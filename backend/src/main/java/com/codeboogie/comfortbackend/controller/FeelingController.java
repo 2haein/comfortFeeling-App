@@ -1,5 +1,8 @@
 package com.codeboogie.comfortbackend.controller;
 
+import com.codeboogie.comfortbackend.model.FeelingRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,8 +21,26 @@ import java.util.Date;
 @RestController
 public class FeelingController {
 
-    @GetMapping("/add")
-    public Feeling addFeeling(){
-        return new Feeling("abc", 3, new Date(), "기분", 35, 128);
+    @Autowired
+    private MongoTemplate mongoTemplate; //몽고DB 템플릿 불러오기
+
+    @Autowired
+    private FeelingRepository feelingRepository;
+
+    private void insert() {
+        Feeling entity = Feeling.builder()
+                .userId("test")
+                .score(3)
+                .publishDate(new Date())
+                .text("hi test")
+                .xcoord(35)
+                .ycoord(128)
+                .build();
+
+        //feelingRepository 또는 mongoTemplate 둘중 아무거나 선택 가능
+        //feelingRepository.save(entity);
+
+        mongoTemplate.insert(entity);
+
     }
 }
