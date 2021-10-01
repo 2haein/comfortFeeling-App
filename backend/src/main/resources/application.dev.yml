@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    url : mongodb+srv://admin:sundo0528soft@comfortfeeling.zi0os.mongodb.net/comfort_feeling
+    username : admin
+    password : sundo0528soft
+    driver-class-name: mongodb.jdbc.MongoDriver
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+    database: mongodb
