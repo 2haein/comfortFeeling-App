@@ -6,3 +6,6 @@ spring:
     import:
       - optional:classpath:application.dev.yml
 
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+

@@ -1,12 +1,13 @@
 spring:
-  datasource:
-    url : mongodb+srv://admin:sundo0528soft@comfortfeeling.zi0os.mongodb.net/comfort_feeling
-    username : admin
-    password : sundo0528soft
-    driver-class-name: mongodb.jdbc.MongoDriver
+  data:
+    mongodb:
+      host: comfortfeeling.zi0os.mongodb.net
+      port: 27017
+      database: comfort_feeling
+      username: admin
+      password: sundo0528soft
 
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: none
-    database: mongodb
+      ddl-auto: create
