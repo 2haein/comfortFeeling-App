@@ -3,34 +3,42 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.frontend">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission
+        android:name="android.permission.ACCESS_FINE_LOCATION"
         tools:ignore="CoarseFineLocation" />
 
     <application
+        android:name=".GlobalApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FrontEnd"
-        android:usesCleartextTraffic="true"
-        android:networkSecurityConfig="@xml/network_security_config"
-        >
+        android:usesCleartextTraffic="true">
+
         <activity
             android:name=".MainActivity"
+            android:theme="@style/Theme.FrontEnd.NoActionBar"
+            android:label="@string/app_name" />
+
+        <meta-data
+            android:name="com.kakao.sdk.AppKey"
+            android:value="cb2c018d5bea8a40846fb57534209711" />
+
+        <activity
+            android:name=".LoginActivity"
             android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.FrontEnd.NoActionBar">
+            android:label="@string/title_activity_login">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <meta-data android:name="com.kakao.sdk.AppKey" android:value="36d61c4a178bb6b8863868bf4e3e8ee2"/>
-
     </application>
-
 
 </manifest>
