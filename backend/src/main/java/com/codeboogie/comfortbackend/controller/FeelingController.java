@@ -1,14 +1,17 @@
 package com.codeboogie.comfortbackend.controller;
 
-import com.codeboogie.comfortbackend.model.FeelingRepository;
+import com.codeboogie.comfortbackend.model.FeelingService;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.web.bind.annotation.*;
 import com.codeboogie.comfortbackend.model.Feeling;
 
-import java.util.Date;
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author 한승남
@@ -17,7 +20,7 @@ import java.util.Date;
  *
 */
 
-@RequestMapping("/feeling")
+
 @RestController
 public class FeelingController {
 
@@ -25,22 +28,45 @@ public class FeelingController {
     private MongoTemplate mongoTemplate; //몽고DB 템플릿 불러오기
 
     @Autowired
-    private FeelingRepository feelingRepository;
+    private FeelingService feelingService;
 
-    private void insert() {
-        Feeling entity = Feeling.builder()
-                .userId("test")
-                .score(3)
-                .publishDate(new Date())
-                .text("hi test")
-                .xcoord(35)
-                .ycoord(128)
-                .build();
+    //https://dion-ko.tistory.com/115
 
-        //feelingRepository 또는 mongoTemplate 둘중 아무거나 선택 가능
-        //feelingRepository.save(entity);
+    //https://imasoftwareengineer.tistory.com/37 [삐멜 소프트웨어 엔지니어]
 
-        mongoTemplate.insert(entity);
+/*    @RequestMapping(value="/", method={ RequestMethod.GET, RequestMethod.POST })
+    public String home( HttpServletRequest request ) throws Exception {
+        JSONObject json = new JSONObject();
 
+        json.put("success", true);
+        json.put("data", 10);
+        json.put(null, 10);
+
+        return json.toString();
+    }*/
+
+    @RequestMapping(method = RequestMethod.POST)
+    public @ResponseBody Feeling insert(@RequestBody final Feeling feeling) {
+        List<String> errors = new ArrayList<>();
+        try {
+            feelingService.insert(feeling);
+        } catch(final Exception e) {
+            errors.add(e.getMessage());
+            e.printStackTrace();
+        }
+        return feeling;
     }
+
+    // 삭제 기능
+    /*@GetMapping("/remove")
+    public void remove(String key, String value) {
+        Criteria criteria = new Criteria(key);
+        criteria.is(value);
+
+        Query query = new Query(criteria);
+
+        mongoTemplate.remove(query, "feeling");
+
+    }*/
+
 }
