@@ -1,6 +1,7 @@
 package com.example.frontend;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -17,7 +18,6 @@ import com.kakao.network.NetworkTask;
 import java.util.Date;
 
 public class PostActivity extends AppCompatActivity {
-
     public TextView restapi_output;
     public EditText edit_text;
     public Button submit_btn;
