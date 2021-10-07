@@ -21,7 +21,7 @@ import com.kakao.usermgmt.UserManagement;
 import com.kakao.usermgmt.callback.LogoutResponseCallback;
 
 public class LoginActivity extends AppCompatActivity {
-    private Button loginV1, logout;
+    private Button loginV1;
     private SessionCallback sessionCallback = new SessionCallback();
     Session session;
     private static final String TAG = "LoginActivity";
@@ -32,7 +32,6 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         loginV1 = findViewById(R.id.loginV1);
-        logout = findViewById(R.id.logout);
 
 
         session = Session.getCurrentSession();
@@ -54,7 +53,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        logout.setOnClickListener(v -> {
+  /*      logout.setOnClickListener(v -> {
             Log.d(TAG, "onCreate:click ");
             UserManagement.getInstance()
                     .requestLogout(new LogoutResponseCallback() {
@@ -73,10 +72,7 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d(TAG, "onCompleteLogout:logout ");
                         }
                     });
-        });
-
-        // 카카오 개발자 홈페이지에 등록할 해시키 구하기
-//        getHashKey();
+        });*/
     }
 
 

@@ -7,10 +7,12 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
 import android.view.ViewGroup;
 
+import com.example.frontend.callback.SessionCallback;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
@@ -33,10 +35,15 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.Toast;
 
 
 import com.example.frontend.databinding.ActivityMainBinding;
+import com.kakao.auth.Session;
+import com.kakao.network.ErrorResult;
+import com.kakao.usermgmt.UserManagement;
+import com.kakao.usermgmt.callback.LogoutResponseCallback;
 
 import net.daum.android.map.MapViewEventListener;
 import net.daum.mf.map.api.MapPOIItem;
@@ -52,6 +59,10 @@ public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
+
+    // menu item initialization
+    private SessionCallback sessionCallback = new SessionCallback();
+    private static final String TAG = "LOGOUT";
 
 
     private MapView mapView;
@@ -79,15 +90,12 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow, R.id.nav_logout)
+                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
                 .setOpenableLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
-
-
-
 
         mapView = new MapView(this);
         //mapView.setCurrentLocationEventListener((MapView.CurrentLocationEventListener) this);
@@ -196,6 +204,37 @@ public class MainActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
+    }
+
+    /**
+     * Simple code for menu item selection
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Log.d(TAG, "test11111111111111 ");
+        switch (item.getItemId()) {
+            case R.id.nav_logout:
+                UserManagement.getInstance()
+                        .requestLogout(new LogoutResponseCallback() {
+                            @Override
+                            public void onSessionClosed(ErrorResult errorResult) {
+                                super.onSessionClosed(errorResult);
+                                Log.d(TAG, "onSessionClosed: " + errorResult.getErrorMessage());
+                            }
+                            @Override
+                            public void onCompleteLogout() {
+                                if (sessionCallback != null) {
+                                    Session.getCurrentSession().removeCallback(sessionCallback);
+                                }
+                                Log.d(TAG, "onCompleteLogout:logout ");
+                            }
+                        });
+                Intent i = new Intent(this,LoginActivity.class);
+                this.startActivity(i);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
