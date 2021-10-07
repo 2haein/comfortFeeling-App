@@ -21,7 +21,7 @@ import java.util.Date;
 public class Feeling {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
     private Long userId; //카카오 계정
     private int score; //감정 기록 점수
     private Date publishDate; //작성한 날짜
@@ -30,7 +30,7 @@ public class Feeling {
     private float ycoord; //글 작성 위치 y 좌표
 
     @Builder //빌더로 entity 만들어 한번에 저장
-    public Feeling(Long id, Long userId, int score, Date publishDate, String text, float xcoord, float ycoord) {
+    public Feeling(String id, Long userId, int score, Date publishDate, String text, float xcoord, float ycoord) {
         this.id = id;
         this.userId = userId;
         this.score = score;
