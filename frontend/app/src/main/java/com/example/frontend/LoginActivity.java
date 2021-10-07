@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -21,7 +22,7 @@ import com.kakao.usermgmt.UserManagement;
 import com.kakao.usermgmt.callback.LogoutResponseCallback;
 
 public class LoginActivity extends AppCompatActivity {
-    private Button loginV1;
+    private ImageButton loginV1;
     private SessionCallback sessionCallback = new SessionCallback();
     Session session;
     private static final String TAG = "LoginActivity";
