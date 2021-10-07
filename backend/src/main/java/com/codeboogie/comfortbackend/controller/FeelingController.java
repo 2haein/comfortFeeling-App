@@ -22,6 +22,7 @@ import java.util.List;
 
 
 @RestController
+@RequestMapping("api")
 public class FeelingController {
 
     @Autowired
@@ -45,8 +46,8 @@ public class FeelingController {
         return json.toString();
     }*/
 
-    @RequestMapping(method = RequestMethod.POST)
-    public @ResponseBody Feeling insert(@RequestBody final Feeling feeling) {
+    @RequestMapping(path="/insert", method={ RequestMethod.GET, RequestMethod.POST })
+    public @ResponseBody void insert(@RequestBody final Feeling feeling) {
         List<String> errors = new ArrayList<>();
         try {
             feelingService.insert(feeling);
@@ -54,19 +55,34 @@ public class FeelingController {
             errors.add(e.getMessage());
             e.printStackTrace();
         }
-        return feeling;
     }
 
-    // 삭제 기능
-    /*@GetMapping("/remove")
-    public void remove(String key, String value) {
-        Criteria criteria = new Criteria(key);
-        criteria.is(value);
+    @RequestMapping(path="/update", method={ RequestMethod.GET, RequestMethod.POST })
+    public @ResponseBody void update(@RequestBody final Feeling feeling) {
+        List<String> errors = new ArrayList<>();
+        try {
+            feelingService.update(feeling);
+        } catch(final Exception e) {
+            errors.add(e.getMessage());
+            e.printStackTrace();
+        }
+    }
 
-        Query query = new Query(criteria);
+    @RequestMapping(path="/remove", method={ RequestMethod.GET, RequestMethod.POST })
+    public @ResponseBody void remove(@RequestBody final Feeling feeling) {
+        List<String> errors = new ArrayList<>();
+        String key = "id";
+        String value = feeling.getId();
+        try {
+            feelingService.remove(key, value);
+        } catch(final Exception e) {
+            errors.add(e.getMessage());
+            e.printStackTrace();
+        }
+    }
 
-        mongoTemplate.remove(query, "feeling");
 
-    }*/
+
+
 
 }

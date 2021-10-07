@@ -16,7 +16,7 @@ import java.util.Date;
 public class FeelingRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
     private Long userId; //카카오 계정
     private int score; //감정 기록 점수
     private Date publishDate; //작성한 날짜
