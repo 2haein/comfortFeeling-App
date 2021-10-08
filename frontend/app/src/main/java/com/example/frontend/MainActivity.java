@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
     // menu item initialization
     private SessionCallback sessionCallback = new SessionCallback();
+    private String strNickname, strProfile, strEmail, strUserId;
 
     MapPoint currentMapPoint;
 
@@ -88,8 +89,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
         setSupportActionBar(binding.appBarMain.toolbar);
+
         binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -110,6 +111,19 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
+        /**
+         * Drawer 및 Navigation Setting 후 호출
+         */
+        View headerView = navigationView.getHeaderView(0);
+        TextView userId = headerView.findViewById(R.id.userId);
+        Intent intent = getIntent();
+        strUserId = intent.getStringExtra("userId");
+        userId.setText(strUserId);
+        TextView nickName = headerView.findViewById(R.id.nickName);
+        strNickname = intent.getStringExtra("nickName");
+        nickName.setText(strNickname);
+        ImageView profileImageUrl = findViewById(R.id.profileImageUrl);
+        strProfile = intent.getStringExtra("profileImageUrl");
 
 
 

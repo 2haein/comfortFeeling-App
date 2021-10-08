@@ -157,7 +157,8 @@ public class LoginActivity extends AppCompatActivity {
 
                                 // 프로필 (닉네임, 프로필 사진 경로)
                                 Profile profile = kakaoAccount.getProfile();
-                                intent.putExtra("name", profile.getNickname());
+                                intent.putExtra("userId", id);
+                                intent.putExtra("nickName", profile.getNickname());
                                 intent.putExtra("profile", profile.getProfileImageUrl());
                                 intent.putExtra("thumbnail", profile.getThumbnailImageUrl());
 
