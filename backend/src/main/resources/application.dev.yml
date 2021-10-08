@@ -1,6 +1,7 @@
 spring:
   data:
     mongodb:
+      auto-index-creation: true
       database: comfort_feeling
       uri: mongodb+srv://admin:sundo0528soft@comfortfeeling.zi0os.mongodb.net/comfort_feeling
 
