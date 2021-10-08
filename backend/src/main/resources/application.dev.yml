@@ -6,5 +6,8 @@ spring:
 
   jpa:
     show-sql: true
-    hibernate:
-      ddl-auto: upgrade
+    properties:
+      hibernate:
+        ogm:
+          datastore:
+            create_database: ture
