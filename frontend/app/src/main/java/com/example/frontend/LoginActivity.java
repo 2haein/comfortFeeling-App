@@ -22,7 +22,7 @@ import com.kakao.usermgmt.UserManagement;
 import com.kakao.usermgmt.callback.LogoutResponseCallback;
 
 public class LoginActivity extends AppCompatActivity {
-    private ImageButton login;
+    private ImageButton loginV1;
     private SessionCallback sessionCallback = new SessionCallback();
     Session session;
     private static final String TAG = "LoginActivity";
