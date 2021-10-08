@@ -61,9 +61,7 @@ public class GlobalApplication extends Application {
                 @Override
                 public ApprovalType getApprovalType() {
                     return ApprovalType.INDIVIDUAL;
-
                 }
-
 
                 @Override
                 public boolean isSaveFormData() {
