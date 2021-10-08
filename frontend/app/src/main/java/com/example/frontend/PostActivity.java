@@ -1,7 +1,6 @@
 package com.example.frontend;
 
 import android.content.ContentValues;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -12,10 +11,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-
-import com.kakao.network.NetworkTask;
-
 import java.util.Date;
+import java.util.Random;
 
 public class PostActivity extends AppCompatActivity {
     public TextView restapi_output;
@@ -44,11 +41,14 @@ public class PostActivity extends AppCompatActivity {
         submit_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                userId=new Random().nextLong();
                 text=edit_text.getText().toString();
                 score=rating;
                 publishDate= new Date();
+                xcoord=37.5663f;
+                ycoord=126.9779f;
                 //REST API 주소
-                String url = "http://localhost:8080/";
+                String url = "http://localhost:8080/api/insert";
 
                 //AsyncTask
                 NetworkAsyncTask networkTask = new NetworkAsyncTask(url, null);
