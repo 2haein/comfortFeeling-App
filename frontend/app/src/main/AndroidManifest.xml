@@ -40,9 +40,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".PostActivity"
-            android:label="감정을 위로해" />
+            android:theme="@style/Theme.FrontEnd.NoActionBar"
+            android:label="@string/app_name" />
     </application>
 
 </manifest>
