@@ -13,6 +13,9 @@ import android.view.View;
 import android.view.Menu;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.annotation.GlideModule;
+import com.bumptech.glide.module.AppGlideModule;
 import com.example.frontend.callback.SessionCallback;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
@@ -122,10 +125,14 @@ public class MainActivity extends AppCompatActivity {
         TextView nickName = headerView.findViewById(R.id.nickName);
         strNickname = intent.getStringExtra("nickName");
         nickName.setText(strNickname);
-        ImageView profileImageUrl = findViewById(R.id.profileImageUrl);
-        strProfile = intent.getStringExtra("profileImageUrl");
-
-
+        ImageView profileImageUrl = headerView.findViewById(R.id.profileImageUrl);
+        strProfile = intent.getStringExtra("thumbnail");
+        Glide.with(this)
+                .load(strProfile)
+                .placeholder(R.mipmap.ic_launcher_round)
+                .error(R.mipmap.ic_launcher_round)
+                .fallback(R.mipmap.ic_launcher_round)
+                .into(profileImageUrl);
 
         mapView = new MapView(this);
         if (!checkLocationServicesStatus()) {
