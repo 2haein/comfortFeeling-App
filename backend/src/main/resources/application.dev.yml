@@ -1,10 +1,14 @@
 spring:
   data:
     mongodb:
+      auto-index-creation: true
       database: comfort_feeling
       uri: mongodb+srv://admin:sundo0528soft@comfortfeeling.zi0os.mongodb.net/comfort_feeling
 
   jpa:
     show-sql: true
-    hibernate:
-      ddl-auto: upgrade
+    properties:
+      hibernate:
+        ogm:
+          datastore:
+            create_database: ture
