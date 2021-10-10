@@ -26,7 +26,8 @@ public class MemberServiceImpl implements MemberService{
 
 
         } catch (Exception e){
-            e.printStackTrace();
+            System.out.println("이전에 가입한 사용자 로그인 중......");
+//            e.printStackTrace();
         }
         return true;
     }
