@@ -1,6 +1,7 @@
 package com.example.frontend;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -19,7 +20,7 @@ public class PostActivity extends AppCompatActivity {
     public EditText edit_text;
     public Button submit_btn;
     public RatingBar feel_rate;
-    public static Long userId;
+    public static String userId;
     public static String text;
     public static Date publishDate;
     public static int score;
@@ -36,19 +37,23 @@ public class PostActivity extends AppCompatActivity {
         submit_btn = (Button)findViewById(R.id.button);
 
         int rating = (int) feel_rate.getRating();
+        Intent secondIntent = getIntent();
+        double lat = secondIntent.getExtras().getDouble("lat");
+        double lon = secondIntent.getExtras().getDouble("lon");
 
 
         submit_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                userId=new Random().nextLong();
+                userId= String.valueOf(new Random());
                 text=edit_text.getText().toString();
                 score=rating;
                 publishDate= new Date();
-                xcoord=37.5663f;
-                ycoord=126.9779f;
+                xcoord=(float)lat;
+                ycoord=(float)lon;
                 //REST API 주소
-                String url = "http://localhost:8080/api/insert";
+                String url = "http://192.168.0.32:8080/api/insert";
+                //String url = "http://본인IP주소:8080/api/insert";
 
                 //AsyncTask
                 NetworkAsyncTask networkTask = new NetworkAsyncTask(url, null);

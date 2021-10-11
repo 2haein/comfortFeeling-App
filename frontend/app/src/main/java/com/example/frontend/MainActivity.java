@@ -191,6 +191,7 @@ public class MainActivity extends AppCompatActivity {
         public void onCalloutBalloonOfPOIItemTouched(MapView mapView, MapPOIItem mapPOIItem, MapPOIItem.CalloutBalloonButtonType calloutBalloonButtonType) {
             AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
             builder.setTitle("선택하세요");
+
             builder.setItems(R.array.LAN, new DialogInterface.OnClickListener(){
                 @Override
                 public void onClick(DialogInterface dialog, int pos)
@@ -201,6 +202,8 @@ public class MainActivity extends AppCompatActivity {
                     // 각 버튼별로 수행할 일
                     if(pos == 0){
                         Intent intent = new Intent(getApplicationContext(), PostActivity.class);
+                        intent.putExtra("lat", mCurrentLat);
+                        intent.putExtra("lon", mCurrentLng);
                         startActivity(intent);
                     }
                     else if(pos==1){
