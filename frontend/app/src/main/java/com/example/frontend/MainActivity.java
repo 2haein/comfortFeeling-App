@@ -79,8 +79,8 @@ public class MainActivity extends AppCompatActivity {
 
     MapPoint currentMapPoint;
 
-    private double mCurrentLng;
-    private double mCurrentLat;
+    private float mCurrentLng;
+    private float mCurrentLat;
 
     private MarkerEventListener eventListener = new MarkerEventListener();
 
@@ -335,8 +335,8 @@ public class MainActivity extends AppCompatActivity {
         //이 좌표로 지도 중심 이동
         mapView.setMapCenterPoint(currentMapPoint, true);
         //전역변수로 현재 좌표 저장
-        mCurrentLat = mapPointGeo.latitude;
-        mCurrentLng = mapPointGeo.longitude;
+        mCurrentLat = (float)mapPointGeo.latitude;
+        mCurrentLng = (float)mapPointGeo.longitude;
         Log.d(LOG_TAG, "현재위치 => " + mCurrentLat + "  " + mCurrentLng);
 
     }

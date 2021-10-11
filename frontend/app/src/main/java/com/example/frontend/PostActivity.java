@@ -2,6 +2,7 @@ package com.example.frontend;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -10,9 +11,18 @@ import android.widget.RatingBar;
 import android.os.AsyncTask;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.frontend.callback.SessionCallback;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Random;
 
 public class PostActivity extends AppCompatActivity {
@@ -20,11 +30,8 @@ public class PostActivity extends AppCompatActivity {
     public EditText edit_text;
     public Button submit_btn;
     public RatingBar feel_rate;
-    public static String userId;
-    public static String text;
-    public static Date publishDate;
-    public static int score;
-    public static float xcoord, ycoord;
+    private SessionCallback sessionCallback = new SessionCallback();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,29 +44,37 @@ public class PostActivity extends AppCompatActivity {
         submit_btn = (Button)findViewById(R.id.button);
 
         int rating = (int) feel_rate.getRating();
-        Intent secondIntent = getIntent();
-        double lat = secondIntent.getExtras().getDouble("lat");
-        double lon = secondIntent.getExtras().getDouble("lon");
+        Intent intent = getIntent();
 
 
         submit_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                userId= String.valueOf(new Random());
-                text=edit_text.getText().toString();
-                score=rating;
-                publishDate= new Date();
-                xcoord=(float)lat;
-                ycoord=(float)lon;
                 //REST API 주소
-                String url = "http://192.168.0.32:8080/api/insert";
+                String url = "http://localhost:8080/api/insert";
                 //String url = "http://본인IP주소:8080/api/insert";
 
-                //AsyncTask
-                NetworkAsyncTask networkTask = new NetworkAsyncTask(url, null);
-                networkTask.execute();
-                
+                SimpleDateFormat sformat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+                Date now = new Date();
+                String getTime = sformat.format(now);
 
+                try{
+                    String jsonString = new JSONObject()
+                    .put("userId", intent.getStringExtra("userId"))
+                    .put("text", edit_text.getText().toString())
+                    .put("score", rating)
+                    .put("publishDate", getTime)
+                    .put("xcoord", intent.getExtras().getFloat("lat"))
+                    .put("ycoord", intent.getExtras().getFloat("lon"))
+                    .toString();
+
+                    //REST API
+                    NetworkAsyncTask networkTask = new NetworkAsyncTask(url, jsonString);
+                    networkTask.execute();
+
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -67,12 +82,12 @@ public class PostActivity extends AppCompatActivity {
     public class NetworkAsyncTask extends AsyncTask<Void, Void, String> {
 
         private String url;
-        private ContentValues values;
+        private String jsonValue;
 
-        public NetworkAsyncTask(String url, ContentValues values) {
+        public NetworkAsyncTask(String url, String jsonValue) {
 
             this.url = url;
-            this.values = values;
+            this.jsonValue = jsonValue;
         }
 
         @Override
@@ -80,7 +95,7 @@ public class PostActivity extends AppCompatActivity {
 
             String result; // 요청 결과를 저장할 변수.
             RequestHttpURLConnection requestHttpURLConnection = new RequestHttpURLConnection();
-            result = requestHttpURLConnection.request(url, values); // 해당 URL로 부터 결과물을 얻어온다.
+            result = requestHttpURLConnection.sendREST(url, jsonValue); // 해당 URL로 부터 결과물을 얻어온다.
 
             return result;
         }
