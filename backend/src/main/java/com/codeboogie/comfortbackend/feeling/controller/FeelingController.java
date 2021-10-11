@@ -1,15 +1,11 @@
-package com.codeboogie.comfortbackend.controller;
+package com.codeboogie.comfortbackend.feeling.controller;
 
-import com.codeboogie.comfortbackend.model.FeelingService;
-import org.json.simple.JSONObject;
+import com.codeboogie.comfortbackend.feeling.model.FeelingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.web.bind.annotation.*;
-import com.codeboogie.comfortbackend.model.Feeling;
+import com.codeboogie.comfortbackend.feeling.model.Feeling;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
