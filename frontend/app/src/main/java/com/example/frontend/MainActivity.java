@@ -248,6 +248,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         public void onCalloutBalloonOfPOIItemTouched(MapView mapView, MapPOIItem mapPOIItem, MapPOIItem.CalloutBalloonButtonType calloutBalloonButtonType) {
             AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
             builder.setTitle("선택하세요");
+
             builder.setItems(R.array.LAN, new DialogInterface.OnClickListener(){
                 @Override
                 public void onClick(DialogInterface dialog, int pos)
@@ -257,6 +258,8 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     // 각 버튼별로 수행할 일
                     if(pos == 0){
                         Intent intent = new Intent(getApplicationContext(), PostActivity.class);
+                        intent.putExtra("lat", mCurrentLat);
+                        intent.putExtra("lon", mCurrentLng);
                         startActivity(intent);
                     }
                     else if(pos==1){
@@ -388,8 +391,8 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         //이 좌표로 지도 중심 이동
         mapView.setMapCenterPoint(currentMapPoint, true);
         //전역변수로 현재 좌표 저장
-        mCurrentLat = (float) mapPointGeo.latitude;
-        mCurrentLng = (float) mapPointGeo.longitude;
+        mCurrentLat = (float)mapPointGeo.latitude;
+        mCurrentLng = (float)mapPointGeo.longitude;
         Log.d(LOG_TAG, "현재위치 => " + mCurrentLat + "  " + mCurrentLng);
 
     }
