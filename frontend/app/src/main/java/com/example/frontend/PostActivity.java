@@ -28,6 +28,7 @@ import java.util.Random;
 public class PostActivity extends AppCompatActivity {
     public TextView restapi_output;
     public EditText edit_text;
+    public Button back_btn;
     public Button submit_btn;
     public RatingBar feel_rate;
     private SessionCallback sessionCallback = new SessionCallback();
@@ -41,12 +42,19 @@ public class PostActivity extends AppCompatActivity {
         restapi_output = (TextView)findViewById(R.id.restapi_output);
         edit_text = (EditText)findViewById(R.id.editTextTextMultiLine);
         feel_rate = (RatingBar)findViewById(R.id.ratingBar);
+        back_btn = (Button)findViewById(R.id.back_btn);
         submit_btn = (Button)findViewById(R.id.button);
 
         int rating = (int) feel_rate.getRating();
         Intent intent = getIntent();
 
+        back_btn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
 
+        });
         submit_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,6 +83,7 @@ public class PostActivity extends AppCompatActivity {
                 }catch(Exception e){
                     e.printStackTrace();
                 }
+                finish();
             }
         });
     }

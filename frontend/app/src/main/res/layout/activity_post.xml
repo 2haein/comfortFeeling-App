@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
+    android:layout_height="match_parent"
+    android:background="@color/white">
 
     <TextView
         android:id="@+id/textView2"
@@ -66,6 +66,7 @@
             android:ems="10"
             android:gravity="start|top"
             android:hint="내용을 써주세요!"
+            android:textColorHint="#808080"
             android:inputType="textMultiLine"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -84,6 +85,20 @@
     </RelativeLayout>
 
     <Button
+        android:id="@+id/back_btn"
+        android:layout_width="117dp"
+        android:layout_height="56dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="#808080"
+        android:fontFamily="@font/notosanskrlight"
+        android:text="뒤로가기"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.238"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
         android:id="@+id/button"
         android:layout_width="117dp"
         android:layout_height="56dp"
@@ -94,6 +109,7 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.826"
         app:layout_constraintStart_toStartOf="parent" />
 
 
