@@ -18,13 +18,18 @@ public class FeelingService {
 //    @Autowired
 //    private FeelingRepository feelingRepository;
 
-    private List<Feeling> findDatas(String key, String value) {
-        Criteria criteria = new Criteria(key);
-        criteria.is(value);
+    public long findDatas(String userId, String date) {
+        Query query = new Query();
+        Criteria criteria = new Criteria();
 
-        Query query = new Query(criteria);
+        Criteria criteria_arr[] = new Criteria[2];
 
-        return mongoTemplate.find(query, Feeling.class, "feeling");
+        criteria_arr[0] = Criteria.where("userId").regex(userId);
+        criteria_arr[1] = Criteria.where("publishDate").regex(date);
+
+        query.addCriteria(criteria.andOperator(criteria_arr));
+
+        return mongoTemplate.count(query, Feeling.class, "feeling");
     }
 
     public Feeling insert(final Feeling feeling) {

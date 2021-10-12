@@ -1,5 +1,7 @@
 package com.example.frontend;
 
+import android.os.AsyncTask;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -34,6 +36,29 @@ public class RequestHttpURLConnection {
             e.printStackTrace();
         }
         return outResult.toString();
+    }
+
+    public static class NetworkAsyncTask extends AsyncTask<Void, Void, String> {
+
+        private String url;
+        private String jsonValue;
+
+        public NetworkAsyncTask(String url, String jsonValue) {
+
+            this.url = url;
+            this.jsonValue = jsonValue;
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+
+            String result; // 요청 결과를 저장할 변수.
+            result = sendREST(url, jsonValue); // 해당 URL로 부터 결과물을 얻어온다.
+
+            return result;
+        }
+
+
     }
 
 

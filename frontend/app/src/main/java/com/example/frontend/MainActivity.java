@@ -59,9 +59,15 @@ import net.daum.mf.map.api.MapReverseGeoCoder;
 
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONObject;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements MapView.CurrentLocationEventListener, MapView.MapViewEventListener {
 
@@ -430,6 +436,36 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         marker.setDraggable(true);
         mapView.addPOIItem(marker);
 
+    }
+
+    //글 기록 확인
+    public void checkPostHistory(){
+        SimpleDateFormat sformat = new SimpleDateFormat("yyyy-MM-dd");
+        Date now = new Date();
+        String getTime = sformat.format(now);
+        String rtnStr="";
+
+        //REST API 주소
+        String url = "http://localhost:8080/api/history";
+        //String url = "http://본인IP주소:8080/api/history";
+
+        try{
+            String jsonString = new JSONObject()
+                    .put("userId", strUserId)
+                    .put("publishDate", getTime)
+                    .toString();
+
+            //REST API
+            RequestHttpURLConnection.NetworkAsyncTask networkTask = new RequestHttpURLConnection.NetworkAsyncTask(url, jsonString);
+            rtnStr = networkTask.execute().get();
+
+            //리스트 길이 확인
+
+
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
 
