@@ -260,6 +260,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                         Intent intent = new Intent(getApplicationContext(), PostActivity.class);
                         intent.putExtra("lat", mCurrentLat);
                         intent.putExtra("lon", mCurrentLng);
+                        intent.putExtra("userId", strUserId);
                         startActivity(intent);
                     }
                     else if(pos==1){
