@@ -3,7 +3,6 @@ package com.example.frontend;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
-import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
@@ -32,6 +31,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -63,7 +63,7 @@ import org.jetbrains.annotations.NotNull;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MapView.CurrentLocationEventListener, MapView.MapViewEventListener {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
 
     private MarkerEventListener eventListener = new MarkerEventListener();
 
-    MapPOIItem marker = new MapPOIItem();
+
     String[] REQUIRED_PERMISSIONS  = {Manifest.permission.ACCESS_FINE_LOCATION};
 
     @Override
@@ -135,6 +135,9 @@ public class MainActivity extends AppCompatActivity {
                 .into(profileImageUrl);
 
         mapView = new MapView(this);
+        mapView.setCurrentLocationEventListener(this);
+        mapView.setMapViewEventListener(this);
+
         if (!checkLocationServicesStatus()) {
             showDialogForLocationServiceSetting();
         }else {
@@ -144,15 +147,68 @@ public class MainActivity extends AppCompatActivity {
         ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.map_view);
         mapViewContainer.addView(mapView);
 
-        mapView.setZoomLevel(7, true);
+        mapView.setZoomLevel(3, true); //맵 확대
         mapView.zoomIn(true);
         mapView.zoomOut(true);
         mapView.setCalloutBalloonAdapter(new CustomCalloutBalloonAdapter());
         mapView.setPOIItemEventListener(eventListener);
 
-        setMapMarker();
+
+
+
 
     }
+
+    //MapView.MapViewEventListener 구현
+    @Override
+    public void onMapViewInitialized(MapView mapView) {
+
+    }
+
+    @Override
+    public void onMapViewCenterPointMoved(MapView mapView, MapPoint mapPoint) {
+
+    }
+
+    @Override
+    public void onMapViewZoomLevelChanged(MapView mapView, int i) {
+
+    }
+
+    @Override
+    public void onMapViewSingleTapped(MapView mapView, MapPoint mapPoint) {
+
+    }
+
+    @Override
+    public void onMapViewDoubleTapped(MapView mapView, MapPoint mapPoint) {
+
+    }
+
+    @Override
+    public void onMapViewLongPressed(MapView mapView, MapPoint mapPoint) {
+        //사용자가 지도를 길게 누른 경우 수행
+        setMapMarker(mapView, mapPoint);
+
+    }
+
+    @Override
+    public void onMapViewDragStarted(MapView mapView, MapPoint mapPoint) {
+
+    }
+
+    @Override
+    public void onMapViewDragEnded(MapView mapView, MapPoint mapPoint) {
+
+    }
+
+    @Override
+    public void onMapViewMoveFinished(MapView mapView, MapPoint mapPoint) {
+
+    }
+    //MapView.MapViewEventListener 구현끝
+
+
 
     // 커스텀 말풍선 클래스
     class CustomCalloutBalloonAdapter implements CalloutBalloonAdapter {
@@ -176,6 +232,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    //마커 클릭시
     class MarkerEventListener implements MapView.POIItemEventListener {
         @Override
         public void onPOIItemSelected(MapView mapView, MapPOIItem mapPOIItem) {
@@ -198,7 +255,6 @@ public class MainActivity extends AppCompatActivity {
                 {
                     String[] items = getResources().getStringArray(R.array.LAN);
                     Toast.makeText(getApplicationContext(),items[pos],Toast.LENGTH_LONG).show();
-
                     // 각 버튼별로 수행할 일
                     if(pos == 0){
                         Intent intent = new Intent(getApplicationContext(), PostActivity.class);
@@ -256,7 +312,7 @@ public class MainActivity extends AppCompatActivity {
         if (hasFineLocationPermission == PackageManager.PERMISSION_GRANTED ) {
             // 2. 이미 퍼미션을 가지고 있다면
             // 3.  위치 값을 가져올 수 있음
-            mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOff); //TrackingModeOnWithoutHeading
+            mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading); //TrackingModeOnWithoutHeading
 
 
         } else {  //2. 퍼미션 요청을 허용한 적이 없다면 퍼미션 요청이 필요합니다. 2가지 경우(3-1, 4-1)가 있습니다.
@@ -327,7 +383,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
+    @Override
     public void onCurrentLocationUpdate(MapView mapView, MapPoint mapPoint, float accuracyInMeters) {
         MapPoint.GeoCoordinate mapPointGeo = mapPoint.getMapPointGeoCoord();
         Log.i(LOG_TAG, String.format("MapView onCurrentLocationUpdate (%f,%f) accuracy (%f)", mapPointGeo.latitude, mapPointGeo.longitude, accuracyInMeters));
@@ -341,6 +397,21 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onCurrentLocationDeviceHeadingUpdate(MapView mapView, float v) {
+
+    }
+
+    @Override
+    public void onCurrentLocationUpdateFailed(MapView mapView) {
+
+    }
+
+    @Override
+    public void onCurrentLocationUpdateCancelled(MapView mapView) {
+
+    }
+
     public boolean checkLocationServicesStatus() {
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
@@ -348,13 +419,14 @@ public class MainActivity extends AppCompatActivity {
                 || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     }
 
-    public void setMapMarker() {
+    public void setMapMarker(MapView mapView, MapPoint mapPoint) {
+        MapPOIItem marker = new MapPOIItem();
         marker.setItemName("현재 위치");
-        //수정 필요 --> 현재위치로
-        MapPoint mapPoint = MapPoint.mapPointWithGeoCoord(37.53737528, 127.00557633);
         marker.setMapPoint(mapPoint);
-        marker.setMarkerType(MapPOIItem.MarkerType.BluePin); // 기본으로 제공하는 BluePin 마커 모양.
-        marker.setSelectedMarkerType(MapPOIItem.MarkerType.RedPin); // 마커를 클릭했을때, 기본으로 제공하는 RedPin 마커 모양.
+        marker.setMarkerType(MapPOIItem.MarkerType.CustomImage);
+        marker.setCustomImageResourceId(R.drawable.custom_marker_red);
+        marker.setCustomImageAutoscale(true);
+        marker.setCustomImageAnchor(0.5f, 1.0f);
         marker.setDraggable(true);
         mapView.addPOIItem(marker);
 

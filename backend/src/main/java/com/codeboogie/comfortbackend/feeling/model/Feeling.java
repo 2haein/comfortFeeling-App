@@ -1,4 +1,4 @@
-package com.codeboogie.comfortbackend.model;
+package com.codeboogie.comfortbackend.feeling.model;
 
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;

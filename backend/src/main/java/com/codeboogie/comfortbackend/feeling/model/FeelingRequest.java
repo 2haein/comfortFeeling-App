@@ -1,4 +1,4 @@
-package com.codeboogie.comfortbackend.model;
+package com.codeboogie.comfortbackend.feeling.model;
 
 import lombok.Builder;
 import lombok.Getter;
