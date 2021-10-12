@@ -108,6 +108,16 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
             }
         });
 
+        binding.appBarMain.fab1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getApplicationContext(), "현재위치 탐색",Toast.LENGTH_SHORT).show();
+                mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading); //TrackingModeOnWithoutHeading
+
+            }
+        });
+
+
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
         // Passing each menu ID as a set of Ids because each
@@ -267,6 +277,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                         Intent intent = new Intent(getApplicationContext(), PostActivity.class);
                         intent.putExtra("lat", mCurrentLat);
                         intent.putExtra("lon", mCurrentLng);
+                        intent.putExtra("userId", strUserId);
                         startActivity(intent);
                     }
                     else if(pos == 0 && count == 1){
@@ -401,7 +412,8 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         currentMapPoint = MapPoint.mapPointWithGeoCoord(mapPointGeo.latitude, mapPointGeo.longitude);
         //이 좌표로 지도 중심 이동
         mapView.setMapCenterPoint(currentMapPoint, true);
-
+        //최초 1회만 현재위치 받기 위함
+        mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOff); //TrackingModeOnWithoutHeading
         //전역변수로 현재 좌표 저장
         mCurrentLat = (float)mapPointGeo.latitude;
         mCurrentLng = (float)mapPointGeo.longitude;

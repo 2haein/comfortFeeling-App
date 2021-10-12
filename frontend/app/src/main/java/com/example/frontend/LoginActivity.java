@@ -2,6 +2,7 @@ package com.example.frontend;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -28,6 +29,21 @@ import com.kakao.usermgmt.response.model.Profile;
 import com.kakao.usermgmt.response.model.UserAccount;
 import com.kakao.util.OptionalBoolean;
 import com.kakao.util.exception.KakaoException;
+
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
 
 public class LoginActivity extends AppCompatActivity {
     private ImageButton loginV1;
@@ -144,8 +160,6 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(MeV2Response result) {
                             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                            //글쓰기 카카오 userID 전송
-                            //Intent secondIntent = new Intent(getApplicationContext(), PostActivity.class);
 
 
                             Log.i("KAKAO_API", "사용자 아이디: " + result.getId());
@@ -163,7 +177,10 @@ public class LoginActivity extends AppCompatActivity {
                                 intent.putExtra("nickName", profile.getNickname());
                                 intent.putExtra("profile", profile.getProfileImageUrl());
                                 intent.putExtra("thumbnail", profile.getThumbnailImageUrl());
-                                //secondIntent.putExtra("userId", id);
+
+                                // login 함수안에 연결할 서버 IP주소 설정 후 주석 풀기, (설정 안할 시 서버 접속 오류 남)
+                                // login(id, profile.getNickname());
+
 
                                 // LOGGING
                                 if (profile ==null){
@@ -183,14 +200,80 @@ public class LoginActivity extends AppCompatActivity {
                             }
 
                             startActivity(intent);
-                            //startActivity(secondIntent);
                             finish();
 
 
                         }
-                    });
 
+                    });
+        }
+
+        // 서버와 연동하기
+        public void login(String userId, String userName) {
+            Log.w("login","로그인 하는중");
+            try {
+                Log.w("앱에서 보낸값",userId+", "+userName);
+
+                CustomTask task = new CustomTask();
+                String result = task.execute(userId,userName).get();
+                Log.w("받은값",result);
+
+            } catch (Exception e) {
+                Log.w("로그인 에러", e);
+            }
+        }
+
+    }
+
+
+    class CustomTask extends AsyncTask<String, Void, String> {
+        String sendMsg, receiveMsg;
+        @Override
+        // doInBackground의 매개변수 값이 여러개일 경우를 위해 배열로
+        protected String doInBackground(String... strings) {
+            try {
+                String str;
+                URL url = new URL("http://192.168.219.170:8080/api/member");  // 어떤 서버에 요청할지(localhost 안됨.)
+                // ex) http://192.168.210.170:8080/api/member
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+                conn.setRequestMethod("POST");                              //데이터를 POST 방식으로 전송합니다.
+                conn.setDoOutput(true);
+
+                // 서버에 보낼 값 포함해 요청함.
+                OutputStreamWriter osw = new OutputStreamWriter(conn.getOutputStream());
+                sendMsg = "userId="+strings[0]+"&userName="+strings[1]; // GET방식으로 작성해 POST로 보냄 ex) "id=admin&pwd=1234";
+                osw.write(sendMsg);                           // OutputStreamWriter에 담아 전송
+                osw.flush();
+                Log.i("통신 중", "test");
+                // jsp와 통신이 잘 되고, 서버에서 보낸 값 받음.
+                if(conn.getResponseCode() == conn.HTTP_OK) {
+                    InputStreamReader tmp = new InputStreamReader(conn.getInputStream(), "UTF-8");
+                    BufferedReader reader = new BufferedReader(tmp);
+                    StringBuffer buffer = new StringBuffer();
+                    Log.i("통신 결과", "test1");
+                    while ((str = reader.readLine()) != null) {
+                        buffer.append(str);
+                        Log.i("통신 결과", "test2");
+                    }
+                    Log.i("통신 결과", "test3"+buffer);
+                    receiveMsg = buffer.toString();
+                    Log.i("통신 결과", receiveMsg);
+                } else {    // 통신이 실패한 이유를 찍기위한 로그
+                    Log.i("통신 결과", conn.getResponseCode()+"에러");
+                }
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            // 서버에서 보낸 값을 리턴합니다.
+            return receiveMsg;
         }
     }
 
 }
+
+
+
