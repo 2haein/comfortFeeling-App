@@ -179,7 +179,7 @@ public class LoginActivity extends AppCompatActivity {
                                 intent.putExtra("thumbnail", profile.getThumbnailImageUrl());
 
                                 // login 함수안에 연결할 서버 IP주소 설정 후 주석 풀기, (설정 안할 시 서버 접속 오류 남)
-                                 login(id, profile.getNickname());
+                                // login(id, profile.getNickname());
 
 
                                 // LOGGING
@@ -242,7 +242,8 @@ public class LoginActivity extends AppCompatActivity {
 
                 // 서버에 보낼 값 포함해 요청함.
                 OutputStreamWriter osw = new OutputStreamWriter(conn.getOutputStream());
-                 osw.write(sendMsg);                           // OutputStreamWriter에 담아 전송
+                sendMsg = "userId="+strings[0]+"&userName="+strings[1]; // GET방식으로 작성해 POST로 보냄 ex) "id=admin&pwd=1234";
+                osw.write(sendMsg);                           // OutputStreamWriter에 담아 전송
                 osw.flush();
                 Log.i("통신 중", "test");
                 // jsp와 통신이 잘 되고, 서버에서 보낸 값 받음.
@@ -250,7 +251,16 @@ public class LoginActivity extends AppCompatActivity {
                     InputStreamReader tmp = new InputStreamReader(conn.getInputStream(), "UTF-8");
                     BufferedReader reader = new BufferedReader(tmp);
                     StringBuffer buffer = new StringBuffer();
-
+                    Log.i("통신 결과", "test1");
+                    while ((str = reader.readLine()) != null) {
+                        buffer.append(str);
+                        Log.i("통신 결과", "test2");
+                    }
+                    Log.i("통신 결과", "test3"+buffer);
+                    receiveMsg = buffer.toString();
+                    Log.i("통신 결과", receiveMsg);
+                } else {    // 통신이 실패한 이유를 찍기위한 로그
+                    Log.i("통신 결과", conn.getResponseCode()+"에러");
                 }
 
             } catch (MalformedURLException e) {
