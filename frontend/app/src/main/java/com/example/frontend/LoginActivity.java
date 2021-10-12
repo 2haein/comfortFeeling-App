@@ -145,7 +145,7 @@ public class LoginActivity extends AppCompatActivity {
                         public void onSuccess(MeV2Response result) {
                             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                             //글쓰기 카카오 userID 전송
-                            Intent secondIntent = new Intent(getApplicationContext(), PostActivity.class);
+                            //Intent secondIntent = new Intent(getApplicationContext(), PostActivity.class);
 
 
                             Log.i("KAKAO_API", "사용자 아이디: " + result.getId());
@@ -163,7 +163,7 @@ public class LoginActivity extends AppCompatActivity {
                                 intent.putExtra("nickName", profile.getNickname());
                                 intent.putExtra("profile", profile.getProfileImageUrl());
                                 intent.putExtra("thumbnail", profile.getThumbnailImageUrl());
-                                secondIntent.putExtra("userId", id);
+                                //secondIntent.putExtra("userId", id);
 
                                 // LOGGING
                                 if (profile ==null){
@@ -183,7 +183,7 @@ public class LoginActivity extends AppCompatActivity {
                             }
 
                             startActivity(intent);
-                            startActivity(secondIntent);
+                            //startActivity(secondIntent);
                             finish();
 
 
