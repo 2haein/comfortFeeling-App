@@ -31,16 +31,12 @@ public class FeelingController {
 
     //https://imasoftwareengineer.tistory.com/37 [삐멜 소프트웨어 엔지니어]
 
-/*    @RequestMapping(value="/", method={ RequestMethod.GET, RequestMethod.POST })
-    public String home( HttpServletRequest request ) throws Exception {
-        JSONObject json = new JSONObject();
+    @RequestMapping(value="/history", method={ RequestMethod.GET, RequestMethod.POST })
+    public @ResponseBody long history(@RequestBody String userId, String date) {
 
-        json.put("success", true);
-        json.put("data", 10);
-        json.put(null, 10);
+        return feelingService.findDatas(userId, date);
+    }
 
-        return json.toString();
-    }*/
 
     @RequestMapping(path="/insert", method={ RequestMethod.GET, RequestMethod.POST })
     public @ResponseBody void insert(@RequestBody final Feeling feeling) {
