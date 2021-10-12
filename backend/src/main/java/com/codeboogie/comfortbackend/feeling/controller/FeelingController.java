@@ -27,50 +27,48 @@ public class FeelingController {
     @Autowired
     private FeelingService feelingService;
 
-    //https://dion-ko.tistory.com/115
-
-    //https://imasoftwareengineer.tistory.com/37 [삐멜 소프트웨어 엔지니어]
-
-    @RequestMapping(value="/history", method={ RequestMethod.GET, RequestMethod.POST })
-    public @ResponseBody long history(@RequestBody String userId, String date) {
-
-        return feelingService.findDatas(userId, date);
-    }
-
-
     @RequestMapping(path="/insert", method={ RequestMethod.GET, RequestMethod.POST })
     public @ResponseBody void insert(@RequestBody final Feeling feeling) {
-        List<String> errors = new ArrayList<>();
         try {
             feelingService.insert(feeling);
         } catch(final Exception e) {
-            errors.add(e.getMessage());
             e.printStackTrace();
         }
     }
 
     @RequestMapping(path="/update", method={ RequestMethod.GET, RequestMethod.POST })
     public @ResponseBody void update(@RequestBody final Feeling feeling) {
-        List<String> errors = new ArrayList<>();
         try {
             feelingService.update(feeling);
         } catch(final Exception e) {
-            errors.add(e.getMessage());
             e.printStackTrace();
         }
     }
 
     @RequestMapping(path="/remove", method={ RequestMethod.GET, RequestMethod.POST })
     public @ResponseBody void remove(@RequestBody final Feeling feeling) {
-        List<String> errors = new ArrayList<>();
         String key = "id";
         String value = feeling.getId();
         try {
             feelingService.remove(key, value);
         } catch(final Exception e) {
-            errors.add(e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    //하루 글 썻는지 조회
+    @RequestMapping(value="/history", method={ RequestMethod.GET, RequestMethod.POST })
+    public @ResponseBody long history(@RequestBody String userId, String date) {
+
+        return feelingService.findDatas(userId, date);
+    }
+
+    // 전체 글 조회
+    @RequestMapping(path="/history2", method={ RequestMethod.GET, RequestMethod.POST })
+    public @ResponseBody List<Feeling> history2(@RequestBody String userId) {
+        String value = userId;
+
+        return feelingService.findHistory(value);
     }
 
 

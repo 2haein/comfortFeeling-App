@@ -68,5 +68,14 @@ public class FeelingService {
 
     }
 
+    public List<Feeling> findHistory(String userId) {
+        Criteria criteria = new Criteria("userId");
+        criteria.is(userId);
+
+        Query query = new Query(criteria);
+
+        return mongoTemplate.find(query, Feeling.class, "feeling" );
+    }
+
 
 }
