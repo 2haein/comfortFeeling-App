@@ -261,12 +261,17 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                 {
                     String[] items = getResources().getStringArray(R.array.LAN);
                     Toast.makeText(getApplicationContext(),items[pos],Toast.LENGTH_LONG).show();
+                    int count = checkPostHistory();
                     // 각 버튼별로 수행할 일
-                    if(pos == 0){
+                    if(pos == 0 && count == 0){
                         Intent intent = new Intent(getApplicationContext(), PostActivity.class);
                         intent.putExtra("lat", mCurrentLat);
                         intent.putExtra("lon", mCurrentLng);
                         startActivity(intent);
+                    }
+                    else if(pos == 0 && count == 1){
+                        Toast.makeText(getApplicationContext(), "하루에 한 번만 등록 가능!",
+                                Toast.LENGTH_SHORT).show();
                     }
                     else if(pos==1){
                         mapView.removePOIItem(mapPOIItem);
@@ -396,6 +401,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         currentMapPoint = MapPoint.mapPointWithGeoCoord(mapPointGeo.latitude, mapPointGeo.longitude);
         //이 좌표로 지도 중심 이동
         mapView.setMapCenterPoint(currentMapPoint, true);
+
         //전역변수로 현재 좌표 저장
         mCurrentLat = (float)mapPointGeo.latitude;
         mCurrentLng = (float)mapPointGeo.longitude;
@@ -439,12 +445,12 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
     }
 
     //글 기록 확인
-    public void checkPostHistory(){
+    public int checkPostHistory(){
         SimpleDateFormat sformat = new SimpleDateFormat("yyyy-MM-dd");
         Date now = new Date();
         String getTime = sformat.format(now);
         String rtnStr="";
-
+        int count = 0;
         //REST API 주소
         String url = "http://localhost:8080/api/history";
         //String url = "http://본인IP주소:8080/api/history";
@@ -460,12 +466,14 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
             rtnStr = networkTask.execute().get();
 
             //리스트 길이 확인
-
+            count = Integer.parseInt(rtnStr);
 
 
         }catch(Exception e){
             e.printStackTrace();
         }
+
+        return count;
     }
 
 
