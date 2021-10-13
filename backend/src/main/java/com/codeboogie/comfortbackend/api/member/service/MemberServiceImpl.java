@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 @Service
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService{
@@ -16,18 +17,22 @@ public class MemberServiceImpl implements MemberService{
 
     @Override
     public boolean createMember(MemberDTO memberDTO){
-        // TODO: login id 검사 로직 추가
         try{
-            Member member = new Member();
-            member.setUserId(memberDTO.getUserId());
-            member.setUserName(memberDTO.getUserName());
+            Member comfortMember = new Member();
+            comfortMember.setUserId(memberDTO.getUserId());
+            comfortMember.setUserName(memberDTO.getUserName());
 
-            Member memberResult = memberRepository.save(member);
 
+            Member member = memberRepository.findByUserId(memberDTO.getUserId());
+            System.out.println(member);
+
+            if (member == null) {
+                memberRepository.save(comfortMember);
+            }
 
         } catch (Exception e){
             System.out.println("이전에 가입한 사용자 로그인 중......");
-//            e.printStackTrace();
+            e.printStackTrace();
         }
         return true;
     }

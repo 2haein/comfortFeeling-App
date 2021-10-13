@@ -2,11 +2,13 @@ package com.codeboogie.comfortbackend.api.member.controller;
 
 import com.codeboogie.comfortbackend.api.member.service.MemberService;
 import com.codeboogie.comfortbackend.common.member.domain.dto.MemberDTO;
+import com.codeboogie.comfortbackend.common.member.domain.model.Member;
+import com.codeboogie.comfortbackend.common.member.domain.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("api")
@@ -14,6 +16,7 @@ public class MemberController {
 
     @Autowired
     private MemberService memberService;
+
 
     @RequestMapping(value = "/member", method= {RequestMethod.POST})
     public @ResponseBody void insert(@RequestParam HashMap<String, String> data, MemberDTO memberDTO) {
