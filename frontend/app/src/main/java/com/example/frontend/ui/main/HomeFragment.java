@@ -68,6 +68,7 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
         View root = binding.getRoot();
 
 
+
         /**
          * KAKAO MAP 설정
          * */
@@ -250,6 +251,8 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle("선택하세요");
 
+            MainActivity activity = (MainActivity) getActivity();
+
             builder.setItems(R.array.LAN, new DialogInterface.OnClickListener(){
                 @Override
                 public void onClick(DialogInterface dialog, int pos)
@@ -259,12 +262,10 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
                     int count = checkPostHistory();
                     // 각 버튼별로 수행할 일
                     if(pos == 0 && count == 0){
-                        MainActivity loginData = new MainActivity();
-
                         Intent intent = new Intent(getActivity(), PostActivity.class);
                         intent.putExtra("lat", mCurrentLat);
                         intent.putExtra("lon", mCurrentLng);
-                        intent.putExtra("userId", loginData.strUserId);
+                        intent.putExtra("userId", activity.getUserId());
                         startActivity(intent);
                     }
                     else if(pos == 0 && count == 1){

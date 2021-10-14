@@ -130,4 +130,8 @@ public class MainActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
+    public String getUserId() {
+        return strUserId;
+    }
+
 }
