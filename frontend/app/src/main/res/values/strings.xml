@@ -7,7 +7,7 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
-    <string name="menu_home">감정 지도</string>
+    <string name="menu_home">감정을 위로해</string>
     <string name="menu_history">History</string>
     <string name="menu_slideshow">감정 기록 그래프</string>
     <string name="menu_logout">로그아웃</string>
