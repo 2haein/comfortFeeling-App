@@ -20,6 +20,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.frontend.MainActivity;
 import com.example.frontend.PostActivity;
 import com.example.frontend.R;
 import com.example.frontend.RequestHttpURLConnection;
@@ -55,6 +56,7 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
 
     private float mCurrentLng;
     private float mCurrentLat;
+
     private String strUserId;
 
     private MarkerEventListener eventListener = new MarkerEventListener();
@@ -64,6 +66,7 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+
 
 
         /**
@@ -248,6 +251,8 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle("선택하세요");
 
+            MainActivity activity = (MainActivity) getActivity();
+
             builder.setItems(R.array.LAN, new DialogInterface.OnClickListener(){
                 @Override
                 public void onClick(DialogInterface dialog, int pos)
@@ -260,7 +265,7 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
                         Intent intent = new Intent(getActivity(), PostActivity.class);
                         intent.putExtra("lat", mCurrentLat);
                         intent.putExtra("lon", mCurrentLng);
-                        intent.putExtra("userId", strUserId);
+                        intent.putExtra("userId", activity.getUserId());
                         startActivity(intent);
                     }
                     else if(pos == 0 && count == 1){

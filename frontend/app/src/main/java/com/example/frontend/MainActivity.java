@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
     // menu item initialization
     private SessionCallback sessionCallback = new SessionCallback();
-    private String strNickname, strProfile, strEmail, strUserId;
+    public String strNickname, strProfile, strEmail, strUserId;
 
 
     @Override
@@ -128,6 +128,10 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    public String getUserId() {
+        return strUserId;
     }
 
 }
