@@ -1,6 +1,9 @@
 package com.example.frontend;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -38,6 +41,11 @@ public class PostActivity extends AppCompatActivity {
         submit_btn = (Button)findViewById(R.id.button);
 
         Intent intent = getIntent();
+
+        LayerDrawable stars = (LayerDrawable) feel_rate.getProgressDrawable();
+        stars.getDrawable(2).setColorFilter(Color.parseColor("#e7c31b"), PorterDuff.Mode.SRC_ATOP); // for filled stars
+        stars.getDrawable(1).setColorFilter(Color.parseColor("#e7c31b"), PorterDuff.Mode.SRC_ATOP); // for half filled stars
+        stars.getDrawable(0).setColorFilter(Color.parseColor("#c2c2c2"), PorterDuff.Mode.SRC_ATOP); // for empty stars
 
         back_btn.setOnClickListener(new View.OnClickListener(){
             @Override
