@@ -73,7 +73,7 @@ public class PostActivity extends AppCompatActivity {
                     .put("text", edit_text.getText().toString())
                     .put("score", rating)
                     .put("publishDate", getTime)
-                    .put("xcoord", intent.getExtras().getFloat("linat"))
+                    .put("xcoord", intent.getExtras().getFloat("lat"))
                     .put("ycoord", intent.getExtras().getFloat("lon"))
                     .toString();
 
