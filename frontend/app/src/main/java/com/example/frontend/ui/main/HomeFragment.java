@@ -56,8 +56,8 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
 
     private float mCurrentLng;
     private float mCurrentLat;
-    MainActivity loginData = new MainActivity();
-    private String strUserId = loginData.strUserId;
+
+    private String strUserId;
 
     private MarkerEventListener eventListener = new MarkerEventListener();
 
@@ -259,10 +259,12 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
                     int count = checkPostHistory();
                     // 각 버튼별로 수행할 일
                     if(pos == 0 && count == 0){
+                        MainActivity loginData = new MainActivity();
+
                         Intent intent = new Intent(getActivity(), PostActivity.class);
                         intent.putExtra("lat", mCurrentLat);
                         intent.putExtra("lon", mCurrentLng);
-                        intent.putExtra("userId", strUserId);
+                        intent.putExtra("userId", loginData.strUserId);
                         startActivity(intent);
                     }
                     else if(pos == 0 && count == 1){
