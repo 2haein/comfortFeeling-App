@@ -1,4 +1,4 @@
-package com.example.frontend.ui.slideshow;
+package com.example.frontend.ui.graph;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

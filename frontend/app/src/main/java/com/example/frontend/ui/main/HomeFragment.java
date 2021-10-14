@@ -1,6 +1,4 @@
-package com.example.frontend.ui.home;
-
-import static androidx.core.content.ContextCompat.getSystemService;
+package com.example.frontend.ui.main;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -18,14 +16,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 
-import com.example.frontend.MainActivity;
 import com.example.frontend.PostActivity;
 import com.example.frontend.R;
 import com.example.frontend.RequestHttpURLConnection;

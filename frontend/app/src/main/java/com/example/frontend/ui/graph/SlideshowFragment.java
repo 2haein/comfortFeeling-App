@@ -1,6 +1,5 @@
-package com.example.frontend.ui.slideshow;
+package com.example.frontend.ui.graph;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,16 +8,11 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.frontend.R;
 import com.example.frontend.databinding.FragmentSlideshowBinding;
 import com.google.android.material.snackbar.Snackbar;
-
-import org.xmlpull.v1.XmlPullParser;
 
 public class SlideshowFragment extends Fragment {
 

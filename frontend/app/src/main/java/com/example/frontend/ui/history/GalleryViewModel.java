@@ -1,4 +1,4 @@
-package com.example.frontend.ui.gallery;
+package com.example.frontend.ui.history;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
