@@ -38,7 +38,6 @@ import java.util.Date;
 public class HomeFragment extends Fragment implements MapView.CurrentLocationEventListener, MapView.MapViewEventListener {
 
     private static final String LOG_TAG = "KAKAO_MAP_LOG";
-    //    private HomeViewModel homeViewModel;
     private FragmentHomeBinding binding;
 
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
@@ -62,29 +61,9 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-//        homeViewModel =
-//                new ViewModelProvider(this).get(HomeViewModel.class);
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-
-//        final TextView textView = binding.textHome;
-//        homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-//            @Override
-//            public void onChanged(@Nullable String s) {
-//                textView.setText(s);
-//            }
-//        });
-
-        /**
-         * KAKAO MAP 권한 설정
-         * */
-
-        if (!checkLocationServicesStatus()) {
-            showDialogForLocationServiceSetting();
-        }else {
-            checkRunTimePermission();
-        }
 
 
         /**
@@ -116,7 +95,15 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
         mapView.setPOIItemEventListener(eventListener);
 
 
+        /**
+         * KAKAO MAP 권한 설정
+         * */
 
+        if (!checkLocationServicesStatus()) {
+            showDialogForLocationServiceSetting();
+        }else {
+            checkRunTimePermission();
+        }
 
 
         return root;
@@ -181,9 +168,7 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
 
 
     public boolean checkLocationServicesStatus() {
-//        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-
-        LocationManager locationManager = (LocationManager)getContext().getSystemService(Context.LOCATION_SERVICE);;
+        LocationManager locationManager = (LocationManager) getActivity().getSystemService(getActivity().LOCATION_SERVICE);
 
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
                 || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
@@ -198,7 +183,7 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
         if (hasFineLocationPermission == PackageManager.PERMISSION_GRANTED ) {
             // 2. 이미 퍼미션을 가지고 있다면
             // 3.  위치 값을 가져올 수 있음
-//            mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading); //TrackingModeOnWithoutHeading
+            mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading); //TrackingModeOnWithoutHeading
 
 
         } else {  //2. 퍼미션 요청을 허용한 적이 없다면 퍼미션 요청이 필요합니다. 2가지 경우(3-1, 4-1)가 있습니다.
