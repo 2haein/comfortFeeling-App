@@ -20,6 +20,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.frontend.MainActivity;
 import com.example.frontend.PostActivity;
 import com.example.frontend.R;
 import com.example.frontend.RequestHttpURLConnection;
@@ -55,7 +56,8 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
 
     private float mCurrentLng;
     private float mCurrentLat;
-    private String strUserId;
+    MainActivity loginData = new MainActivity();
+    private String strUserId = loginData.strUserId;
 
     private MarkerEventListener eventListener = new MarkerEventListener();
 

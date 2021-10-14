@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
     // menu item initialization
     private SessionCallback sessionCallback = new SessionCallback();
-    private String strNickname, strProfile, strEmail, strUserId;
+    public String strNickname, strProfile, strEmail, strUserId;
 
 
     @Override
