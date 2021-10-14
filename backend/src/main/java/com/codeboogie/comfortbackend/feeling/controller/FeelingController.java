@@ -71,7 +71,7 @@ public class FeelingController {
         return feelingService.findHistory(value);
     }
 
-
+    // 그래프 조회 년월일 전송 받을시 스코어 리턴
 
 
 

@@ -20,6 +20,7 @@ public class FeelingRequest {
     private Long userId; //카카오 계정
     private int score; //감정 기록 점수
     private Date publishDate; //작성한 날짜
+    private Date updateDate;
     private String text; //작성한 글
     private float xcoord; //글 작성 위치 x 좌표
     private float ycoord; //글 작성 위치 y 좌표

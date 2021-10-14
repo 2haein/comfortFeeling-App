@@ -11,6 +11,7 @@ public class FeelingAdapter {
                 .userId(feelingRequest.getUserId())
                 .score(feelingRequest.getScore())
                 .publishDate(feelingRequest.getPublishDate())
+                .updateDate(feelingRequest.getUpdateDate())
                 .text(feelingRequest.getText())
                 .xcoord(feelingRequest.getXcoord())
                 .ycoord(feelingRequest.getYcoord())
