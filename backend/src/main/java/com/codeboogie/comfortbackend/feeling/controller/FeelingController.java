@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import com.codeboogie.comfortbackend.feeling.model.Feeling;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -72,6 +73,11 @@ public class FeelingController {
     }
 
     // 그래프 조회 년월일 전송 받을시 스코어 리턴
+    @RequestMapping(path="/graph", method={ RequestMethod.GET, RequestMethod.POST })
+    public @ResponseBody List<Feeling> graph(@RequestBody String userId, String startDate, String endDate) {
+
+        return feelingService.getGraph(userId, startDate, endDate);
+    }
 
 
 

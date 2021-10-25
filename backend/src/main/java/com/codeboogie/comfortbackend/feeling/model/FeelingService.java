@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -75,6 +76,21 @@ public class FeelingService {
         Query query = new Query(criteria);
 
         return mongoTemplate.find(query, Feeling.class, "feeling" );
+    }
+
+    public List<Feeling> getGraph(String userId, String startDate, String endDate) {
+        Query query = new Query();
+        Criteria criteria = new Criteria();
+
+        Criteria criteria_arr[] = new Criteria[2];
+
+        criteria_arr[0] = Criteria.where("userId").regex(userId);
+        criteria_arr[1] = Criteria.where("publishDate").gte(startDate).lte(endDate);
+
+        query.addCriteria(criteria.andOperator(criteria_arr));
+        query.fields().include("userId", "score", "publishDate");
+
+        return mongoTemplate.find(query, Feeling.class, "feeling");
     }
 
 
