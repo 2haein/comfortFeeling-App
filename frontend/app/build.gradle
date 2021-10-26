@@ -62,4 +62,5 @@ dependencies {
     implementation('org.apache.httpcomponents:httpmime:4.3') {
         exclude module: "httpclient"
     }
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.2'
 }
