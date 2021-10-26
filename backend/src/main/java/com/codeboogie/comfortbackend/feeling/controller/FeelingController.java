@@ -64,6 +64,22 @@ public class FeelingController {
         return feelingService.findDatas(userId, date);
     }
 
+    //주변 글 개수 불러와서 지도에 포인터 표출
+    @RequestMapping(path="/loadDataCount", method={ RequestMethod.GET, RequestMethod.POST })
+    public @ResponseBody int loadDataCount(@RequestBody HashMap<String, String> data) throws Exception {
+        System.out.println("안드로이드 -> 서버로 Post 요청 date:"+ data.get("publishDate"));
+
+        return feelingService.loadDataCount(data.get("publishDate"));
+    }
+
+    // 주변 글 불러와서 지도에 포인터 표출
+    @RequestMapping(path="/loadData", method={ RequestMethod.GET, RequestMethod.POST })
+    public @ResponseBody List<Feeling> loadData(@RequestBody HashMap<String, String> data) throws Exception {
+        System.out.println("안드로이드 -> 서버로 Post 요청 date:"+ data.get("publishDate"));
+
+        return feelingService.loadData(data.get("publishDate"));
+    }
+
     // 전체 글 조회
     @RequestMapping(path="/loadHistory", method={ RequestMethod.GET, RequestMethod.POST })
     public @ResponseBody List<Feeling> loadHistory(@RequestBody Long userId) {
@@ -72,10 +88,18 @@ public class FeelingController {
         return feelingService.loadHistory(userId);
     }
 
+    /*//댓글 추가
+    @RequestMapping(path="/addCmt", method={ RequestMethod.GET, RequestMethod.POST })
+    public @ResponseBody List<HashMap> addCmt(@RequestBody HashMap<String, String> data) {
+        System.out.println("안드로이드 -> 서버로 Post 요청 :"+ data);
+
+        return a;
+    }*/
+
     /*//댓글 조회
-    @RequestMapping(path="/load_cmt", method={ RequestMethod.GET, RequestMethod.POST })
-    public @ResponseBody List<HashMap> load_cmt(@RequestBody Long userId) {
-        System.out.println("안드로이드 -> 서버로 Post 요청 userId:"+ userId);
+    @RequestMapping(path="/loadCmt", method={ RequestMethod.GET, RequestMethod.POST })
+    public @ResponseBody List<HashMap> loadCmt(@RequestBody HashMap<String, String> data) {
+        System.out.println("안드로이드 -> 서버로 Post 요청 :"+ data);
 
         return a;
     }*/

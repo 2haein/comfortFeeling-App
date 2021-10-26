@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -18,20 +19,6 @@ public class FeelingService {
 
 //    @Autowired
 //    private FeelingRepository feelingRepository;
-
-    public long findDatas(String userId, String date) {
-        Query query = new Query();
-        Criteria criteria = new Criteria();
-
-        Criteria criteria_arr[] = new Criteria[2];
-
-        criteria_arr[0] = Criteria.where("userId").regex(userId);
-        criteria_arr[1] = Criteria.where("publishDate").regex(date);
-
-        query.addCriteria(criteria.andOperator(criteria_arr));
-
-        return mongoTemplate.count(query, Feeling.class, "feeling");
-    }
 
     public Feeling insert(final Feeling feeling) {
         if(feeling == null) {
@@ -69,6 +56,63 @@ public class FeelingService {
 
     }
 
+    public long findDatas(String userId, String date) {
+        Query query = new Query();
+        Criteria criteria = new Criteria();
+
+        Criteria criteria_arr[] = new Criteria[2];
+
+        criteria_arr[0] = Criteria.where("userId").regex(userId);
+        criteria_arr[1] = Criteria.where("publishDate").regex(date);
+
+        query.addCriteria(criteria.andOperator(criteria_arr));
+
+        return mongoTemplate.count(query, Feeling.class, "feeling");
+    }
+
+    public int loadDataCount(String date) throws ParseException {
+        Criteria criteria = new Criteria("publishDate");
+
+        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        String startDate = date + "T00:00:00.000Z";
+        Date sDate = inputFormat.parse(startDate);
+        // 시간대가 UTC로 되기 때문에 9시간 추가해야 한국 시간대 맞춰짐
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(sDate);
+        cal.add(Calendar.HOUR, 9);
+        sDate = cal.getTime();
+        cal.add(Calendar.DATE, 1);
+        Date eDate = cal.getTime();
+
+        criteria.gte(sDate).lte(eDate);
+
+        Query query = new Query(criteria);
+        System.out.println("query :"+ query);
+
+        return (int) mongoTemplate.count(query, Feeling.class, "feeling");
+    }
+
+    public List<Feeling> loadData(String date) throws ParseException {
+        Criteria criteria = new Criteria("publishDate");
+
+        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        String startDate = date + "T00:00:00.000Z";
+        Date sDate = inputFormat.parse(startDate);
+        // 시간대가 UTC로 되기 때문에 9시간 추가해야 한국 시간대 맞춰짐
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(sDate);
+        cal.add(Calendar.HOUR, 9);
+        sDate = cal.getTime();
+        cal.add(Calendar.DATE, 1);
+        Date eDate = cal.getTime();
+
+        criteria.gte(sDate).lte(eDate);
+
+        Query query = new Query(criteria);
+
+        return mongoTemplate.find(query, Feeling.class, "feeling");
+    }
+
     public List<Feeling> loadHistory(Long userId) {
         Criteria criteria = new Criteria("userId");
         criteria.is(userId);
@@ -78,7 +122,7 @@ public class FeelingService {
         return mongoTemplate.find(query, Feeling.class, "feeling" );
     }
 
-   /* public List<HashMap> load_cmt(String id) {
+   /* public List<HashMap> loadCmt(String id) {
         Criteria criteria = new Criteria("_id");
         criteria.is(id);
 
