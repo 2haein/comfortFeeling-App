@@ -73,6 +73,15 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
          * KAKAO MAP 설정
          * */
 
+        binding.write.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), PostActivity.class);
+                Toast.makeText(getActivity(), "오늘의 감정기록!",Toast.LENGTH_SHORT).show();
+                startActivity(intent);
+            }
+        });
+
         binding.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

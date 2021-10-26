@@ -19,15 +19,30 @@
             tools:layout_editor_absoluteX="60dp"
             tools:layout_editor_absoluteY="34dp" >
 
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/write"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="28dp"
+                android:src="@drawable/pencil"
+                app:backgroundTint="#EEE6C4"
+                app:elevation="6dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:pressedTranslationZ="12dp" />
+
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|end"
-                android:layout_marginEnd="10dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="92dp"
                 android:src="@drawable/ic_location_searching_black_24dp"
-                app:backgroundTint="#ffffff"
+                app:backgroundTint="#EEE6C4"
                 app:elevation="6dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
