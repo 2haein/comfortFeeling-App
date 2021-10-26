@@ -28,8 +28,10 @@ import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.utils.Utils;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -46,8 +48,14 @@ public class GraphFragment extends Fragment {
 
         final TextView textView = binding.representTextView;
         TextView textView2 = binding.scoreText;
+        TextView dateView = binding.DateView;
         textView.setText("오늘의 감정 점수");
         textView2.setText("3점");
+        long now = System.currentTimeMillis();
+        Date date = new Date(now);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 MM월");
+        String getTime = sdf.format(date);
+        dateView.setText(getTime);
 
         ArrayList<Integer> jsonList = new ArrayList<>(); // ArrayList 선언
         ArrayList<String> labelList = new ArrayList<>(); // ArrayList 선언
@@ -79,6 +87,10 @@ public class GraphFragment extends Fragment {
         lineDataSet.setDrawHorizontalHighlightIndicator(false);
         lineDataSet.setDrawHighlightIndicators(false);
         lineDataSet.setDrawValues(false);
+        //to make the smooth line as the graph is adrapt change so smooth curve
+        lineDataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+        //to enable the cubic density : if 1 then it will be sharp curve
+        lineDataSet.setCubicIntensity(0.2f);
 
         LineData lineData = new LineData();
         lineData.addDataSet(lineDataSet);
@@ -98,7 +110,7 @@ public class GraphFragment extends Fragment {
         yLAxis.setAxisMaximum(5);
 //        yLAxis.setAxisMinimum(1);
         yLAxis.setTextSize(12);
-        yRAxis.setDrawLabels(true);
+        yRAxis.setDrawLabels(false);
         yRAxis.setDrawAxisLine(false);
         yRAxis.setDrawGridLines(false);
         yLAxis.setGranularity(1.0f);
