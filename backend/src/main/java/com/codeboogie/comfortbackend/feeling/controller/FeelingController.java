@@ -82,15 +82,15 @@ public class FeelingController {
     }*/
 
     // 그래프 조회 년월일 전송 받을시 스코어 리턴
-    // String 데이터 : userId, startDate & endDate (DateFormat : yyyy-MM-dd'T'HH:mm:ss.SSS'Z')
+    // String 데이터 : userId, startDate & endDate (DateFormat : yyyy-MM-dd)
     @RequestMapping(path="/graph", method={ RequestMethod.GET, RequestMethod.POST })
     public @ResponseBody List<Feeling> graph(@RequestBody HashMap<String, String> data) throws Exception {
         System.out.println("안드로이드 -> 서버로 Post 요청 :"+ data);
 
-        return feelingService.getGraph(data.get("userId"), data.get("startDate"), data.get("endDate"));
+        return feelingService.getGraph(data.get("userId"), data.get("publishDate"));
     }
 
-    // 그래프 월별 조회 : String 데이터 : userId / 년-월 (ex. 2021-10)
+    // 그래프 월별 조회 : String 데이터 : userId / yyyy-MM (ex. 2021-10)
     @RequestMapping(path="/graphMonth", method={ RequestMethod.GET, RequestMethod.POST })
     public @ResponseBody List<Feeling> graphMonth(@RequestBody HashMap<String, String> data) throws Exception {
         System.out.println("안드로이드 -> 서버로 Post 요청 :"+ data);

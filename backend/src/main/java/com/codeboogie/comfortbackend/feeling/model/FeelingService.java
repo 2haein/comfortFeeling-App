@@ -91,22 +91,29 @@ public class FeelingService {
         return mongoTemplate.find(query, , "feeling" );
     }*/
 
-    public List<Feeling> getGraph(String userId, String startDate, String endDate) throws Exception {
+    public List<Feeling> getGraph(String userId, String publishDate) throws Exception {
         Query query = new Query();
         Criteria criteria = new Criteria();
 
         Criteria criteria_arr[] = new Criteria[2];
         SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-
+        String startDate = publishDate + "T00:00:00.000Z";
         Date sDate = inputFormat.parse(startDate);
-        Date eDate = inputFormat.parse(endDate);
-
+        // 시간대가 UTC로 되기 때문에 9시간 추가해야 한국 시간대 맞춰짐
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(sDate);
+        cal.add(Calendar.HOUR, 9);
+        sDate = cal.getTime();
+        cal.add(Calendar.DATE, 1);
+        Date eDate = cal.getTime();
 
         criteria_arr[0] = Criteria.where("userId").is(Long.parseLong(userId));
         criteria_arr[1] = Criteria.where("publishDate").gte(sDate).lte(eDate);
 
         query.addCriteria(criteria.andOperator(criteria_arr));
         query.fields().include("score", "publishDate");
+
+        //System.out.println("query :"+ query);
 
         return mongoTemplate.find(query, Feeling.class, "feeling");
     }
@@ -119,13 +126,13 @@ public class FeelingService {
         SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 
         // 시작 시간 맞추기 입력값 예시 2021-10
-        String startDate = month + "-01T00:00:00.001Z";
+        String startDate = month + "-01T00:00:00.000Z";
         Date sDate = inputFormat.parse(startDate);
 
-        // 아래 사항 안할시 하루 전부터 계산됨 하루 추가해야함
+        // 시간대가 UTC로 되기 때문에 9시간 추가해야 한국 시간대 맞춰짐
         Calendar cal = Calendar.getInstance();
         cal.setTime(sDate);
-        cal.add(Calendar.DATE, 1);
+        cal.add(Calendar.HOUR, 9);
         sDate = cal.getTime();
         cal.add(Calendar.MONTH, 1);
         Date eDate = cal.getTime();
@@ -136,6 +143,7 @@ public class FeelingService {
         query.addCriteria(criteria.andOperator(criteria_arr));
         query.fields().include("score", "publishDate");
 
+        //System.out.println("query :"+ query);
         return mongoTemplate.find(query, Feeling.class, "feeling");
     }
 
