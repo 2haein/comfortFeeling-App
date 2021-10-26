@@ -10,7 +10,10 @@
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/chart"
         android:layout_width="match_parent"
-        android:layout_height="450dp" />
+        android:layout_height="450dp"
+        app:layout_constraintBottom_toTopOf="@+id/representTextView"
+        app:layout_constraintTop_toBottomOf="@+id/DateView"
+        tools:layout_editor_absoluteX="0dp" />
 
     <TextView
         android:id="@+id/representTextView"
@@ -18,9 +21,9 @@
         android:layout_height="54dp"
         android:gravity="center"
         android:text="TextView"
-        android:textStyle="bold"
         android:textSize="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/scoreText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
@@ -41,5 +44,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/representTextView"
         app:layout_constraintVertical_bias="0.312" />
+
+    <TextView
+        android:id="@+id/DateView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="TextView"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/chart"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.44"
+        tools:layout_editor_absoluteX="16dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
