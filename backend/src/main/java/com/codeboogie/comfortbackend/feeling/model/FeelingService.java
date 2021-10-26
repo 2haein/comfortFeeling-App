@@ -122,14 +122,21 @@ public class FeelingService {
         return mongoTemplate.find(query, Feeling.class, "feeling" );
     }
 
-   /* public List<HashMap> loadCmt(String id) {
-        Criteria criteria = new Criteria("_id");
-        criteria.is(id);
+    public Comment addCmt(final Comment comment) {
+        if(comment == null) {
+            throw new NullPointerException("Data Null");
+        }
+        return mongoTemplate.insert(comment, "comment");
+    }
+
+   public List<Comment> loadCmt(final Comment comment) {
+        Criteria criteria = new Criteria("feeling_id");
+        criteria.is(comment.getFeeling_id());
 
         Query query = new Query(criteria);
 
-        return mongoTemplate.find(query, , "feeling" );
-    }*/
+        return mongoTemplate.find(query, Comment.class, "comment" );
+    }
 
     public int getGraph(String userId, String publishDate) throws Exception {
         Query query = new Query();

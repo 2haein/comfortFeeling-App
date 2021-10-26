@@ -1,5 +1,6 @@
 package com.codeboogie.comfortbackend.feeling.controller;
 
+import com.codeboogie.comfortbackend.feeling.model.Comment;
 import com.codeboogie.comfortbackend.feeling.model.FeelingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -88,21 +89,24 @@ public class FeelingController {
         return feelingService.loadHistory(userId);
     }
 
-    /*//댓글 추가
+    //댓글 추가
     @RequestMapping(path="/addCmt", method={ RequestMethod.GET, RequestMethod.POST })
-    public @ResponseBody List<HashMap> addCmt(@RequestBody HashMap<String, String> data) {
-        System.out.println("안드로이드 -> 서버로 Post 요청 :"+ data);
+    public @ResponseBody void addCmt(@RequestBody final Comment comment) {
+        System.out.println("안드로이드 -> 서버로 Post 요청 :"+ comment);
+        try {
+            feelingService.addCmt(comment);
+        } catch(final Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-        return a;
-    }*/
-
-    /*//댓글 조회
+    //댓글 조회
     @RequestMapping(path="/loadCmt", method={ RequestMethod.GET, RequestMethod.POST })
-    public @ResponseBody List<HashMap> loadCmt(@RequestBody HashMap<String, String> data) {
-        System.out.println("안드로이드 -> 서버로 Post 요청 :"+ data);
+    public @ResponseBody List<Comment> loadCmt(@RequestBody final Comment comment) {
+        System.out.println("안드로이드 -> 서버로 Post 요청 :"+ comment);
 
-        return a;
-    }*/
+        return feelingService.loadCmt(comment);
+    }
 
     // 그래프 조회 년월일 전송 받을시 스코어 리턴
     // String 데이터 : userId, startDate & endDate (DateFormat : yyyy-MM-dd)
