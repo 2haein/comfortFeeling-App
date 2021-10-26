@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class graphFragment extends Fragment {
+public class GraphFragment extends Fragment {
 
     private FragmentGraphBinding binding;
     private LineChart lineChart;
@@ -38,7 +38,7 @@ public class graphFragment extends Fragment {
         binding = FragmentGraphBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textSlideshow;
+        final TextView textView = binding.textExample;
         lineChart = (LineChart) binding.chart;
 
         textView.setText("asdsadsa");
@@ -49,7 +49,7 @@ public class graphFragment extends Fragment {
         entries.add(new Entry(3, 0));
         entries.add(new Entry(4, 4));
         entries.add(new Entry(5, 3));
-        LineDataSet lineDataSet = new LineDataSet(entries, "속성명1");
+        LineDataSet lineDataSet = new LineDataSet(entries, "감정 점수");
         lineDataSet.setLineWidth(2);
         lineDataSet.setCircleRadius(6);
         lineDataSet.setCircleColor(Color.parseColor("#FFA1B4DC"));
@@ -80,6 +80,9 @@ public class graphFragment extends Fragment {
         lineChart.animateY(2000, Easing.EasingOption.EaseInCubic);
         lineChart.invalidate();
 
+        MyMarkerView marker = new MyMarkerView(this, R.layout.markerviewtext);
+        marker.setChartView(lineChart);
+        lineChart.setMarker(marker);
 
 
 

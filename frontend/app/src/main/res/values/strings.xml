@@ -9,7 +9,7 @@
 
     <string name="menu_home">감정을 위로해</string>
     <string name="menu_history">History</string>
-    <string name="menu_slideshow">감정 기록 그래프</string>
+    <string name="menu_graph">감정 변화 그래프</string>
     <string name="menu_logout">로그아웃</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="prompt_email">Email</string>
