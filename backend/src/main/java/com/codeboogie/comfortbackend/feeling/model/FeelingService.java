@@ -5,14 +5,10 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
-import org.springframework.data.mongodb.repository.Aggregation;
 import org.springframework.stereotype.Service;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class FeelingService {
@@ -91,7 +87,7 @@ public class FeelingService {
         return mongoTemplate.find(query, , "feeling" );
     }*/
 
-    public List<Feeling> getGraph(String userId, String publishDate) throws Exception {
+    public int getGraph(String userId, String publishDate) throws Exception {
         Query query = new Query();
         Criteria criteria = new Criteria();
 
@@ -111,14 +107,17 @@ public class FeelingService {
         criteria_arr[1] = Criteria.where("publishDate").gte(sDate).lte(eDate);
 
         query.addCriteria(criteria.andOperator(criteria_arr));
-        query.fields().include("score", "publishDate");
+        query.fields().include("score");
 
         //System.out.println("query :"+ query);
+        List<Feeling> temp = mongoTemplate.find(query, Feeling.class, "feeling");
 
-        return mongoTemplate.find(query, Feeling.class, "feeling");
+        int rtnVal = temp.get(0).getScore();
+
+        return rtnVal;
     }
 
-    public List<Feeling> getGraphMonth(String userId, String month) throws Exception {
+    public List<HashMap<String, Integer>> getGraphMonth(String userId, String month) throws Exception {
         Query query = new Query();
         Criteria criteria = new Criteria();
 
@@ -144,7 +143,19 @@ public class FeelingService {
         query.fields().include("score", "publishDate");
 
         //System.out.println("query :"+ query);
-        return mongoTemplate.find(query, Feeling.class, "feeling");
+        List<Feeling> temp = mongoTemplate.find(query, Feeling.class, "feeling");
+        List<HashMap<String, Integer>> listMap = new ArrayList<>();
+
+
+        for(int i =0; i<temp.size(); i++){
+            HashMap<String, Integer> hashMap = new HashMap<>();
+            String dTemp = temp.get(i).getPublishDate().toString();
+            dTemp = dTemp.substring(8,10);
+            hashMap.put(dTemp, temp.get(i).getScore());
+            listMap.add(hashMap);
+        }
+
+        return listMap;
     }
 
 

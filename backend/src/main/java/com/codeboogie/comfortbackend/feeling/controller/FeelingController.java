@@ -6,7 +6,6 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.web.bind.annotation.*;
 import com.codeboogie.comfortbackend.feeling.model.Feeling;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -84,7 +83,7 @@ public class FeelingController {
     // 그래프 조회 년월일 전송 받을시 스코어 리턴
     // String 데이터 : userId, startDate & endDate (DateFormat : yyyy-MM-dd)
     @RequestMapping(path="/graph", method={ RequestMethod.GET, RequestMethod.POST })
-    public @ResponseBody List<Feeling> graph(@RequestBody HashMap<String, String> data) throws Exception {
+    public @ResponseBody int graph(@RequestBody HashMap<String, String> data) throws Exception {
         System.out.println("안드로이드 -> 서버로 Post 요청 :"+ data);
 
         return feelingService.getGraph(data.get("userId"), data.get("publishDate"));
@@ -92,11 +91,12 @@ public class FeelingController {
 
     // 그래프 월별 조회 : String 데이터 : userId / yyyy-MM (ex. 2021-10)
     @RequestMapping(path="/graphMonth", method={ RequestMethod.GET, RequestMethod.POST })
-    public @ResponseBody List<Feeling> graphMonth(@RequestBody HashMap<String, String> data) throws Exception {
+    public @ResponseBody List<HashMap<String, Integer>> graphMonth(@RequestBody HashMap<String, String> data) throws Exception {
         System.out.println("안드로이드 -> 서버로 Post 요청 :"+ data);
 
         return feelingService.getGraphMonth(data.get("userId"), data.get("month"));
     }
+
 
 
 
