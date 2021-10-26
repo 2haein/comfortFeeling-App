@@ -60,23 +60,42 @@ public class FeelingController {
     //하루 글 썻는지 조회
     @RequestMapping(value="/history", method={ RequestMethod.GET, RequestMethod.POST })
     public @ResponseBody long history(@RequestBody String userId, String date) {
+        System.out.println("안드로이드 -> 서버로 Post 요청 userId:"+ userId + " date:" + date);
 
         return feelingService.findDatas(userId, date);
     }
 
     // 전체 글 조회
-    @RequestMapping(path="/history2", method={ RequestMethod.GET, RequestMethod.POST })
-    public @ResponseBody List<Feeling> history2(@RequestBody String userId) {
-        String value = userId;
+    @RequestMapping(path="/loadHistory", method={ RequestMethod.GET, RequestMethod.POST })
+    public @ResponseBody List<Feeling> loadHistory(@RequestBody Long userId) {
+        System.out.println("안드로이드 -> 서버로 Post 요청 userId:"+ userId);
 
-        return feelingService.findHistory(value);
+        return feelingService.loadHistory(userId);
     }
 
-    // 그래프 조회 년월일 전송 받을시 스코어 리턴
-    @RequestMapping(path="/graph", method={ RequestMethod.GET, RequestMethod.POST })
-    public @ResponseBody List<Feeling> graph(@RequestBody String userId, String startDate, String endDate) {
+    /*//댓글 조회
+    @RequestMapping(path="/load_cmt", method={ RequestMethod.GET, RequestMethod.POST })
+    public @ResponseBody List<HashMap> load_cmt(@RequestBody Long userId) {
+        System.out.println("안드로이드 -> 서버로 Post 요청 userId:"+ userId);
 
-        return feelingService.getGraph(userId, startDate, endDate);
+        return a;
+    }*/
+
+    // 그래프 조회 년월일 전송 받을시 스코어 리턴
+    // String 데이터 : userId, startDate & endDate (DateFormat : yyyy-MM-dd'T'HH:mm:ss.SSS'Z')
+    @RequestMapping(path="/graph", method={ RequestMethod.GET, RequestMethod.POST })
+    public @ResponseBody List<Feeling> graph(@RequestBody HashMap<String, String> data) throws Exception {
+        System.out.println("안드로이드 -> 서버로 Post 요청 :"+ data);
+
+        return feelingService.getGraph(data.get("userId"), data.get("startDate"), data.get("endDate"));
+    }
+
+    // 그래프 월별 조회 : String 데이터 : userId / 년-월 (ex. 2021-10)
+    @RequestMapping(path="/graphMonth", method={ RequestMethod.GET, RequestMethod.POST })
+    public @ResponseBody List<Feeling> graphMonth(@RequestBody HashMap<String, String> data) throws Exception {
+        System.out.println("안드로이드 -> 서버로 Post 요청 :"+ data);
+
+        return feelingService.getGraphMonth(data.get("userId"), data.get("month"));
     }
 
 
