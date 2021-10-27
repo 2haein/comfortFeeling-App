@@ -21,6 +21,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.frontend.MainActivity;
+import com.example.frontend.PopupActivity;
 import com.example.frontend.PostActivity;
 import com.example.frontend.R;
 import com.example.frontend.RequestHttpURLConnection;
@@ -85,7 +86,7 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
             @Override
             public void onClick(View view) {
                 MainActivity activity = (MainActivity) getActivity();
-                Intent intent = new Intent(getActivity(), PostActivity.class);
+                Intent intent = new Intent(getActivity(), PopupActivity.class);
                 Toast.makeText(getActivity(), "오늘의 감정기록!",Toast.LENGTH_SHORT).show();
                 intent.putExtra("lat", mCurrentLat);
                 intent.putExtra("lon", mCurrentLng);
