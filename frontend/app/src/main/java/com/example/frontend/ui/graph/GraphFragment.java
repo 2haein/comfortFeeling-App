@@ -61,7 +61,6 @@ public class GraphFragment extends Fragment {
     private String todayScore = "0";
     private String todayDate;
     private String monthDate;
-    private List<HashMap> arrayDate;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -72,6 +71,11 @@ public class GraphFragment extends Fragment {
         lineChart = (LineChart) binding.chart;
         List<Entry> entries = new ArrayList<>();
         lineChart.clear();
+        entries.add(new Entry(0, 0));
+//        entries.add(new Entry(2, 2));
+//        entries.add(new Entry(3, 3));
+//        entries.add(new Entry(4, 2));
+//        entries.add(new Entry(5, 5));
 
         long now = System.currentTimeMillis();
         Date date = new Date(now);
@@ -85,6 +89,11 @@ public class GraphFragment extends Fragment {
         SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
         todayDate = sdf2.format(date);
 
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 MM월 dd일");
+        String getTime = sdf.format(date);
+        dateView.setText(getTime);
+
         /**
          * 그래프 API1: Score 점수 받아오기
          * */
@@ -92,12 +101,14 @@ public class GraphFragment extends Fragment {
         if(userId != null){
             todayScore = getTodayScore(userId, todayDate);
         }
-        if(todayScore == "0" || todayScore == null) {
-            textView2.setText("아직 오늘의 감정이 기록되지 않았습니다!");
-        } else {
-            textView2.setText(todayScore+"점");
-            textView2.setTextSize(20);
-            textView2.setTextColor(Color.parseColor("#ff8d07"));
+        if(todayScore != null) {
+            if (Integer.parseInt(todayScore) == 0) {
+                textView2.setText("아직 오늘의 감정이 기록되지 않았습니다!");
+            } else {
+                textView2.setText(todayScore + "점");
+                textView2.setTextSize(20);
+                textView2.setTextColor(Color.parseColor("#ff8d07"));
+            }
         }
 
         /**
@@ -163,9 +174,6 @@ public class GraphFragment extends Fragment {
 //        }
 
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 MM월 dd일");
-        String getTime = sdf.format(date);
-        dateView.setText(getTime);
 
 
 //        for (Record record : records) { //values에 데이터를 담는 과정
@@ -174,12 +182,6 @@ public class GraphFragment extends Fragment {
 //            values.add(new Entry(dateTime, weight));
 //        }
 
-
-        entries.add(new Entry(0, 0));
-//        entries.add(new Entry(2, 2));
-//        entries.add(new Entry(3, 3));
-//        entries.add(new Entry(4, 2));
-//        entries.add(new Entry(5, 5));
         LineDataSet lineDataSet = new LineDataSet(entries, "감정 점수");
         lineDataSet.setLineWidth(3);
         lineDataSet.setCircleRadius(8);
@@ -191,10 +193,6 @@ public class GraphFragment extends Fragment {
         lineDataSet.setDrawHorizontalHighlightIndicator(false);
         lineDataSet.setDrawHighlightIndicators(false);
         lineDataSet.setDrawValues(false);
-        //to make the smooth line as the graph is adrapt change so smooth curve
-        lineDataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
-        //to enable the cubic density : if 1 then it will be sharp curve
-        lineDataSet.setCubicIntensity(0.2f);
 
         LineData lineData = new LineData();
         lineData.addDataSet(lineDataSet);
