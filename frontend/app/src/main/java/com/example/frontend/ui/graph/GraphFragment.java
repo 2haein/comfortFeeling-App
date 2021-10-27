@@ -1,7 +1,9 @@
 package com.example.frontend.ui.graph;
 
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +13,11 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.frontend.LoginActivity;
+import com.example.frontend.MainActivity;
 import com.example.frontend.R;
 import com.example.frontend.databinding.FragmentGraphBinding;
+import com.example.frontend.http.CommonMethod;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
@@ -28,6 +33,13 @@ import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.utils.Utils;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,6 +51,9 @@ public class GraphFragment extends Fragment {
 
     private FragmentGraphBinding binding;
     private LineChart lineChart;
+    private String userId;
+    private String todayDate;
+    private String monthDate;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -46,14 +61,48 @@ public class GraphFragment extends Fragment {
         binding = FragmentGraphBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        long now = System.currentTimeMillis();
+        Date date = new Date(now);
+
         final TextView textView = binding.representTextView;
         TextView textView2 = binding.scoreText;
         TextView dateView = binding.DateView;
+        MainActivity activity = (MainActivity) getActivity();
+        userId = activity.getUserId();
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+        todayDate = sdf2.format(date);
+
+        /**
+         * 그래프 API1: Score 점수 받아오기
+         * */
         textView.setText("오늘의 감정 점수");
-        textView2.setText("3점");
-        long now = System.currentTimeMillis();
-        Date date = new Date(now);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 MM월");
+        String TodayScore = getTodayScore(userId, todayDate);
+        if(TodayScore== null || TodayScore == "0") {
+            textView2.setText("아직 오늘의 감정이 기록되지 않았습니다!");
+        } else {
+            textView2.setText(TodayScore+"점");
+            textView2.setTextSize(20);
+            textView2.setTextColor(Color.parseColor("#ff8d07"));
+        }
+
+        /**
+         * 그래프 API2: 월일별 Score 점수 받아오기
+         * @param: String userId
+         * @param: String month (yyyy-MM)
+         * */
+        SimpleDateFormat sdf3 = new SimpleDateFormat("yyyy-MM");
+        monthDate = sdf3.format(date);
+//        String TodayScore = getTodayScore(userId, monthDate);
+//        if(TodayScore== null || TodayScore == "0") {
+//            textView2.setText("아직 오늘의 감정이 기록되지 않았습니다!");
+//        } else {
+//            textView2.setText(TodayScore+"점");
+//            textView2.setTextSize(20);
+//            textView2.setTextColor(Color.parseColor("#ff8d07"));
+//        }
+
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 MM월 dd일");
         String getTime = sdf.format(date);
         dateView.setText(getTime);
 
@@ -141,6 +190,72 @@ public class GraphFragment extends Fragment {
 
         return root;
     }
+
+    // 서버와 연동하기
+    public String getTodayScore(String userId, String todayDate) {
+        Log.w("graphFragment","오늘의 감정 기록 점수 가져오는 중");
+        String result ="";
+        try {
+            Log.w("앱에서 보낸값",userId+", "+todayDate);
+
+            GraphFragment.CustomTask task = new GraphFragment.CustomTask();
+            result = task.execute(userId,todayDate).get();
+
+            Log.w("받은값",result);
+
+
+        } catch (Exception e) {
+            Log.w("감정 기록 점수 에러", e);
+        }
+        return result;
+    }
+
+
+    class CustomTask extends AsyncTask<String, Void, String> {
+        String sendMsg, receiveMsg;
+        @Override
+        // doInBackground의 매개변수 값이 여러개일 경우를 위해 배열로
+        protected String doInBackground(String... strings) {
+            try {
+                String str;
+
+                URL url = new URL( CommonMethod.ipConfig+"/api/graph");  // 어떤 서버에 요청할지(localhost 안됨.)
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+                conn.setRequestMethod("POST");                              //데이터를 POST 방식으로 전송합니다.
+                conn.setDoOutput(true);
+
+                // 서버에 보낼 값 포함해 요청함.
+                OutputStreamWriter osw = new OutputStreamWriter(conn.getOutputStream());
+                sendMsg = "userId="+strings[0]+"&publishDate="+strings[1];
+                osw.write(sendMsg);                           // OutputStreamWriter에 담아 전송
+                osw.flush();
+                Log.i("통신 중", "test");
+                // jsp와 통신이 잘 되고, 서버에서 보낸 값 받음.
+                if(conn.getResponseCode() == conn.HTTP_OK) {
+                    InputStreamReader tmp = new InputStreamReader(conn.getInputStream(), "UTF-8");
+                    BufferedReader reader = new BufferedReader(tmp);
+                    StringBuffer buffer = new StringBuffer();
+                    while ((str = reader.readLine()) != null) {
+                        buffer.append(str);
+                    }
+                    receiveMsg = buffer.toString();
+                    Log.i("통신 결과", receiveMsg);
+                } else {    // 통신이 실패한 이유를 찍기위한 로그
+                    Log.i("통신 결과", conn.getResponseCode()+"에러");
+                    return null;
+                }
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            // 서버에서 보낸 값을 리턴합니다.
+            return receiveMsg;
+        }
+    }
+
 
 
     @Override
