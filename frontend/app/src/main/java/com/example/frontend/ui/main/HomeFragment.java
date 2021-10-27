@@ -414,7 +414,7 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
         String rtnStr="";
         int count = 0;
         //REST API 주소
-        String url = "http://192.168.0.200:8080/api/history";
+        String url = "http://localhost:8080/api/history";
         //String url = "http://본인IP주소:8080/api/history";
 
         try{
@@ -446,7 +446,8 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
          String getTime = sformat.format(now);
          String rtnStr="";
 
-         String url = "http://192.168.0.200:8080/api/loadData"; // 글 정보
+         String url = "http://localhost:8080/api/loadData"; // 글 정보
+//         String url = "http://192.168.0.200:8080/api/loadData"; // 글 정보
          try{
              String jsonString = new JSONObject()
                      .put("publishDate", getTime)
@@ -477,7 +478,8 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
         String getTime = sformat.format(now);
         String rtnStr="";
         int postNum=0;
-        String url = "http://192.168.0.200:8080/api/loadDataCount"; //당일 글 갯수
+        String url = "http://localhost:8080/api/loadDataCount";
+//        String url = "http://192.168.0.200:8080/api/loadDataCount"; //당일 글 갯수
 
         try{
             String jsonString = new JSONObject()
