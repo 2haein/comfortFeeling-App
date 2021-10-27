@@ -155,8 +155,12 @@ public class FeelingService {
 
         //System.out.println("query :"+ query);
         List<Feeling> temp = mongoTemplate.find(query, Feeling.class, "feeling");
-
-        int rtnVal = temp.get(0).getScore();
+        int rtnVal = 0;
+        if(temp.size()==0){
+            rtnVal = 0;
+        } else{
+            rtnVal = temp.get(0).getScore();
+        }
 
         return rtnVal;
     }
