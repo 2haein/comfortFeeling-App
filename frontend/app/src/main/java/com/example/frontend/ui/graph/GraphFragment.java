@@ -107,7 +107,7 @@ public class GraphFragment extends Fragment {
          * */
         SimpleDateFormat sdf3 = new SimpleDateFormat("yyyy-MM");
         monthDate = sdf3.format(date);
-        String MonthScore="pp";
+        String MonthScore   ="init";
         if(userId != null){
             MonthScore = getMonthScore(userId, monthDate);
         }
@@ -122,35 +122,36 @@ public class GraphFragment extends Fragment {
          * Simple Way to Convert String to JSON
         * */
         JSONArray jsonArr = null;
-        try {
-            jsonArr = new JSONArray(MonthScore);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        for (int i = 0; i < jsonArr.length(); i++)
-        {
-            JSONObject jsonMonthObj = null;
+        if(MonthScore != null) {
             try {
-                jsonMonthObj = jsonArr.getJSONObject(i);
+                jsonArr = new JSONArray(MonthScore);
+
+                for (int i = 0; i < jsonArr.length(); i++) {
+                    JSONObject jsonMonthObj = null;
+                    try {
+                        jsonMonthObj = jsonArr.getJSONObject(i);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    Iterator iterator = jsonMonthObj.keys(); // key값들을 모두 얻어옴.
+                    String dayScore = "";
+                    String day = "";
+                    while (iterator.hasNext()) {
+                        day = iterator.next().toString();
+                        try {
+                            dayScore = jsonMonthObj.getString(day);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    entries.add(new Entry(Integer.parseInt(day), Integer.parseInt(dayScore)));
+                    System.out.println(jsonMonthObj);
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
-            Iterator iterator = jsonMonthObj.keys(); // key값들을 모두 얻어옴.
-            String dayScore ="";
-            String day="";
-            while(iterator.hasNext())
-            {
-                day = iterator.next().toString();
-                try {
-                    dayScore = jsonMonthObj.getString(day);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            entries.add(new Entry(Integer.parseInt(day), Integer.parseInt(dayScore)));
-            System.out.println(jsonMonthObj);
         }
 //        arrayDate = MonthScore;
 //        if(TodayScore== null || TodayScore == "0") {
@@ -174,7 +175,7 @@ public class GraphFragment extends Fragment {
 //        }
 
 
-//        entries.add(new Entry(1, 1));
+        entries.add(new Entry(0, 0));
 //        entries.add(new Entry(2, 2));
 //        entries.add(new Entry(3, 3));
 //        entries.add(new Entry(4, 2));
@@ -202,6 +203,8 @@ public class GraphFragment extends Fragment {
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setTextColor(Color.BLACK);
         xAxis.setTextSize(12);
+        xAxis.setAxisMinimum(1);
+        xAxis.setGranularity(1.0f);
         xAxis.enableGridDashedLine(8, 24, 0);
         xAxis.setLabelCount(10, true); //X축의 데이터를 최대 몇개 까지 나타낼지에 대한 설정 5개 force가 true 이면 반드시 보여줌
         xAxis.setAxisMaximum(31);
@@ -211,7 +214,7 @@ public class GraphFragment extends Fragment {
         yLAxis.setTextColor(Color.BLACK);
         YAxis yRAxis = lineChart.getAxisRight();
         yLAxis.setAxisMaximum(5);
-//        yLAxis.setAxisMinimum(1);
+        yLAxis.setAxisMinimum(0);
         yLAxis.setTextSize(12);
         yRAxis.setDrawLabels(false);
         yRAxis.setDrawAxisLine(false);
