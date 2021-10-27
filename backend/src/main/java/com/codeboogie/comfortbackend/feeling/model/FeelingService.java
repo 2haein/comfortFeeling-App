@@ -142,8 +142,8 @@ public class FeelingService {
         // 시간대가 UTC로 되기 때문에 9시간 추가해야 한국 시간대 맞춰짐
         Calendar cal = Calendar.getInstance();
         cal.setTime(sDate);
-        cal.add(Calendar.HOUR, 9);
-        sDate = cal.getTime();
+        /*cal.add(Calendar.HOUR, 9);
+        sDate = cal.getTime();*/
         cal.add(Calendar.DATE, 1);
         Date eDate = cal.getTime();
 
@@ -179,8 +179,8 @@ public class FeelingService {
         // 시간대가 UTC로 되기 때문에 9시간 추가해야 한국 시간대 맞춰짐
         Calendar cal = Calendar.getInstance();
         cal.setTime(sDate);
-        cal.add(Calendar.HOUR, 9);
-        sDate = cal.getTime();
+        /*cal.add(Calendar.HOUR, 9);
+        sDate = cal.getTime();*/
         cal.add(Calendar.MONTH, 1);
         Date eDate = cal.getTime();
 
