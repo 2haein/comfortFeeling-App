@@ -86,7 +86,7 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
             @Override
             public void onClick(View view) {
                 MainActivity activity = (MainActivity) getActivity();
-                Intent intent = new Intent(getActivity(), PopupActivity.class);
+                Intent intent = new Intent(getActivity(), PostActivity.class);
                 Toast.makeText(getActivity(), "오늘의 감정기록!",Toast.LENGTH_SHORT).show();
                 intent.putExtra("lat", mCurrentLat);
                 intent.putExtra("lon", mCurrentLng);
