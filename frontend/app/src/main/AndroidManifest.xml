@@ -48,7 +48,7 @@
             android:label="@string/app_name" />
         <activity
             android:name=".PopupActivity"
-            android:theme="@style/Theme.Transparent"
+            android:theme="@style/Theme.FrontEnd.NoActionBar"
             android:label="@string/app_name" />
 
 
