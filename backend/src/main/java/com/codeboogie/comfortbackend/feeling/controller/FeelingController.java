@@ -82,8 +82,10 @@ public class FeelingController {
 
     // 전체 글 조회
     @RequestMapping(path="/loadHistory", method={ RequestMethod.GET, RequestMethod.POST })
-    public @ResponseBody List<Feeling> loadHistory(@RequestBody Long userId) {
-        System.out.println("안드로이드 -> 서버로 Post 요청 userId:"+ userId);
+    public @ResponseBody List<Feeling> loadHistory(@RequestBody HashMap<String, String> data) {
+        System.out.println("안드로이드 -> 서버로 Post 요청 userId:"+ data);
+        Long userId = Long.parseLong(data.get("userId"));
+
 
         return feelingService.loadHistory(userId);
     }
