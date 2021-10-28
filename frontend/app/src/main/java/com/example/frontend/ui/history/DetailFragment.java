@@ -27,6 +27,9 @@ import com.example.frontend.RequestHttpURLConnection;
 import com.example.frontend.databinding.FragmentDetailBinding;
 import com.example.frontend.http.CommonMethod;
 
+import net.daum.mf.map.api.MapPoint;
+import net.daum.mf.map.api.MapView;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -49,6 +52,12 @@ public class DetailFragment extends Fragment {
     // 로그에 사용할 TAG
     final private String TAG = getClass().getSimpleName();
     private FragmentDetailBinding binding;
+
+    /**
+     * KAKAO MAP 선언
+     * */
+    private MapView mapView;
+    ViewGroup mapViewContainer;
 
     // 사용할 컴포넌트 선언
     TextView content_tv, date_tv;
@@ -107,6 +116,8 @@ public class DetailFragment extends Fragment {
             // Database 의 데이터들을 변수로 저장한 후 해당 TextView 에 데이터 입력
             String content = jsonObject.optString("text");
             String publishDate = jsonObject.optString("publishDate");
+            double xcoord = Double.parseDouble(jsonObject.optString("xcoord"));
+            double ycoord = Double.parseDouble(jsonObject.optString("ycoord"));
             SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
             Date pDate = inputFormat.parse(publishDate);
             inputFormat.applyPattern("yyyy-MM-dd HH:mm:ss");
@@ -156,10 +167,17 @@ public class DetailFragment extends Fragment {
                     break;
             }
 
+            mapView = new MapView(getActivity());
+            mapViewContainer = (ViewGroup) binding.mapView;
+            mapViewContainer.addView(mapView);
+
+            // 중심점 변경 + 줌 레벨 변경
+            mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(xcoord, ycoord), 3, true);
+
 
             // 해당 게시물에 대한 댓글 불러오는 함수 호출, 파라미터로 게시물 번호 넘김
-            //LoadCmt loadCmt = new LoadCmt();
-            //loadCmt.execute(board_seq);
+            LoadCmt loadCmt = new LoadCmt();
+            loadCmt.execute(board_seq);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -171,11 +189,13 @@ public class DetailFragment extends Fragment {
         return root;
     }
 
+    public void onPause() {
+        super.onPause();
+        mapViewContainer.removeAllViews();
+    }
+
     //당일 글 갯수
     public String getHistory(){
-        SimpleDateFormat sformat = new SimpleDateFormat("yyyy-MM-dd");
-        Date now = new Date();
-        String getTime = sformat.format(now);
         String rtnStr="";
         int postNum=0;
         String url = CommonMethod.ipConfig +"/api/loadHistory";
@@ -231,19 +251,23 @@ public class DetailFragment extends Fragment {
                     View customView = layoutInflater.inflate(R.layout.history_comment, null);
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
 
-                    String userid= jsonObject.optString("userid");
-                    String content = jsonObject.optString("content");
-                    String crt_dt = jsonObject.optString("crt_dt");
+                    String content = jsonObject.optString("context");
+                    String crt_dt = jsonObject.optString("publishDate");
+                    SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+                    Date pDate = inputFormat.parse(crt_dt);
+                    inputFormat.applyPattern("yyyy-MM-dd HH:mm:ss");
+                    String newDateForm = inputFormat.format(pDate);
 
-                    ((TextView)customView.findViewById(R.id.cmt_userid_tv)).setText(userid);
                     ((TextView)customView.findViewById(R.id.cmt_content_tv)).setText(content);
-                    ((TextView)customView.findViewById(R.id.cmt_date_tv)).setText(crt_dt);
+                    ((TextView)customView.findViewById(R.id.cmt_date_tv)).setText(newDateForm);
 
 // 댓글 레이아웃에 custom_comment 의 디자인에 데이터를 담아서 추가
                     comment_layout.addView(customView);
                 }
 
             } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (ParseException e) {
                 e.printStackTrace();
             }
 
@@ -253,7 +277,7 @@ public class DetailFragment extends Fragment {
         @Override
         protected String doInBackground(String... params) {
 
-            String server_url =  CommonMethod.ipConfig + "/api/load_cmt";
+            String server_url =  CommonMethod.ipConfig + "/api/loadCmt";
 
 
             URL url;
@@ -347,7 +371,11 @@ public class DetailFragment extends Fragment {
             String content = params[1];
             String board_seq = params[2];
 
-            String server_url =  CommonMethod.ipConfig + "/api/reg_comment";
+            SimpleDateFormat sformat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+            Date now = new Date();
+            String getTime = sformat.format(now);
+
+            String server_url =  CommonMethod.ipConfig + "/api/addCmt";
 
 
             URL url;
@@ -362,9 +390,11 @@ public class DetailFragment extends Fragment {
                 conn.setDoInput(true);
                 conn.setDoOutput(true);
                 Uri.Builder builder = new Uri.Builder()
-                        .appendQueryParameter("userid", userid)
-                        .appendQueryParameter("content", content)
-                        .appendQueryParameter("board_seq", board_seq);
+                        .appendQueryParameter("userId", userid)
+                        .appendQueryParameter("context", content)
+                        .appendQueryParameter("feeling_id", board_seq)
+                        .appendQueryParameter("publishDate", getTime)
+                        .appendQueryParameter("show", "1");
                 String query = builder.build().getEncodedQuery();
 
                 OutputStream os = conn.getOutputStream();

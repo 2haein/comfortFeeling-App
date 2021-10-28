@@ -101,10 +101,10 @@ public class FeelingController {
 
     //댓글 추가
     @RequestMapping(path="/addCmt", method={ RequestMethod.GET, RequestMethod.POST })
-    public @ResponseBody void addCmt(@RequestBody final Comment comment) {
-        System.out.println("안드로이드 -> 서버로 Post 요청 :"+ comment);
+    public @ResponseBody void addCmt(@RequestParam HashMap<String, String> data) {
+        System.out.println("안드로이드 -> 서버로 Post 댓글등록 :"+ data);
         try {
-            feelingService.addCmt(comment);
+            feelingService.addCmt(data);
         } catch(final Exception e) {
             e.printStackTrace();
         }
@@ -112,10 +112,10 @@ public class FeelingController {
 
     //댓글 조회
     @RequestMapping(path="/loadCmt", method={ RequestMethod.GET, RequestMethod.POST })
-    public @ResponseBody List<Comment> loadCmt(@RequestBody final Comment comment) {
-        System.out.println("안드로이드 -> 서버로 Post 요청 :"+ comment);
+    public @ResponseBody List<Comment> loadCmt(@RequestParam HashMap<String, String> data) {
+        System.out.println("안드로이드 -> 서버로 Post 댓글 요청 :"+ data);
 
-        return feelingService.loadCmt(comment);
+        return feelingService.loadCmt(data);
     }
 
     // 그래프 조회 년월일 전송 받을시 스코어 리턴

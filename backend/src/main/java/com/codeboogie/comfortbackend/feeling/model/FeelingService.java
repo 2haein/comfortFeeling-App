@@ -129,16 +129,29 @@ public class FeelingService {
     }
 
 
-    public Comment addCmt(final Comment comment) {
-        if(comment == null) {
+    public Comment addCmt(HashMap<String, String> data) throws ParseException {
+        if(data == null) {
             throw new NullPointerException("Data Null");
         }
+
+        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        Date sDate = inputFormat.parse(data.get("publishDate"));
+
+        Comment comment = Comment.builder()
+                .feeling_id(data.get("feeling_id"))
+                .context(data.get("context"))
+                .userId(Long.parseLong(data.get("userId")))
+                .publishDate(sDate)
+                .show(Integer.parseInt(data.get("show")))
+                .build();
+
         return mongoTemplate.insert(comment, "comment");
     }
 
-   public List<Comment> loadCmt(final Comment comment) {
+   public List<Comment> loadCmt(HashMap<String, String> data) {
+
         Criteria criteria = new Criteria("feeling_id");
-        criteria.is(comment.getFeeling_id());
+        criteria.is(data.get("feeling_id"));
 
 
         Query query = new Query(criteria);

@@ -109,11 +109,9 @@ public class HistoryFragment extends Fragment {
 
             }
 
-            // ListView 에서 사용할 arrayAdapter를 생성하고, ListView 와 연결
             //ArrayAdapter arrayAdapter = new ArrayAdapter<String>(getActivity().getApplicationContext(), android.R.layout.simple_list_item_1, titleList);
             //listView.setAdapter(arrayAdapter);
 
-            // arrayAdapter의 데이터가 변경되었을때 새로고침
             //arrayAdapter.notifyDataSetChanged();
 
         } catch (JSONException e) {
@@ -133,12 +131,12 @@ public class HistoryFragment extends Fragment {
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                 DetailFragment detailFragment = new DetailFragment();
 
-                //프레그먼트끼리 rfgName넘기기 위한 bundle
+                //프레그먼트끼리 seq넘기기 위한 bundle
                 Bundle bundle = new Bundle();
                 bundle.putString("seq", idStr);
-                detailFragment.setArguments(bundle); //Name 변수 값 전달. 반드시 setArguments() 메소드를 사용하지 않으면, 받는 쪽에서 null 값으로 받음.
-                //버튼을 눌렀을 때 RE-Fr자바를 탈 수 있도록 함
-                transaction.replace(R.id.history_fragment, detailFragment); //프레임 레이아웃에서 프레그먼트 1로 변경(replace)해라
+                detailFragment.setArguments(bundle); //seq 변수 값 전달.
+
+                transaction.replace(R.id.history_fragment, detailFragment); //프레임 레이아웃에서 detailFragment로 변경
                 transaction.addToBackStack(null);
                 transaction.commit(); //저장해라 commit
 
@@ -151,11 +149,7 @@ public class HistoryFragment extends Fragment {
 
     //당일 글 갯수
     public String getHistoryList(){
-        SimpleDateFormat sformat = new SimpleDateFormat("yyyy-MM-dd");
-        Date now = new Date();
-        String getTime = sformat.format(now);
         String rtnStr="";
-        int postNum=0;
         String url = CommonMethod.ipConfig +"/api/loadHistoryList";
 
         try{
@@ -179,121 +173,4 @@ public class HistoryFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
-
-
-/*    @Override
-    public void onResume() {
-        super.onResume();
-    // 해당 액티비티가 활성화 될 때, 게시물 리스트를 불러오는 함수를 호출
-        GetBoard getBoard = new GetBoard();
-        getBoard.execute();
-    }
-
-
-    // 게시물 리스트를 읽어오는 함수
-    class GetBoard extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-            Log.d(TAG, "onPreExecute");
-        }
-
-
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-            Log.d(TAG, "onPostExecute, " + result);
-
-            // 배열들 초기화
-            titleList.clear();
-            dateList.clear();
-            seqList.clear();
-
-            try {
-
-                // 결과물이 JSONArray 형태로 넘어오기 때문에 파싱
-                JSONArray jsonArray = new JSONArray(result);
-
-                for(int i=0;i<jsonArray.length();i++){
-                    JSONObject jsonObject = jsonArray.getJSONObject(i);
-
-                    String title = jsonObject.optString("text");
-                    String publishDate = jsonObject.optString("publishDate");
-                    String seq = jsonObject.optString("_id");
-
-                // title, seq 값을 변수로 받아서 배열에 추가
-                    titleList.add(title);
-                    dateList.add(publishDate);
-                    seqList.add(seq);
-
-                }
-
-                // ListView 에서 사용할 arrayAdapter를 생성하고, ListView 와 연결
-                ArrayAdapter arrayAdapter = new ArrayAdapter<String>(getActivity().getApplicationContext(), android.R.layout.simple_list_item_1, titleList);
-                listView.setAdapter(arrayAdapter);
-
-                // arrayAdapter의 데이터가 변경되었을때 새로고침
-                arrayAdapter.notifyDataSetChanged();
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-
-        }
-
-
-        @Override
-        protected String doInBackground(String... params) {
-
-
-            String server_url = CommonMethod.ipConfig +"/api/loadHistory";
-
-
-            URL url;
-            String response = "";
-            try {
-                url = new URL(server_url);
-
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setReadTimeout(15000);
-                conn.setConnectTimeout(15000);
-                conn.setRequestMethod("POST");
-                conn.setDoInput(true);
-                conn.setDoOutput(true);
-                Uri.Builder builder = new Uri.Builder()
-                        .appendQueryParameter("userId", activity.getUserId());
-                String query = builder.build().getEncodedQuery();
-
-                OutputStream os = conn.getOutputStream();
-                BufferedWriter writer = new BufferedWriter(
-                        new OutputStreamWriter(os, "UTF-8"));
-                writer.write(query);
-                writer.flush();
-                writer.close();
-                os.close();
-
-                conn.connect();
-                int responseCode=conn.getResponseCode();
-
-                if (responseCode == HttpsURLConnection.HTTP_OK) {
-                    String line;
-                    BufferedReader br=new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                    while ((line=br.readLine()) != null) {
-                        response+=line;
-                    }
-                }
-                else {
-                    response="";
-
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            return response;
-        }
-    } */
 }
