@@ -9,6 +9,7 @@ import android.view.Menu;
 
 import com.bumptech.glide.Glide;
 import com.example.frontend.callback.SessionCallback;
+import com.example.frontend.common.ProfileData;
 import com.example.frontend.ui.main.HomeFragment;
 import com.google.android.material.navigation.NavigationView;
 
@@ -39,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
     // menu item initialization
     private SessionCallback sessionCallback = new SessionCallback();
-    public String strNickname, strProfile, strEmail, strUserId;
+    public String strUserId;
 
 
     @Override
@@ -68,16 +69,12 @@ public class MainActivity extends AppCompatActivity {
          */
         View headerView = navigationView.getHeaderView(0);
         TextView userId = headerView.findViewById(R.id.userId);
-        Intent intent = getIntent();
-        strUserId = intent.getStringExtra("userId");
-        userId.setText(strUserId);
+        userId.setText(ProfileData.getUserId());
         TextView nickName = headerView.findViewById(R.id.nickName);
-        strNickname = intent.getStringExtra("nickName");
-        nickName.setText(strNickname);
+        nickName.setText(ProfileData.getNickName());
         ImageView profileImageUrl = headerView.findViewById(R.id.profileImageUrl);
-        strProfile = intent.getStringExtra("thumbnail");
         Glide.with(this)
-                .load(strProfile)
+                .load(ProfileData.getThumbnail())
                 .placeholder(R.mipmap.ic_launcher_round)
                 .error(R.mipmap.ic_launcher_round)
                 .fallback(R.mipmap.ic_launcher_round)
@@ -130,10 +127,6 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
-    }
-
-    public String getUserId() {
-        return strUserId;
     }
 
 }
