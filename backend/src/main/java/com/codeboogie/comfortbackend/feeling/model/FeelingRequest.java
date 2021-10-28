@@ -22,6 +22,6 @@ public class FeelingRequest {
     private Date publishDate; //작성한 날짜
     private Date updateDate;
     private String text; //작성한 글
-    private float xcoord; //글 작성 위치 x 좌표
-    private float ycoord; //글 작성 위치 y 좌표
+    private Double xcoord; //글 작성 위치 x 좌표
+    private Double ycoord; //글 작성 위치 y 좌표
 }
