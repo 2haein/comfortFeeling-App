@@ -99,6 +99,7 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
         mapView.setPOIItemEventListener(eventListener);
 
 
+
         // 여기부터 마커 가져오기
         cnt = getPostNum(); //게시글 수
         try {
@@ -350,6 +351,8 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
                     String[] items = getResources().getStringArray(R.array.LAN);
                     FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                     PostFragment postFragment = new PostFragment();
+                    final double lat = mapPOIItem.getMapPoint().getMapPointGeoCoord().latitude;
+                    final double log = mapPOIItem.getMapPoint().getMapPointGeoCoord().longitude;
 
                     Toast.makeText(getActivity(),items[pos],Toast.LENGTH_LONG).show();
                     int count = checkPostHistory();
@@ -357,8 +360,8 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
                     if(pos == 0 && count == 0){
 
                         Bundle bundle = new Bundle();
-                        bundle.putDouble("lat", mCurrentLat);
-                        bundle.putDouble("lon", mCurrentLng);
+                        bundle.putDouble("lat", lat);
+                        bundle.putDouble("lon", log);
                         postFragment.setArguments(bundle); //seq 변수 값 전달.
                         transaction.replace(R.id.home_fragment, postFragment); //프레임 레이아웃에서 detailFragment로 변경
                         transaction.addToBackStack(null);
@@ -371,6 +374,7 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
                     }
                     else if(pos==1){
                         mapView.removePOIItem(mapPOIItem);
+                        removePosting();
                     }
                 }
             });
@@ -409,7 +413,6 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
         });
         builder.create().show();
     }
-
 
 
     @Override
@@ -552,6 +555,31 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
 
         return postNum;
     }
+
+    //글 삭제
+    public void removePosting(){
+        SimpleDateFormat sformat = new SimpleDateFormat("yyyy-MM-dd");
+        Date now = new Date();
+        String getTime = sformat.format(now);
+        String rtnStr="";
+        String url = CommonMethod.ipConfig + "/api/remove";
+
+        try{
+            String jsonString = new JSONObject()
+                    .put("userId", strUserId)
+                    .put("publishDate", getTime)
+                    .toString();
+
+            //REST API
+            RequestHttpURLConnection.NetworkAsyncTask networkTask = new RequestHttpURLConnection.NetworkAsyncTask(url, jsonString);
+            rtnStr = networkTask.execute().get();
+            Toast.makeText(getActivity(), "게시글 삭제", Toast.LENGTH_LONG).show();
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
 
 
 }
