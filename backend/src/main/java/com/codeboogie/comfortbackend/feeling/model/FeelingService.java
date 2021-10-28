@@ -66,7 +66,7 @@ public class FeelingService {
 
         query.addCriteria(criteria.andOperator(criteria_arr));
 
-        mongoTemplate.remove(query, "feeling");
+        mongoTemplate.findAndRemove(query, Feeling.class,"feeling");
 
     }
 
