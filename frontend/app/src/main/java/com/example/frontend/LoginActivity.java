@@ -16,6 +16,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.frontend.http.CommonMethod;
 import com.kakao.auth.ApiErrorCode;
 import com.kakao.auth.AuthType;
 import com.kakao.auth.ISessionCallback;
@@ -233,8 +234,7 @@ public class LoginActivity extends AppCompatActivity {
         protected String doInBackground(String... strings) {
             try {
                 String str;
-                URL url = new URL("http://192.168.219.170:8080/api/member");  // 어떤 서버에 요청할지(localhost 안됨.)
-                // ex) http://192.168.210.170:8080/api/member
+                URL url = new URL(CommonMethod.ipConfig +"/api/member");  // 어떤 서버에 요청할지(localhost 안됨.)
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
                 conn.setRequestMethod("POST");                              //데이터를 POST 방식으로 전송합니다.
