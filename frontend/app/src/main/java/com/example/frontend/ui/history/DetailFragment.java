@@ -2,6 +2,7 @@ package com.example.frontend.ui.history;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,6 +38,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -52,9 +55,9 @@ public class DetailFragment extends Fragment {
     LinearLayout comment_layout;
     EditText comment_et;
     Button reg_button;
+    ImageView feel_btn1, feel_btn2, feel_btn3, feel_btn4, feel_btn5;
 
     String board_seq;
-
     String userId;
 
     @Override
@@ -70,26 +73,29 @@ public class DetailFragment extends Fragment {
         // 컴포넌트 초기화
         content_tv = (TextView) root.findViewById(R.id.content_tv);
         date_tv = (TextView) root.findViewById(R.id.date_tv);
-
+        feel_btn1 = (ImageView)root.findViewById(R.id.imageView1);
+        feel_btn2 = (ImageView)root.findViewById(R.id.imageView2);
+        feel_btn3 = (ImageView)root.findViewById(R.id.imageView3);
+        feel_btn4 = (ImageView)root.findViewById(R.id.imageView4);
+        feel_btn5 = (ImageView)root.findViewById(R.id.imageView5);
         comment_layout = (LinearLayout) root.findViewById(R.id.comment_layout);
         comment_et = (EditText) root.findViewById(R.id.comment_et);
         reg_button = (Button) root.findViewById(R.id.reg_button);
 
-        /*// 등록하기 버튼을 눌렀을 때 댓글 등록 함수 호출
+        // 등록하기 버튼을 눌렀을 때 댓글 등록 함수 호출
         reg_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 RegCmt regCmt = new RegCmt();
                 regCmt.execute(userId, comment_et.getText().toString(), board_seq);
             }
-        });*/
+        });
 
         Bundle bundle = getArguments();  //번들 받기. getArguments() 메소드로 받음.
 
         if(bundle != null){
             board_seq = bundle.getString("seq");
             System.out.println("seq=" + board_seq); //확인
-
         }
 
         try {
@@ -101,9 +107,54 @@ public class DetailFragment extends Fragment {
             // Database 의 데이터들을 변수로 저장한 후 해당 TextView 에 데이터 입력
             String content = jsonObject.optString("text");
             String publishDate = jsonObject.optString("publishDate");
+            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+            Date pDate = inputFormat.parse(publishDate);
+            inputFormat.applyPattern("yyyy-MM-dd HH:mm:ss");
+            String newDateForm = inputFormat.format(pDate);
+
+            int score = Integer.parseInt(jsonObject.optString("score"));
 
             content_tv.setText(content);
-            date_tv.setText(publishDate);
+            date_tv.setText(newDateForm);
+
+            switch (score) {
+                case 1: feel_btn1.setBackgroundColor(Color.YELLOW);
+                    feel_btn2.setBackgroundColor(Color.WHITE);
+                    feel_btn3.setBackgroundColor(Color.WHITE);
+                    feel_btn4.setBackgroundColor(Color.WHITE);
+                    feel_btn5.setBackgroundColor(Color.WHITE);
+                    break;
+                case 2 : feel_btn1.setBackgroundColor(Color.WHITE);
+                    feel_btn2.setBackgroundColor(Color.YELLOW);
+                    feel_btn3.setBackgroundColor(Color.WHITE);
+                    feel_btn4.setBackgroundColor(Color.WHITE);
+                    feel_btn5.setBackgroundColor(Color.WHITE);
+                    break;
+                case 3 : feel_btn1.setBackgroundColor(Color.WHITE);
+                    feel_btn2.setBackgroundColor(Color.WHITE);
+                    feel_btn3.setBackgroundColor(Color.YELLOW);
+                    feel_btn4.setBackgroundColor(Color.WHITE);
+                    feel_btn5.setBackgroundColor(Color.WHITE);
+                    break;
+                case 4 : feel_btn1.setBackgroundColor(Color.WHITE);
+                    feel_btn2.setBackgroundColor(Color.WHITE);
+                    feel_btn3.setBackgroundColor(Color.WHITE);
+                    feel_btn4.setBackgroundColor(Color.YELLOW);
+                    feel_btn5.setBackgroundColor(Color.WHITE);
+                    break;
+                case 5 : feel_btn1.setBackgroundColor(Color.WHITE);
+                    feel_btn2.setBackgroundColor(Color.WHITE);
+                    feel_btn3.setBackgroundColor(Color.WHITE);
+                    feel_btn4.setBackgroundColor(Color.WHITE);
+                    feel_btn5.setBackgroundColor(Color.YELLOW);
+                    break;
+                default : feel_btn1.setBackgroundColor(Color.WHITE);
+                    feel_btn2.setBackgroundColor(Color.WHITE);
+                    feel_btn3.setBackgroundColor(Color.WHITE);
+                    feel_btn4.setBackgroundColor(Color.WHITE);
+                    feel_btn5.setBackgroundColor(Color.WHITE);
+                    break;
+            }
 
 
             // 해당 게시물에 대한 댓글 불러오는 함수 호출, 파라미터로 게시물 번호 넘김
@@ -111,6 +162,8 @@ public class DetailFragment extends Fragment {
             //loadCmt.execute(board_seq);
 
         } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
             e.printStackTrace();
         }
 
@@ -142,112 +195,6 @@ public class DetailFragment extends Fragment {
 
         return rtnStr;
     }
-
-/*    private void InitData(){
-
-// 해당 게시물의 데이터를 읽어오는 함수, 파라미터로 보드 번호를 넘김
-        LoadBoard loadBoard = new LoadBoard();
-        loadBoard.execute(board_seq);
-
-    }*/
-
-    /*class LoadBoard extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-            Log.d(TAG, "onPreExecute");
-        }
-
-
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-            Log.d(TAG, "onPostExecute, " + result);
-            try {
-// 결과값이 JSONArray 형태로 넘어오기 때문에
-// JSONArray, JSONObject 를 사용해서 파싱
-                JSONArray jsonArray = null;
-                jsonArray = new JSONArray(result);
-
-                for(int i=0;i<jsonArray.length();i++){
-                    JSONObject jsonObject = jsonArray.getJSONObject(i);
-
-// Database 의 데이터들을 변수로 저장한 후 해당 TextView 에 데이터 입력
-                    String content = jsonObject.optString("text");
-                    String publishDate = jsonObject.optString("publishDate");
-
-                    content_tv.setText(content);
-                    date_tv.setText(publishDate);
-
-                }
-
-// 해당 게시물에 대한 댓글 불러오는 함수 호출, 파라미터로 게시물 번호 넘김
-                //LoadCmt loadCmt = new LoadCmt();
-                //loadCmt.execute(board_seq);
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-        }
-
-
-        @Override
-        protected String doInBackground(String... params) {
-
-            String board_seq = params[0];
-
-// 호출할 php 파일 경로
-            String server_url =  CommonMethod.ipConfig + "/api/loadHistory";
-
-
-            URL url;
-            String response = "";
-            try {
-                url = new URL(server_url);
-
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setReadTimeout(15000);
-                conn.setConnectTimeout(15000);
-                conn.setRequestMethod("POST");
-                conn.setDoInput(true);
-                conn.setDoOutput(true);
-                Uri.Builder builder = new Uri.Builder()
-                        .appendQueryParameter("userId", userId)
-                        .appendQueryParameter("_id", board_seq);
-                String query = builder.build().getEncodedQuery();
-
-                OutputStream os = conn.getOutputStream();
-                BufferedWriter writer = new BufferedWriter(
-                        new OutputStreamWriter(os, "UTF-8"));
-                writer.write(query);
-                writer.flush();
-                writer.close();
-                os.close();
-
-                conn.connect();
-                int responseCode=conn.getResponseCode();
-
-                if (responseCode == HttpsURLConnection.HTTP_OK) {
-                    String line;
-                    BufferedReader br=new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                    while ((line=br.readLine()) != null) {
-                        response+=line;
-                    }
-                }
-                else {
-                    response="";
-
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            return response;
-        }
-    }*/
 
 
     // 게시물의 댓글을 읽어오는 함수
@@ -306,7 +253,6 @@ public class DetailFragment extends Fragment {
         @Override
         protected String doInBackground(String... params) {
 
-            String board_seq = params[0];
             String server_url =  CommonMethod.ipConfig + "/api/load_cmt";
 
 
@@ -322,7 +268,7 @@ public class DetailFragment extends Fragment {
                 conn.setDoInput(true);
                 conn.setDoOutput(true);
                 Uri.Builder builder = new Uri.Builder()
-                        .appendQueryParameter("_id", board_seq);
+                        .appendQueryParameter("feeling_id", board_seq);
                 String query = builder.build().getEncodedQuery();
 
                 OutputStream os = conn.getOutputStream();
