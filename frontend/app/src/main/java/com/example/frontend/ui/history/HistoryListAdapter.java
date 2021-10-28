@@ -41,15 +41,17 @@ public class HistoryListAdapter extends BaseAdapter {
         }
 
         // 화면에 표시될 View
-        TextView titleTextView = (TextView) convertView.findViewById(R.id.textView1) ;
-        TextView scoreTextView = (TextView) convertView.findViewById(R.id.textView2) ;
-        TextView dateTextView = (TextView) convertView.findViewById(R.id.textView3) ;
+        ImageView iconImageView = (ImageView) convertView.findViewById(R.id.imageView1);
+        TextView titleTextView = (TextView) convertView.findViewById(R.id.textView1);
+        TextView scoreTextView = (TextView) convertView.findViewById(R.id.textView2);
+        TextView dateTextView = (TextView) convertView.findViewById(R.id.textView3);
 
 
         // Data Set(listViewItemList)에서 position에 위치한 데이터 참조 획득
         HistoryListView historyListView = HistoryListViewList.get(position);
 
         // 아이템 내 각 위젯에 데이터 반영
+        iconImageView.setImageDrawable(historyListView.getIcon());
         titleTextView.setText(historyListView.getTitle());
         scoreTextView.setText(historyListView.getScore());
         dateTextView.setText(historyListView.getDate());
@@ -60,19 +62,20 @@ public class HistoryListAdapter extends BaseAdapter {
     // 지정한 위치(position)에 있는 데이터와 관계된 아이템(row)의 ID
     @Override
     public long getItemId(int position) {
-        return position ;
+        return position;
     }
 
     // 지정한 위치(position)에 있는 데이터 리턴
     @Override
     public Object getItem(int position) {
-        return HistoryListViewList.get(position) ;
+        return HistoryListViewList.get(position);
     }
 
     // 아이템 데이터 추가를 위한 함수
-    public void addItem(String id, String title, String score, String date) {
+    public void addItem(Drawable icon, String id, String title, String score, String date) {
         HistoryListView item = new HistoryListView();
 
+        item.setIcon(icon);
         item.setId(id);
         item.setTitle(title);
         item.setScore(score);

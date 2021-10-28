@@ -1,43 +1,29 @@
 package com.example.frontend.ui.history;
 
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
-import android.app.FragmentManager;
-import android.content.Intent;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.example.frontend.MainActivity;
 import com.example.frontend.R;
 import com.example.frontend.RequestHttpURLConnection;
-import com.example.frontend.databinding.FragmentGraphBinding;
 import com.example.frontend.databinding.FragmentHistoryBinding;
-import com.example.frontend.databinding.FragmentHomeBinding;
 import com.example.frontend.http.CommonMethod;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -95,18 +81,32 @@ public class HistoryFragment extends Fragment {
 
                 String title = jsonObject.optString("text");
                 String publishDate = jsonObject.optString("publishDate");
-                String score = jsonObject.optString("score");
+                int score = Integer.parseInt(jsonObject.optString("score"));
                 String seq = jsonObject.optString("id");
+                SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+                Date pDate = inputFormat.parse(publishDate);
+                inputFormat.applyPattern("yyyy-MM-dd HH:mm:ss");
+                String newDateForm = inputFormat.format(pDate);
 
                 // title, seq 값을 변수로 받아서 배열에 추가
                 titleList.add(title);
                 //dateList.add(publishDate);
                 seqList.add(seq);
 
-                adapter.addItem(seq, title, score, publishDate) ;
-
-
-
+                switch (score) {
+                    case 1 : adapter.addItem(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.emotion1), seq, title, "감정점수 = "+score, "  등록일 = "+newDateForm);
+                            break;
+                    case 2 : adapter.addItem(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.emotion2), seq, title, "감정점수 = "+score, "  등록일 = "+newDateForm);
+                        break;
+                    case 3 : adapter.addItem(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.emotion3), seq, title, "감정점수 = "+score, "  등록일 = "+newDateForm);
+                        break;
+                    case 4 : adapter.addItem(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.emotion4), seq, title, "감정점수 = "+score, "  등록일 = "+newDateForm);
+                        break;
+                    case 5 : adapter.addItem(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.emotion5), seq, title, "감정점수 = "+score, "  등록일 = "+newDateForm);
+                        break;
+                    default:adapter.addItem(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.x_button), seq, title, "감정점수 = "+score, "  등록일 = "+newDateForm);
+                        break;
+                }
             }
 
             //ArrayAdapter arrayAdapter = new ArrayAdapter<String>(getActivity().getApplicationContext(), android.R.layout.simple_list_item_1, titleList);
@@ -115,6 +115,8 @@ public class HistoryFragment extends Fragment {
             //arrayAdapter.notifyDataSetChanged();
 
         } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
             e.printStackTrace();
         }
 
