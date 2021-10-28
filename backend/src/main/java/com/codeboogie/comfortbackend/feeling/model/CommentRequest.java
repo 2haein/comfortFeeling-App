@@ -1,6 +1,5 @@
 package com.codeboogie.comfortbackend.feeling.model;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,15 +12,13 @@ import java.util.Date;
 @Getter
 @Setter
 @NoArgsConstructor
-public class FeelingRequest {
+public class CommentRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
+    private String feeling_id; //원글 ID
     private Long userId; //카카오 계정
-    private int score; //감정 기록 점수
+    private String context; //작성한 글
     private Date publishDate; //작성한 날짜
-    private Date updateDate;
-    private String text; //작성한 글
-    private float xcoord; //글 작성 위치 x 좌표
-    private float ycoord; //글 작성 위치 y 좌표
+    private int show; // 0 : 글 표시 1 : 글 삭제 상태
 }
