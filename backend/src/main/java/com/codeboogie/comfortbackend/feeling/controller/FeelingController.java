@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.web.bind.annotation.*;
 import com.codeboogie.comfortbackend.feeling.model.Feeling;
 
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -59,7 +60,7 @@ public class FeelingController {
 
     //하루 글 썻는지 조회
     @RequestMapping(value="/history", method={ RequestMethod.GET, RequestMethod.POST })
-    public @ResponseBody long history(@RequestBody HashMap<String, String> data) {
+    public @ResponseBody long history(@RequestBody HashMap<String, String> data) throws ParseException {
         System.out.println("안드로이드 -> 서버로 Post 요청 userId:"+ data.get("userId") + " date:" + data.get("publishDate"));
 
         return feelingService.findDatas(data.get("userId"), data.get("publishDate"));

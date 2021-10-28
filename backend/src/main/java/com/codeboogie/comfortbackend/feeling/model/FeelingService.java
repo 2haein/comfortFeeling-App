@@ -57,14 +57,25 @@ public class FeelingService {
 
     }
 
-    public long findDatas(String userId, String date) {
+    public long findDatas(String userId, String date) throws ParseException {
         Query query = new Query();
         Criteria criteria = new Criteria();
 
         Criteria criteria_arr[] = new Criteria[2];
 
-        criteria_arr[0] = Criteria.where("userId").regex(userId);
-        criteria_arr[1] = Criteria.where("publishDate").regex(date);
+        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        String startDate = date + "T00:00:00.000Z";
+        Date sDate = inputFormat.parse(startDate);
+        // 시간대가 UTC로 되기 때문에 9시간 추가해야 한국 시간대 맞춰짐
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(sDate);
+        cal.add(Calendar.HOUR, 9);
+        sDate = cal.getTime();
+        cal.add(Calendar.DATE, 1);
+        Date eDate = cal.getTime();
+
+        criteria_arr[0] = Criteria.where("userId").is(Long.parseLong(userId));
+        criteria_arr[1] = Criteria.where("publishDate").gte(sDate).lte(eDate);
 
         query.addCriteria(criteria.andOperator(criteria_arr));
 
