@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.example.frontend.MainActivity;
 import com.example.frontend.R;
 import com.example.frontend.RequestHttpURLConnection;
+import com.example.frontend.common.ProfileData;
 import com.example.frontend.databinding.FragmentDetailBinding;
 import com.example.frontend.http.CommonMethod;
 
@@ -77,7 +78,7 @@ public class DetailFragment extends Fragment {
         MainActivity activity = (MainActivity) getActivity();
 
 
-        userId = activity.getUserId();
+        userId = ProfileData.getUserId();
 
         // 컴포넌트 초기화
         content_tv = (TextView) root.findViewById(R.id.content_tv);

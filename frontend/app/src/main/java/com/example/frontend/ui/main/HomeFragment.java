@@ -80,10 +80,7 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-
-
-        MainActivity activity = (MainActivity) getActivity();
-        strUserId = activity.getUserId(); //처음에 유저 아이디를 못 불러오는 현상 존재
+        strUserId = ProfileData.getUserId();
         Log.i(LOG_TAG, String.format("userId: (%s)", ProfileData.getUserId()));
 
         mapViewContainer = (ViewGroup) binding.mapView;
@@ -142,8 +139,7 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
                     Toast.makeText(getActivity(), "오늘의 감정기록!",Toast.LENGTH_SHORT).show();
                     intent.putExtra("lat", mCurrentLat);
                     intent.putExtra("lon", mCurrentLng);
-                    Log.i(LOG_TAG, String.format("왜왜왜왜왜왜: %f %f", mCurrentLat, mCurrentLng));
-                    intent.putExtra("userId", activity.getUserId());
+                    intent.putExtra("userId", ProfileData.getUserId());
                     startActivity(intent);
                 }
 
@@ -190,6 +186,7 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        mapViewContainer.removeAllViews();
         binding = null;
     }
 
@@ -211,7 +208,6 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
 
     @Override
     public void onMapViewSingleTapped(MapView mapView, MapPoint mapPoint) {
-        //사용자가 지도를 길게 누른 경우 수행
         setMapMarker(mapView, mapPoint);
     }
 
@@ -221,6 +217,7 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
 
     @Override
     public void onMapViewLongPressed(MapView mapView, MapPoint mapPoint) {
+        setMapMarker(mapView, mapPoint);
     }
 
     @Override
@@ -337,7 +334,7 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
                         Intent intent = new Intent(getActivity(), PostActivity.class);
                         intent.putExtra("lat", mCurrentLat);
                         intent.putExtra("lon", mCurrentLng);
-                        intent.putExtra("userId", activity.getUserId());
+                        intent.putExtra("userId", ProfileData.getUserId());
                         startActivity(intent);
                     }
                     else if(pos == 0 && count == 1){

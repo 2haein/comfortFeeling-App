@@ -16,6 +16,7 @@ import android.widget.ListView;
 import com.example.frontend.MainActivity;
 import com.example.frontend.R;
 import com.example.frontend.RequestHttpURLConnection;
+import com.example.frontend.common.ProfileData;
 import com.example.frontend.databinding.FragmentHistoryBinding;
 import com.example.frontend.http.CommonMethod;
 
@@ -69,7 +70,7 @@ public class HistoryFragment extends Fragment {
         seqList.clear();
 
         MainActivity activity = (MainActivity) getActivity();
-        userId = activity.getUserId();
+        userId = ProfileData.getUserId();
 
         try {
 

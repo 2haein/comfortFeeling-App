@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.frontend.LoginActivity;
 import com.example.frontend.MainActivity;
 import com.example.frontend.R;
+import com.example.frontend.common.ProfileData;
 import com.example.frontend.databinding.FragmentGraphBinding;
 import com.example.frontend.http.CommonMethod;
 import com.github.mikephil.charting.animation.Easing;
@@ -84,8 +85,7 @@ public class GraphFragment extends Fragment {
         TextView textView2 = binding.scoreText;
         textView2.setText("아직 오늘의 감정이 기록되지 않았습니다!");
         TextView dateView = binding.DateView;
-        MainActivity activity = (MainActivity) getActivity();
-        userId = activity.getUserId();
+        userId = ProfileData.getUserId();
         SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
         todayDate = sdf2.format(date);
 
