@@ -1,21 +1,16 @@
 package com.example.frontend;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.frontend.common.ProfileData;
 import com.example.frontend.http.CommonMethod;
 import com.kakao.auth.ApiErrorCode;
 import com.kakao.auth.AuthType;
@@ -23,28 +18,19 @@ import com.kakao.auth.ISessionCallback;
 import com.kakao.auth.Session;
 import com.kakao.network.ErrorResult;
 import com.kakao.usermgmt.UserManagement;
-import com.kakao.usermgmt.callback.LogoutResponseCallback;
 import com.kakao.usermgmt.callback.MeV2ResponseCallback;
 import com.kakao.usermgmt.response.MeV2Response;
 import com.kakao.usermgmt.response.model.Profile;
 import com.kakao.usermgmt.response.model.UserAccount;
-import com.kakao.util.OptionalBoolean;
 import com.kakao.util.exception.KakaoException;
-
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.mime.HttpMultipartMode;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
 
 public class LoginActivity extends AppCompatActivity {
     private ImageButton loginV1;
@@ -174,6 +160,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                 // 프로필 (닉네임, 프로필 사진 경로)
                                 Profile profile = kakaoAccount.getProfile();
+                                new ProfileData(id, profile.getNickname(), profile.getProfileImageUrl(), profile.getThumbnailImageUrl());
                                 intent.putExtra("userId", id);
                                 intent.putExtra("nickName", profile.getNickname());
                                 intent.putExtra("profile", profile.getProfileImageUrl());

@@ -25,6 +25,7 @@ import com.example.frontend.PopupActivity;
 import com.example.frontend.PostActivity;
 import com.example.frontend.R;
 import com.example.frontend.RequestHttpURLConnection;
+import com.example.frontend.common.ProfileData;
 import com.example.frontend.databinding.FragmentHomeBinding;
 import com.example.frontend.http.CommonMethod;
 
@@ -81,7 +82,7 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
 
         MainActivity activity = (MainActivity) getActivity();
         strUserId = activity.getUserId(); //처음에 유저 아이디를 못 불러오는 현상 존재
-        Log.i(LOG_TAG, String.format("userId: (%s)", strUserId));
+        Log.i(LOG_TAG, String.format("userId: (%s)", ProfileData.getUserId()));
 
         mapViewContainer = (ViewGroup) binding.mapView;
         mapView = new MapView(getActivity());
@@ -97,28 +98,28 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
         mapView.setCalloutBalloonAdapter(new CustomCalloutBalloonAdapter());
         mapView.setPOIItemEventListener(eventListener);
 
-        // 여기부터 마커 가져오기
-        cnt = getPostNum(); //게시글 수
-        String str = getPostContent(); //게시글 좌표 추출할 것
-        array = str.split(",");
-
-        for(int i=0; i<=cnt; i++){
-            String xx = (array[(i*8)+6].substring(9));
-            Double x1 = Double.parseDouble(xx);
-            x_marker.add(x1);
-            Log.i(LOG_TAG, String.format("numberx: %f", x_marker.get(0)));
-        }
-        for(int i=0; i<=cnt; i++){
-            String yy = (array[(i*8)+7].substring(9,12)+"."+array[(i*8)+7].substring(13).replace("}", "").replace("]",""));
-            Double y1 = Double.parseDouble(yy);
-            y_marker.add(y1);
-            Log.i(LOG_TAG, String.format("numbery: %f", y_marker.get(0) ));
-        }
-        //make marker
-        for(int i=0; i<=cnt; i++){
-            MapPoint mapPoint = MapPoint.mapPointWithGeoCoord(x_marker.get(i), y_marker.get(i));
-            setMapMarker(mapView, mapPoint);
-        }
+//        // 여기부터 마커 가져오기
+//        cnt = getPostNum(); //게시글 수
+//        String str = getPostContent(); //게시글 좌표 추출할 것
+//        array = str.split(",");
+//
+//        for(int i=0; i<=cnt; i++){
+//            String xx = (array[(i*8)+6].substring(9));
+//            Double x1 = Double.parseDouble(xx);
+//            x_marker.add(x1);
+//            Log.i(LOG_TAG, String.format("numberx: %f", x_marker.get(0)));
+//        }
+//        for(int i=0; i<=cnt; i++){
+//            String yy = (array[(i*8)+7].substring(9,12)+"."+array[(i*8)+7].substring(13).replace("}", "").replace("]",""));
+//            Double y1 = Double.parseDouble(yy);
+//            y_marker.add(y1);
+//            Log.i(LOG_TAG, String.format("numbery: %f", y_marker.get(0) ));
+//        }
+//        //make marker
+//        for(int i=0; i<=cnt; i++){
+//            MapPoint mapPoint = MapPoint.mapPointWithGeoCoord(x_marker.get(i), y_marker.get(i));
+//            setMapMarker(mapView, mapPoint);
+//        }
 
 
         //플로팅 버튼 처리
@@ -132,15 +133,12 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
                     startActivity(intent);
                 }
                 else{
-                    /*
                     Intent intent = new Intent(getActivity(), PostActivity.class);
                     Toast.makeText(getActivity(), "오늘의 감정기록!",Toast.LENGTH_SHORT).show();
                     intent.putExtra("lat", mCurrentLat);
                     intent.putExtra("lon", mCurrentLng);
                     intent.putExtra("userId", activity.getUserId());
                     startActivity(intent);
-
-                     */
                 }
 
             }
@@ -218,19 +216,16 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
 
     @Override
     public void onMapViewSingleTapped(MapView mapView, MapPoint mapPoint) {
-
+        //사용자가 지도를 길게 누른 경우 수행
+        setMapMarker(mapView, mapPoint);
     }
 
     @Override
     public void onMapViewDoubleTapped(MapView mapView, MapPoint mapPoint) {
-
     }
 
     @Override
     public void onMapViewLongPressed(MapView mapView, MapPoint mapPoint) {
-        //사용자가 지도를 길게 누른 경우 수행
-        setMapMarker(mapView, mapPoint);
-
     }
 
     @Override
@@ -477,35 +472,35 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
 
 
     //db에서 글 내용 가져오기
-     public String getPostContent(){
-         SimpleDateFormat sformat = new SimpleDateFormat("yyyy-MM-dd");
-         Date now = new Date();
-         String getTime = sformat.format(now);
-         String rtnStr="";
-
-         String url = CommonMethod.ipConfig + "/api/loadData"; // 글 정보
-//         String url = "http://192.168.0.200:8080/api/loadData"; // 글 정보
-         try{
-             String jsonString = new JSONObject()
-                     .put("publishDate", getTime)
-                     .toString();
-
-             //REST API
-             RequestHttpURLConnection.NetworkAsyncTask networkTask = new RequestHttpURLConnection.NetworkAsyncTask(url, jsonString);
-             rtnStr = networkTask.execute().get();
-
-
-             Log.i(LOG_TAG, String.format("postData: (%s)", rtnStr));
-             String[] array = rtnStr.split("}");
-
-
-         }catch(Exception e){
-             e.printStackTrace();
-         }
-
-         return rtnStr;
-
-     }
+//     public String getPostContent(){
+//         SimpleDateFormat sformat = new SimpleDateFormat("yyyy-MM-dd");
+//         Date now = new Date();
+//         String getTime = sformat.format(now);
+//         String rtnStr="";
+//
+//         String url = CommonMethod.ipConfig + "/api/loadData"; // 글 정보
+////         String url = "http://192.168.0.200:8080/api/loadData"; // 글 정보
+//         try{
+//             String jsonString = new JSONObject()
+//                     .put("publishDate", getTime)
+//                     .toString();
+//
+//             //REST API
+//             RequestHttpURLConnection.NetworkAsyncTask networkTask = new RequestHttpURLConnection.NetworkAsyncTask(url, jsonString);
+//             rtnStr = networkTask.execute().get();
+//
+//
+//             Log.i(LOG_TAG, String.format("postData: (%s)", rtnStr));
+//             String[] array = rtnStr.split("}");
+//
+//
+//         }catch(Exception e){
+//             e.printStackTrace();
+//         }
+//
+//         return rtnStr;
+//
+//     }
 
 
     //당일 글 갯수
