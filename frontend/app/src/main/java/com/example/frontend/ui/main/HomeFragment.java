@@ -65,6 +65,8 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
     ArrayList<Double> y_marker = new ArrayList<Double>();
     private Double mCurrentLng;
     private Double mCurrentLat;
+    private Double getPickedLng=0.0;
+    private Double getPickedLat=0.0;
     private Context context;
     private String strUserId;
     private int isPost = 0;
@@ -130,7 +132,7 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
         binding.write.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MainActivity activity = (MainActivity) getActivity();
+
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                 PostFragment postFragment = new PostFragment();
                 isPost = checkPostHistory();
@@ -140,9 +142,13 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
                     startActivity(intent);
                 }
                 else{
+                    if(getPickedLat==0.0){
+                        Toast.makeText(getActivity(), "마커를 생성해주세요!",Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     Bundle bundle = new Bundle();
-                    bundle.putDouble("lat", mCurrentLat);
-                    bundle.putDouble("lon", mCurrentLng);
+                    bundle.putDouble("lat", getPickedLat);
+                    bundle.putDouble("lon", getPickedLng);
                     postFragment.setArguments(bundle); //seq 변수 값 전달.
                     transaction.replace(R.id.home_fragment, postFragment); //프레임 레이아웃에서 detailFragment로 변경
                     transaction.addToBackStack(null);
@@ -214,6 +220,10 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
 
     @Override
     public void onMapViewSingleTapped(MapView mapView, MapPoint mapPoint) {
+
+        getPickedLat = mapPoint.getMapPointGeoCoord().latitude;
+        getPickedLng = mapPoint.getMapPointGeoCoord().longitude;
+
         isPost = checkPostHistory();
         Log.i(LOG_TAG, String.format("isPost값입니다.: %d", isPost));
         if(isPost == 0){
@@ -232,6 +242,8 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
 
     @Override
     public void onMapViewLongPressed(MapView mapView, MapPoint mapPoint) {
+        getPickedLat = mapPoint.getMapPointGeoCoord().latitude;
+        getPickedLng = mapPoint.getMapPointGeoCoord().longitude;
         isPost = checkPostHistory();
         Log.i(LOG_TAG, String.format("isPost값입니다.: %d", isPost));
         if(isPost == 0){
@@ -342,8 +354,6 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle("선택하세요");
 
-            MainActivity activity = (MainActivity) getActivity();
-
             builder.setItems(R.array.LAN, new DialogInterface.OnClickListener(){
                 @Override
                 public void onClick(DialogInterface dialog, int pos)
@@ -351,8 +361,6 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
                     String[] items = getResources().getStringArray(R.array.LAN);
                     FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                     PostFragment postFragment = new PostFragment();
-                    final double lat = mapPOIItem.getMapPoint().getMapPointGeoCoord().latitude;
-                    final double log = mapPOIItem.getMapPoint().getMapPointGeoCoord().longitude;
 
                     Toast.makeText(getActivity(),items[pos],Toast.LENGTH_LONG).show();
                     int count = checkPostHistory();
@@ -360,8 +368,8 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
                     if(pos == 0 && count == 0){
 
                         Bundle bundle = new Bundle();
-                        bundle.putDouble("lat", lat);
-                        bundle.putDouble("lon", log);
+                        bundle.putDouble("lat", getPickedLat);
+                        bundle.putDouble("lon", getPickedLng);
                         postFragment.setArguments(bundle); //seq 변수 값 전달.
                         transaction.replace(R.id.home_fragment, postFragment); //프레임 레이아웃에서 detailFragment로 변경
                         transaction.addToBackStack(null);
