@@ -129,7 +129,8 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
             @Override
             public void onClick(View view) {
                 MainActivity activity = (MainActivity) getActivity();
-                if(isPost == 1){
+                isPost = checkPostHistory();
+                if(isPost != 0){
                     Intent intent = new Intent(getActivity(), PopupActivity.class);
                     Toast.makeText(getActivity(), "오늘의 감정기록이 존재합니다!",Toast.LENGTH_SHORT).show();
                     startActivity(intent);
@@ -186,7 +187,6 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mapViewContainer.removeAllViews();
         binding = null;
     }
 
@@ -208,7 +208,16 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
 
     @Override
     public void onMapViewSingleTapped(MapView mapView, MapPoint mapPoint) {
-        setMapMarker(mapView, mapPoint);
+        isPost = checkPostHistory();
+        Log.i(LOG_TAG, String.format("isPost값입니다.: %d", isPost));
+        if(isPost == 0){
+            setMapMarker(mapView, mapPoint);
+        }
+        if(isPost != 0){
+            Toast.makeText(getActivity(), "하루에 한 번만 등록 가능!",
+                    Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     @Override
@@ -217,7 +226,15 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
 
     @Override
     public void onMapViewLongPressed(MapView mapView, MapPoint mapPoint) {
-        setMapMarker(mapView, mapPoint);
+        isPost = checkPostHistory();
+        Log.i(LOG_TAG, String.format("isPost값입니다.: %d", isPost));
+        if(isPost == 0){
+            setMapMarker(mapView, mapPoint);
+        }
+        if(isPost != 0){
+            Toast.makeText(getActivity(), "하루에 한 번만 등록 가능!",
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -420,6 +437,7 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
         MapPOIItem marker = new MapPOIItem();
         marker.setItemName("현재 위치");
         marker.setMapPoint(mapPoint);
+        Log.d(LOG_TAG, "마커위치 => " + mapPoint);
         marker.setMarkerType(MapPOIItem.MarkerType.CustomImage);
         marker.setCustomImageResourceId(R.drawable.custom_marker_red);
         marker.setCustomImageAutoscale(true);
