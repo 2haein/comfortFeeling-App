@@ -99,6 +99,14 @@ public class FeelingController {
         return feelingService.loadHistory(data);
     }
 
+    // 글 팝업 조회
+    @RequestMapping(path="/loadTodayHistory", method={ RequestMethod.GET, RequestMethod.POST })
+    public @ResponseBody Feeling loadTodayHistory(@RequestBody HashMap<String, String> data) throws ParseException {
+        System.out.println("안드로이드 -> 서버로 Post 요청 글확인:"+ data);
+
+        return feelingService.loadTodayHistory(data);
+    }
+
     //댓글 추가
     @RequestMapping(path="/addCmt", method={ RequestMethod.GET, RequestMethod.POST })
     public @ResponseBody void addCmt(@RequestParam HashMap<String, String> data) {
