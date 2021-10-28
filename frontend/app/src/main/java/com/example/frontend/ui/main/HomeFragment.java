@@ -57,10 +57,10 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
 
     MapPoint currentMapPoint;
 
-    ArrayList<Float> x_marker = new ArrayList<Float>();
-    ArrayList<Float> y_marker = new ArrayList<Float>();
-    private float mCurrentLng;
-    private float mCurrentLat;
+    ArrayList<Double> x_marker = new ArrayList<Double>();
+    ArrayList<Double> y_marker = new ArrayList<Double>();
+    private Double mCurrentLng;
+    private Double mCurrentLat;
     private Context context;
     private String strUserId;
     private int isPost = 0;
@@ -104,13 +104,13 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
 
         for(int i=0; i<=cnt; i++){
             String xx = (array[(i*8)+6].substring(9));
-            float x1 = Float.parseFloat(xx);
+            Double x1 = Double.parseDouble(xx);
             x_marker.add(x1);
             Log.i(LOG_TAG, String.format("numberx: %f", x_marker.get(0)));
         }
         for(int i=0; i<=cnt; i++){
             String yy = (array[(i*8)+7].substring(9,12)+"."+array[(i*8)+7].substring(13).replace("}", "").replace("]",""));
-            float y1 = Float.parseFloat(yy);
+            Double y1 = Double.parseDouble(yy);
             y_marker.add(y1);
             Log.i(LOG_TAG, String.format("numbery: %f", y_marker.get(0) ));
         }
@@ -406,8 +406,8 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
         //최초 1회만 현재위치 받기 위함
         mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOff); //TrackingModeOnWithoutHeading
         //전역변수로 현재 좌표 저장
-        mCurrentLat = (float)mapPointGeo.latitude;
-        mCurrentLng = (float)mapPointGeo.longitude;
+        mCurrentLat = mapPointGeo.latitude;
+        mCurrentLng = mapPointGeo.longitude;
         Log.d(LOG_TAG, "현재위치 => " + mCurrentLat + "  " + mCurrentLng);
 
     }
