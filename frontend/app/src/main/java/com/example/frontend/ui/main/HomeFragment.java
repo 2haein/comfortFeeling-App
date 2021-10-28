@@ -98,28 +98,29 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
         mapView.setCalloutBalloonAdapter(new CustomCalloutBalloonAdapter());
         mapView.setPOIItemEventListener(eventListener);
 
-//        // 여기부터 마커 가져오기
-//        cnt = getPostNum(); //게시글 수
-//        String str = getPostContent(); //게시글 좌표 추출할 것
-//        array = str.split(",");
-//
-//        for(int i=0; i<=cnt; i++){
-//            String xx = (array[(i*8)+6].substring(9));
-//            Double x1 = Double.parseDouble(xx);
-//            x_marker.add(x1);
-//            Log.i(LOG_TAG, String.format("numberx: %f", x_marker.get(0)));
-//        }
-//        for(int i=0; i<=cnt; i++){
-//            String yy = (array[(i*8)+7].substring(9,12)+"."+array[(i*8)+7].substring(13).replace("}", "").replace("]",""));
-//            Double y1 = Double.parseDouble(yy);
-//            y_marker.add(y1);
-//            Log.i(LOG_TAG, String.format("numbery: %f", y_marker.get(0) ));
-//        }
-//        //make marker
-//        for(int i=0; i<=cnt; i++){
-//            MapPoint mapPoint = MapPoint.mapPointWithGeoCoord(x_marker.get(i), y_marker.get(i));
-//            setMapMarker(mapView, mapPoint);
-//        }
+        // 여기부터 마커 가져오기
+        cnt = getPostNum(); //게시글 수
+        String str = getPostContent(); //게시글 좌표 추출할 것
+        if(str != null) {
+            array = str.split(",");
+        }
+        for(int i=0; i<cnt; i++){
+            String xx = (array[(i*8)+6].substring(9));
+            Double x1 = Double.parseDouble(xx);
+            x_marker.add(x1);
+            Log.i(LOG_TAG, String.format("numberx: %f", x_marker.get(0)));
+        }
+        for(int i=0; i<cnt; i++){
+            String yy = (array[(i*8)+7].substring(9,12)+"."+array[(i*8)+7].substring(13).replace("}", "").replace("]",""));
+            Double y1 = Double.parseDouble(yy);
+            y_marker.add(y1);
+            Log.i(LOG_TAG, String.format("numbery: %f", y_marker.get(0) ));
+        }
+        //make marker
+        for(int i=0; i<cnt; i++){
+            MapPoint mapPoint = MapPoint.mapPointWithGeoCoord(x_marker.get(i), y_marker.get(i));
+            setMapMarker(mapView, mapPoint);
+        }
 
 
         //플로팅 버튼 처리
@@ -170,11 +171,10 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
 
 
 
-    /*
     public void onResume() {
         super.onResume();
         // 유저가 글 썼는지 확인
-        for(int i=0; i<=cnt; i++){
+        for(int i=0; i<cnt; i++){
             isWrite = (array[(i*8)+1].substring(9));
             if(isWrite == strUserId){
                 isPost = 1;
@@ -185,7 +185,6 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
 
     }
 
-     */
 
     public void onPause() {
         super.onPause();
@@ -472,35 +471,33 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
 
 
     //db에서 글 내용 가져오기
-//     public String getPostContent(){
-//         SimpleDateFormat sformat = new SimpleDateFormat("yyyy-MM-dd");
-//         Date now = new Date();
-//         String getTime = sformat.format(now);
-//         String rtnStr="";
-//
-//         String url = CommonMethod.ipConfig + "/api/loadData"; // 글 정보
-////         String url = "http://192.168.0.200:8080/api/loadData"; // 글 정보
-//         try{
-//             String jsonString = new JSONObject()
-//                     .put("publishDate", getTime)
-//                     .toString();
-//
-//             //REST API
-//             RequestHttpURLConnection.NetworkAsyncTask networkTask = new RequestHttpURLConnection.NetworkAsyncTask(url, jsonString);
-//             rtnStr = networkTask.execute().get();
-//
-//
-//             Log.i(LOG_TAG, String.format("postData: (%s)", rtnStr));
-//             String[] array = rtnStr.split("}");
-//
-//
-//         }catch(Exception e){
-//             e.printStackTrace();
-//         }
-//
-//         return rtnStr;
-//
-//     }
+     public String getPostContent(){
+         SimpleDateFormat sformat = new SimpleDateFormat("yyyy-MM-dd");
+         Date now = new Date();
+         String getTime = sformat.format(now);
+         String rtnStr="";
+
+         String url = CommonMethod.ipConfig + "/api/loadData"; // 글 정보
+         try{
+             String jsonString = new JSONObject()
+                     .put("publishDate", getTime)
+                     .toString();
+
+             //REST API
+             RequestHttpURLConnection.NetworkAsyncTask networkTask = new RequestHttpURLConnection.NetworkAsyncTask(url, jsonString);
+             rtnStr = networkTask.execute().get();
+
+
+             Log.i(LOG_TAG, String.format("postData: (%s)", rtnStr));
+
+
+         }catch(Exception e){
+             e.printStackTrace();
+         }
+
+         return rtnStr;
+
+     }
 
 
     //당일 글 갯수
@@ -510,8 +507,7 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
         String getTime = sformat.format(now);
         String rtnStr="";
         int postNum=0;
-        String url = CommonMethod.ipConfig + "/loadDataCount";
-//        String url = "http://192.168.0.200:8080/api/loadDataCount"; //당일 글 갯수
+        String url = CommonMethod.ipConfig + "/api/loadDataCount";  //당일 글 갯수
 
         try{
             String jsonString = new JSONObject()
@@ -521,8 +517,10 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
             //REST API
             RequestHttpURLConnection.NetworkAsyncTask networkTask = new RequestHttpURLConnection.NetworkAsyncTask(url, jsonString);
             rtnStr = networkTask.execute().get();
-            postNum = Integer.parseInt(rtnStr);
-            //Toast.makeText(getActivity(), "마커 가져왔습니다.", Toast.LENGTH_LONG).show();
+            if(rtnStr != "") {
+                postNum = Integer.parseInt(rtnStr);
+            }
+            Toast.makeText(getActivity(), "마커 가져왔습니다.", Toast.LENGTH_LONG).show();
             Log.i(LOG_TAG, String.format("numdb: (%d)", postNum));
 
         }catch(Exception e){
