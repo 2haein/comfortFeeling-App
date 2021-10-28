@@ -29,6 +29,7 @@ import com.example.frontend.RequestHttpURLConnection;
 import com.example.frontend.common.ProfileData;
 import com.example.frontend.databinding.FragmentHomeBinding;
 import com.example.frontend.http.CommonMethod;
+import com.example.frontend.ui.completion.CompletionFragment;
 
 import net.daum.mf.map.api.CalloutBalloonAdapter;
 import net.daum.mf.map.api.MapPOIItem;
@@ -71,6 +72,7 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
     private String strUserId;
     private int isPost = 0;
     private String isWrite;
+    private String board_seq;
     ViewGroup mapViewContainer;
     private int cnt;
     private String[] array;
@@ -101,7 +103,6 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
         mapView.setPOIItemEventListener(eventListener);
 
 
-
         // 여기부터 마커 가져오기
         cnt = getPostNum(); //게시글 수
         try {
@@ -117,6 +118,12 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
                 Log.i(LOG_TAG, String.format("numberx: %f", x_marker.get(i)));
                 Log.i(LOG_TAG, String.format("numbery: %f", y_marker.get(i)));
             }
+            JSONObject jsonObject = jsonArray.getJSONObject(0);
+            String name = jsonObject.optString("userId");
+            if(name.equals(strUserId)){
+                board_seq = jsonObject.optString("id");
+            }
+
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -127,6 +134,8 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
             MapPoint mapPoint = MapPoint.mapPointWithGeoCoord(x_marker.get(i), y_marker.get(i));
             setMapMarker(mapView, mapPoint);
         }
+
+
 
         //플로팅 버튼 처리
         binding.write.setOnClickListener(new View.OnClickListener() {
@@ -179,6 +188,10 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
             checkRunTimePermission();
         }
 
+        CompletionFragment completionFragment = new CompletionFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("seq", board_seq);
+        completionFragment.setArguments(bundle); //seq 변수 값 전달.
 
         return root;
     }
@@ -588,6 +601,11 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
         }
     }
 
+    // 삭제예정
+    public String sendBoardseq(){
+
+        return board_seq;
+    }
 
 
 }
