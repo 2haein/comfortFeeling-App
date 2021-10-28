@@ -102,7 +102,7 @@ public class GraphFragment extends Fragment {
             todayScore = getTodayScore(userId, todayDate);
         }
         if(todayScore != null) {
-            if (Integer.parseInt(todayScore) == 0) {
+            if (todayScore=="" || Integer.parseInt(todayScore) == 0) {
                 textView2.setText("아직 오늘의 감정이 기록되지 않았습니다!");
             } else {
                 textView2.setText(todayScore + "점");
@@ -254,10 +254,11 @@ public class GraphFragment extends Fragment {
             Log.w("앱에서 보낸값",userId+", "+todayDate);
             String api = "/api/graph";
             GraphFragment.CustomTask task = new GraphFragment.CustomTask();
-            result = task.execute(api,userId,todayDate).get();
+                result = task.execute(api, userId, todayDate).get();
 
-            Log.w("받은값",result);
-
+            if(result != null) {
+                Log.w("받은값", result);
+            }
 
         } catch (Exception e) {
             Log.w("감정 기록 점수 에러", e);
@@ -273,10 +274,11 @@ public class GraphFragment extends Fragment {
             Log.w("앱에서 보낸값",userId+", "+monthDate);
             String api = "/api/graphMonth";
             GraphFragment.CustomTask task = new GraphFragment.CustomTask();
-            result = task.execute(api,userId,monthDate).get();
+                result = task.execute(api, userId, monthDate).get();
 
-            Log.w("받은값",result);
-
+            if(result != null) {
+                Log.w("받은값", result);
+            }
 
         } catch (Exception e) {
             Log.w("감정 월별 점수 에러", e);
@@ -298,6 +300,7 @@ public class GraphFragment extends Fragment {
                 conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
                 conn.setRequestMethod("POST");                              //데이터를 POST 방식으로 전송합니다.
                 conn.setDoOutput(true);
+                conn.setConnectTimeout(1000);
 
                 // 서버에 보낼 값 포함해 요청함.
                 OutputStreamWriter osw = new OutputStreamWriter(conn.getOutputStream());
