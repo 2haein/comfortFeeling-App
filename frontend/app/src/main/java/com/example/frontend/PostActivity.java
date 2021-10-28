@@ -17,6 +17,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.frontend.callback.SessionCallback;
+import com.example.frontend.common.ProfileData;
 import com.example.frontend.http.CommonMethod;
 
 import org.json.JSONObject;
@@ -137,7 +138,7 @@ public class PostActivity extends AppCompatActivity {
 
                 try{
                     String jsonString = new JSONObject()
-                    .put("userId", intent.getStringExtra("userId"))
+                    .put("userId", ProfileData.getUserId())
                     .put("text", edit_text.getText().toString())
                     .put("score", rating)
                     .put("publishDate", getTime)
