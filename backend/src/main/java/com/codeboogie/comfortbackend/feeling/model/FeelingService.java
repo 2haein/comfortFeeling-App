@@ -113,13 +113,18 @@ public class FeelingService {
         return mongoTemplate.find(query, Feeling.class, "feeling");
     }
 
-    public List<Feeling> loadHistory(Long userId) {
+    public List<Feeling> loadHistoryList(Long userId) {
         Criteria criteria = new Criteria("userId");
         criteria.is(userId);
 
         Query query = new Query(criteria);
 
         return mongoTemplate.find(query, Feeling.class, "feeling" );
+    }
+
+    public Feeling loadHistory(HashMap<String, String> data) {
+
+        return mongoTemplate.findById(data.get("_id"), Feeling.class, "feeling" );
     }
 
     public Comment addCmt(final Comment comment) {
