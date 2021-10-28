@@ -141,8 +141,8 @@ public class PostActivity extends AppCompatActivity {
                     .put("text", edit_text.getText().toString())
                     .put("score", rating)
                     .put("publishDate", getTime)
-                    .put("xcoord", intent.getExtras().getFloat("lat"))
-                    .put("ycoord", intent.getExtras().getFloat("lon"))
+                    .put("xcoord", intent.getExtras().getDouble("lat"))
+                    .put("ycoord", intent.getExtras().getDouble("lon"))
                     .toString();
 
                     //REST API

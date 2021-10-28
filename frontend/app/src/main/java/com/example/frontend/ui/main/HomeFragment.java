@@ -34,6 +34,8 @@ import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapPoint;
 import net.daum.mf.map.api.MapView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
@@ -98,30 +100,32 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
         mapView.setCalloutBalloonAdapter(new CustomCalloutBalloonAdapter());
         mapView.setPOIItemEventListener(eventListener);
 
+
         // 여기부터 마커 가져오기
         cnt = getPostNum(); //게시글 수
-        String str = getPostContent(); //게시글 좌표 추출할 것
-        if(str != null) {
-            array = str.split(",");
+        try {
+            JSONArray jsonArray = new JSONArray(getPostContent());
+            for(int i=0;i<jsonArray.length();i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                String xx = jsonObject.optString("xcoord");
+                String yy = jsonObject.optString("ycoord");
+                Double x1 = Double.parseDouble(xx);
+                Double y1 = Double.parseDouble(yy);
+                x_marker.add(x1);
+                y_marker.add(y1);
+                Log.i(LOG_TAG, String.format("numberx: %f", x_marker.get(i)));
+                Log.i(LOG_TAG, String.format("numbery: %f", y_marker.get(i)));
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
-        for(int i=0; i<cnt; i++){
-            String xx = (array[(i*8)+6].substring(9));
-            Double x1 = Double.parseDouble(xx);
-            x_marker.add(x1);
-            Log.i(LOG_TAG, String.format("numberx: %f", x_marker.get(0)));
-        }
-        for(int i=0; i<cnt; i++){
-            String yy = (array[(i*8)+7].substring(9,12)+"."+array[(i*8)+7].substring(13).replace("}", "").replace("]",""));
-            Double y1 = Double.parseDouble(yy);
-            y_marker.add(y1);
-            Log.i(LOG_TAG, String.format("numbery: %f", y_marker.get(0) ));
-        }
+
         //make marker
         for(int i=0; i<cnt; i++){
             MapPoint mapPoint = MapPoint.mapPointWithGeoCoord(x_marker.get(i), y_marker.get(i));
             setMapMarker(mapView, mapPoint);
         }
-
 
         //플로팅 버튼 처리
         binding.write.setOnClickListener(new View.OnClickListener() {
@@ -138,6 +142,7 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
                     Toast.makeText(getActivity(), "오늘의 감정기록!",Toast.LENGTH_SHORT).show();
                     intent.putExtra("lat", mCurrentLat);
                     intent.putExtra("lon", mCurrentLng);
+                    Log.i(LOG_TAG, String.format("왜왜왜왜왜왜: %f %f", mCurrentLat, mCurrentLng));
                     intent.putExtra("userId", activity.getUserId());
                     startActivity(intent);
                 }
@@ -173,15 +178,6 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
 
     public void onResume() {
         super.onResume();
-        // 유저가 글 썼는지 확인
-        for(int i=0; i<cnt; i++){
-            isWrite = (array[(i*8)+1].substring(9));
-            if(isWrite == strUserId){
-                isPost = 1;
-                break;
-            }
-        }
-        Log.i(LOG_TAG, String.format("isPost값: %d", isPost ));
 
     }
 
@@ -337,6 +333,7 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
                     int count = checkPostHistory();
                     // 각 버튼별로 수행할 일
                     if(pos == 0 && count == 0){
+
                         Intent intent = new Intent(getActivity(), PostActivity.class);
                         intent.putExtra("lat", mCurrentLat);
                         intent.putExtra("lon", mCurrentLng);
