@@ -1,5 +1,6 @@
 package com.codeboogie.comfortbackend.feeling.model;
 
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -113,13 +114,18 @@ public class FeelingService {
         return mongoTemplate.find(query, Feeling.class, "feeling");
     }
 
-    public List<Feeling> loadHistory(Long userId) {
+    public List<Feeling> loadHistoryList(Long userId) {
         Criteria criteria = new Criteria("userId");
         criteria.is(userId);
 
         Query query = new Query(criteria);
 
         return mongoTemplate.find(query, Feeling.class, "feeling" );
+    }
+
+    public Feeling loadHistory(HashMap<String, String> data) {
+
+        return mongoTemplate.findById(data.get("_id"), Feeling.class, "feeling" );
     }
 
    /* public List<HashMap> loadCmt(String id) {

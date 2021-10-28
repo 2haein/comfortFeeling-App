@@ -2,7 +2,10 @@ package com.example.frontend.ui.history;
 
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
+import android.annotation.SuppressLint;
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -71,6 +74,9 @@ public class HistoryFragment extends Fragment {
 
         listView = (ListView) root.findViewById(R.id.listView);
 
+        HistoryListAdapter adapter = new HistoryListAdapter();
+        listView.setAdapter(adapter);
+
         // 배열들 초기화
         titleList.clear();
         dateList.clear();
@@ -89,36 +95,59 @@ public class HistoryFragment extends Fragment {
 
                 String title = jsonObject.optString("text");
                 String publishDate = jsonObject.optString("publishDate");
-                String seq = jsonObject.optString("_id");
+                String score = jsonObject.optString("score");
+                String seq = jsonObject.optString("id");
 
                 // title, seq 값을 변수로 받아서 배열에 추가
                 titleList.add(title);
-                dateList.add(publishDate);
+                //dateList.add(publishDate);
                 seqList.add(seq);
+
+                adapter.addItem(seq, title, score, publishDate) ;
+
+
 
             }
 
             // ListView 에서 사용할 arrayAdapter를 생성하고, ListView 와 연결
-            ArrayAdapter arrayAdapter = new ArrayAdapter<String>(getActivity().getApplicationContext(), android.R.layout.simple_list_item_1, titleList);
-            listView.setAdapter(arrayAdapter);
+            //ArrayAdapter arrayAdapter = new ArrayAdapter<String>(getActivity().getApplicationContext(), android.R.layout.simple_list_item_1, titleList);
+            //listView.setAdapter(arrayAdapter);
 
             // arrayAdapter의 데이터가 변경되었을때 새로고침
-            arrayAdapter.notifyDataSetChanged();
+            //arrayAdapter.notifyDataSetChanged();
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @SuppressLint("ResourceType")
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View root, int position, long l) {
+                HistoryListView item = (HistoryListView) adapterView.getItemAtPosition(position);
+
+                String idStr = item.getId();
+                System.out.println("idStr="+idStr);
+
+
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                DetailFragment detailFragment = new DetailFragment();
+
+                //프레그먼트끼리 rfgName넘기기 위한 bundle
+                Bundle bundle = new Bundle();
+                bundle.putString("seq", idStr);
+                detailFragment.setArguments(bundle); //Name 변수 값 전달. 반드시 setArguments() 메소드를 사용하지 않으면, 받는 쪽에서 null 값으로 받음.
+                //버튼을 눌렀을 때 RE-Fr자바를 탈 수 있도록 함
+                transaction.replace(R.id.history_fragment, detailFragment); //프레임 레이아웃에서 프레그먼트 1로 변경(replace)해라
+                transaction.addToBackStack(null);
+                transaction.commit(); //저장해라 commit
+
+            }
+        });
+
         return root;
     }
 
-    /*//아이템 클릭 이벤트
-    @Override
-    public void onListItemClick(ListView l, View v, int position, long id){
-        String strText = (String) l.getItemAtPosition(position);
-        Log.d("Fragment: ", position + ": " +strText);
-        Toast.makeText(this.getContext(), "클릭: " + position +" " + strText, Toast.LENGTH_SHORT).show();
-    }*/
 
     //당일 글 갯수
     public String getHistoryList(){
@@ -127,7 +156,7 @@ public class HistoryFragment extends Fragment {
         String getTime = sformat.format(now);
         String rtnStr="";
         int postNum=0;
-        String url = CommonMethod.ipConfig +"/api/loadHistory";
+        String url = CommonMethod.ipConfig +"/api/loadHistoryList";
 
         try{
             String jsonString = new JSONObject()
@@ -137,7 +166,6 @@ public class HistoryFragment extends Fragment {
             //REST API
             RequestHttpURLConnection.NetworkAsyncTask networkTask = new RequestHttpURLConnection.NetworkAsyncTask(url, jsonString);
             rtnStr = networkTask.execute().get();
-            Log.i(TAG, String.format("numdb: (%d)", postNum));
 
         }catch(Exception e){
             e.printStackTrace();
@@ -151,6 +179,7 @@ public class HistoryFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
+
 
 /*    @Override
     public void onResume() {
