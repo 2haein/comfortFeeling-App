@@ -1,5 +1,6 @@
 package com.example.frontend;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -8,6 +9,7 @@ import android.view.Menu;
 
 import com.bumptech.glide.Glide;
 import com.example.frontend.callback.SessionCallback;
+import com.example.frontend.ui.main.HomeFragment;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.navigation.NavController;

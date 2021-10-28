@@ -26,6 +26,7 @@ import com.example.frontend.PostActivity;
 import com.example.frontend.R;
 import com.example.frontend.RequestHttpURLConnection;
 import com.example.frontend.databinding.FragmentHomeBinding;
+import com.example.frontend.http.CommonMethod;
 
 import net.daum.mf.map.api.CalloutBalloonAdapter;
 import net.daum.mf.map.api.MapPOIItem;
@@ -37,8 +38,6 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 public class HomeFragment extends Fragment implements MapView.CurrentLocationEventListener, MapView.MapViewEventListener {
 
@@ -64,34 +63,85 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
     private float mCurrentLat;
     private Context context;
     private String strUserId;
-
+    private int isPost = 0;
+    private String isWrite;
+    ViewGroup mapViewContainer;
+    private int cnt;
+    private String[] array;
 
 
     private MarkerEventListener eventListener = new MarkerEventListener();
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
 
 
-        /**
-         * KAKAO MAP 설정
-         * */
+        MainActivity activity = (MainActivity) getActivity();
+        strUserId = activity.getUserId(); //처음에 유저 아이디를 못 불러오는 현상 존재
+        Log.i(LOG_TAG, String.format("userId: (%s)", strUserId));
 
-        //현재 등록은 안됨 창만 뜸.
+        mapViewContainer = (ViewGroup) binding.mapView;
+        mapView = new MapView(getActivity());
+        mapViewContainer = mapViewContainer.findViewById(R.id.map_view);
+        mapViewContainer.addView(mapView);
+
+        mapView.setCurrentLocationEventListener(this);
+        mapView.setMapViewEventListener(this);
+
+        mapView.setZoomLevel(3, true); //맵 확대
+        mapView.zoomIn(true);
+        mapView.zoomOut(true);
+        mapView.setCalloutBalloonAdapter(new CustomCalloutBalloonAdapter());
+        mapView.setPOIItemEventListener(eventListener);
+
+        // 여기부터 마커 가져오기
+        cnt = getPostNum(); //게시글 수
+        String str = getPostContent(); //게시글 좌표 추출할 것
+        array = str.split(",");
+
+        for(int i=0; i<=cnt; i++){
+            String xx = (array[(i*8)+6].substring(9));
+            float x1 = Float.parseFloat(xx);
+            x_marker.add(x1);
+            Log.i(LOG_TAG, String.format("numberx: %f", x_marker.get(0)));
+        }
+        for(int i=0; i<=cnt; i++){
+            String yy = (array[(i*8)+7].substring(9,12)+"."+array[(i*8)+7].substring(13).replace("}", "").replace("]",""));
+            float y1 = Float.parseFloat(yy);
+            y_marker.add(y1);
+            Log.i(LOG_TAG, String.format("numbery: %f", y_marker.get(0) ));
+        }
+        //make marker
+        for(int i=0; i<=cnt; i++){
+            MapPoint mapPoint = MapPoint.mapPointWithGeoCoord(x_marker.get(i), y_marker.get(i));
+            setMapMarker(mapView, mapPoint);
+        }
+
+
+        //플로팅 버튼 처리
         binding.write.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 MainActivity activity = (MainActivity) getActivity();
-                Intent intent = new Intent(getActivity(), PostActivity.class);
-                Toast.makeText(getActivity(), "오늘의 감정기록!",Toast.LENGTH_SHORT).show();
-                intent.putExtra("lat", mCurrentLat);
-                intent.putExtra("lon", mCurrentLng);
-                intent.putExtra("userId", activity.getUserId());
-                startActivity(intent);
+                if(isPost == 1){
+                    Intent intent = new Intent(getActivity(), PopupActivity.class);
+                    Toast.makeText(getActivity(), "오늘의 감정기록이 존재합니다!",Toast.LENGTH_SHORT).show();
+                    startActivity(intent);
+                }
+                else{
+                    /*
+                    Intent intent = new Intent(getActivity(), PostActivity.class);
+                    Toast.makeText(getActivity(), "오늘의 감정기록!",Toast.LENGTH_SHORT).show();
+                    intent.putExtra("lat", mCurrentLat);
+                    intent.putExtra("lon", mCurrentLng);
+                    intent.putExtra("userId", activity.getUserId());
+                    startActivity(intent);
+
+                     */
+                }
 
             }
         });
@@ -104,44 +154,6 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
 
             }
         });
-
-        mapView = new MapView(getActivity());
-        mapView.setCurrentLocationEventListener(this);
-        mapView.setMapViewEventListener(this);
-
-
-
-        ViewGroup mapViewContainer = (ViewGroup) binding.mapView;
-        mapViewContainer.addView(mapView);
-
-        mapView.setZoomLevel(3, true); //맵 확대
-        mapView.zoomIn(true);
-        mapView.zoomOut(true);
-        mapView.setCalloutBalloonAdapter(new CustomCalloutBalloonAdapter());
-        mapView.setPOIItemEventListener(eventListener);
-
-        // 여기부터 마커
-        int cnt = getPostNum();
-        String str = getPostCoordinate();
-        String[] array = str.split(",");
-
-        for(int i=0; i<cnt; i++){
-            String xx = (array[(i*8)+6].substring(9));
-            float x1 = Float.parseFloat(xx);
-            x_marker.add(x1);
-            Log.i(LOG_TAG, String.format("number: %f", x_marker.get(0)));
-        }
-        for(int i=0; i<cnt; i++){
-            String yy = (array[(i*8)+7].substring(9,12)+"."+array[(i*8)+7].substring(13).replace("}", "").replace("]",""));
-            float y1 = Float.parseFloat(yy);
-            y_marker.add(y1);
-            Log.i(LOG_TAG, String.format("number: %f", y_marker.get(0) ));
-        }
-        //make marker
-        for(int i=0; i<cnt; i++){
-            MapPoint mapPoint = MapPoint.mapPointWithGeoCoord(x_marker.get(i), y_marker.get(i));
-            setMapMarker(mapView, mapPoint);
-        }
 
 
         /**
@@ -158,12 +170,35 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
         return root;
     }
 
+
+
+    /*
+    public void onResume() {
+        super.onResume();
+        // 유저가 글 썼는지 확인
+        for(int i=0; i<=cnt; i++){
+            isWrite = (array[(i*8)+1].substring(9));
+            if(isWrite == strUserId){
+                isPost = 1;
+                break;
+            }
+        }
+        Log.i(LOG_TAG, String.format("isPost값: %d", isPost ));
+
+    }
+
+     */
+
+    public void onPause() {
+        super.onPause();
+        mapViewContainer.removeAllViews();
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
     }
-
 
     //MapView.MapViewEventListener 구현
     @Override
@@ -415,7 +450,7 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
         String rtnStr="";
         int count = 0;
         //REST API 주소
-        String url = "http://localhost:8080/api/history";
+        String url = CommonMethod.ipConfig + "/api/history";
         //String url = "http://본인IP주소:8080/api/history";
 
         try{
@@ -429,6 +464,7 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
             rtnStr = networkTask.execute().get();
 
             //리스트 길이 확인
+            Log.i(LOG_TAG, String.format("ispostdbdb: (%s)", rtnStr));
             count = Integer.parseInt(rtnStr);
 
 
@@ -440,14 +476,14 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
     }
 
 
-    //db에서 글 좌표값 가져오기
-     public String getPostCoordinate(){
+    //db에서 글 내용 가져오기
+     public String getPostContent(){
          SimpleDateFormat sformat = new SimpleDateFormat("yyyy-MM-dd");
          Date now = new Date();
          String getTime = sformat.format(now);
          String rtnStr="";
 
-         String url = "http://localhost:8080/api/loadData"; // 글 정보
+         String url = CommonMethod.ipConfig + "/api/loadData"; // 글 정보
 //         String url = "http://192.168.0.200:8080/api/loadData"; // 글 정보
          try{
              String jsonString = new JSONObject()
@@ -459,7 +495,7 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
              rtnStr = networkTask.execute().get();
 
 
-             Log.i(LOG_TAG, String.format("dbdbdbdb: (%s)", rtnStr));
+             Log.i(LOG_TAG, String.format("postData: (%s)", rtnStr));
              String[] array = rtnStr.split("}");
 
 
@@ -479,7 +515,7 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
         String getTime = sformat.format(now);
         String rtnStr="";
         int postNum=0;
-        String url = "http://localhost:8080/api/loadDataCount";
+        String url = CommonMethod.ipConfig + "/loadDataCount";
 //        String url = "http://192.168.0.200:8080/api/loadDataCount"; //당일 글 갯수
 
         try{

@@ -35,6 +35,12 @@ public class PostActivity extends AppCompatActivity {
 
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        //
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
@@ -123,7 +129,7 @@ public class PostActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //REST API 주소
-                String url = "http://192.168.0.32:8080/api/insert";
+                String url = "http://192.168.0.200:8080/api/insert";
                 //String url = "http://본인IP주소:8080/api/insert";
 
                 SimpleDateFormat sformat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
@@ -153,10 +159,12 @@ public class PostActivity extends AppCompatActivity {
                 }catch(Exception e){
                     e.printStackTrace();
                 }
+
                 finish();
             }
         });
     }
+
 
 
 
