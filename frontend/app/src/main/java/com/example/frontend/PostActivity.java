@@ -17,6 +17,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.frontend.callback.SessionCallback;
+import com.example.frontend.http.CommonMethod;
 
 import org.json.JSONObject;
 
@@ -129,9 +130,7 @@ public class PostActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //REST API 주소
-                String url = "http://192.168.0.200:8080/api/insert";
-                //String url = "http://본인IP주소:8080/api/insert";
-
+                String url = CommonMethod.ipConfig+ "/api/insert";
                 SimpleDateFormat sformat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
                 Date now = new Date();
                 String getTime = sformat.format(now);
