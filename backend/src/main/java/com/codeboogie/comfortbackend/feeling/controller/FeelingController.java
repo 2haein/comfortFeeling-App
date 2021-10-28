@@ -59,10 +59,10 @@ public class FeelingController {
 
     //하루 글 썻는지 조회
     @RequestMapping(value="/history", method={ RequestMethod.GET, RequestMethod.POST })
-    public @ResponseBody long history(@RequestBody String userId, String date) {
-        System.out.println("안드로이드 -> 서버로 Post 요청 userId:"+ userId + " date:" + date);
+    public @ResponseBody long history(@RequestBody HashMap<String, String> data) {
+        System.out.println("안드로이드 -> 서버로 Post 요청 userId:"+ data.get("userId") + " date:" + data.get("publishDate"));
 
-        return feelingService.findDatas(userId, date);
+        return feelingService.findDatas(data.get("userId"), data.get("publishDate"));
     }
 
     //주변 글 개수 불러와서 지도에 포인터 표출
