@@ -82,21 +82,11 @@ public class FeelingController {
     }
 
     // 전체 글 조회
-    @RequestMapping(path="/loadHistoryList", method={ RequestMethod.GET, RequestMethod.POST })
-    public @ResponseBody List<Feeling> loadHistoryList(@RequestBody HashMap<String, String> data) {
-        System.out.println("안드로이드 -> 서버로 Post 요청 userId:"+ data);
-        Long userId = Long.parseLong(data.get("userId"));
-
-
-        return feelingService.loadHistoryList(userId);
-    }
-
-    // 글 조회
     @RequestMapping(path="/loadHistory", method={ RequestMethod.GET, RequestMethod.POST })
-    public @ResponseBody Feeling loadHistory(@RequestBody HashMap<String, String> data) {
-        System.out.println("안드로이드 -> 서버로 Post 요청 글확인:"+ data);
+    public @ResponseBody List<Feeling> loadHistory(@RequestBody Long userId) {
+        System.out.println("안드로이드 -> 서버로 Post 요청 userId:"+ userId);
 
-        return feelingService.loadHistory(data);
+        return feelingService.loadHistory(userId);
     }
 
     //댓글 추가
