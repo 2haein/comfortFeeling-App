@@ -19,10 +19,11 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.frontend.MainActivity;
 import com.example.frontend.PopupActivity;
-import com.example.frontend.PostActivity;
+import com.example.frontend.PostFragment;
 import com.example.frontend.R;
 import com.example.frontend.RequestHttpURLConnection;
 import com.example.frontend.common.ProfileData;
@@ -129,6 +130,8 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
             @Override
             public void onClick(View view) {
                 MainActivity activity = (MainActivity) getActivity();
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                PostFragment postFragment = new PostFragment();
                 isPost = checkPostHistory();
                 if(isPost != 0){
                     Intent intent = new Intent(getActivity(), PopupActivity.class);
@@ -136,12 +139,14 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
                     startActivity(intent);
                 }
                 else{
-                    Intent intent = new Intent(getActivity(), PostActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putDouble("lat", mCurrentLat);
+                    bundle.putDouble("lon", mCurrentLng);
+                    postFragment.setArguments(bundle); //seq 변수 값 전달.
+                    transaction.replace(R.id.home_fragment, postFragment); //프레임 레이아웃에서 detailFragment로 변경
+                    transaction.addToBackStack(null);
+                    transaction.commit(); //저장해라 commit
                     Toast.makeText(getActivity(), "오늘의 감정기록!",Toast.LENGTH_SHORT).show();
-                    intent.putExtra("lat", mCurrentLat);
-                    intent.putExtra("lon", mCurrentLng);
-                    intent.putExtra("userId", ProfileData.getUserId());
-                    startActivity(intent);
                 }
 
             }
@@ -343,16 +348,22 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
                 public void onClick(DialogInterface dialog, int pos)
                 {
                     String[] items = getResources().getStringArray(R.array.LAN);
+                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                    PostFragment postFragment = new PostFragment();
+
                     Toast.makeText(getActivity(),items[pos],Toast.LENGTH_LONG).show();
                     int count = checkPostHistory();
                     // 각 버튼별로 수행할 일
                     if(pos == 0 && count == 0){
 
-                        Intent intent = new Intent(getActivity(), PostActivity.class);
-                        intent.putExtra("lat", mCurrentLat);
-                        intent.putExtra("lon", mCurrentLng);
-                        intent.putExtra("userId", ProfileData.getUserId());
-                        startActivity(intent);
+                        Bundle bundle = new Bundle();
+                        bundle.putDouble("lat", mCurrentLat);
+                        bundle.putDouble("lon", mCurrentLng);
+                        postFragment.setArguments(bundle); //seq 변수 값 전달.
+                        transaction.replace(R.id.home_fragment, postFragment); //프레임 레이아웃에서 detailFragment로 변경
+                        transaction.addToBackStack(null);
+                        transaction.commit(); //저장해라 commit
+
                     }
                     else if(pos == 0 && count == 1){
                         Toast.makeText(getActivity(), "하루에 한 번만 등록 가능!",

@@ -62,12 +62,12 @@
             android:textSize="19dp"
             android:textStyle="bold" />
 
-        <ListView
-            android:id="@+id/listView"
+        <LinearLayout
+            android:id="@+id/comment_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        </ListView>
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="8dp" />
 
 
 
