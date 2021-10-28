@@ -1,5 +1,6 @@
 package com.codeboogie.comfortbackend.feeling.model;
 
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -127,6 +128,7 @@ public class FeelingService {
         return mongoTemplate.findById(data.get("_id"), Feeling.class, "feeling" );
     }
 
+
     public Comment addCmt(final Comment comment) {
         if(comment == null) {
             throw new NullPointerException("Data Null");
@@ -137,6 +139,7 @@ public class FeelingService {
    public List<Comment> loadCmt(final Comment comment) {
         Criteria criteria = new Criteria("feeling_id");
         criteria.is(comment.getFeeling_id());
+
 
         Query query = new Query(criteria);
 
@@ -167,8 +170,12 @@ public class FeelingService {
 
         //System.out.println("query :"+ query);
         List<Feeling> temp = mongoTemplate.find(query, Feeling.class, "feeling");
-
-        int rtnVal = temp.get(0).getScore();
+        int rtnVal = 0;
+        if(temp.size()==0){
+            rtnVal = 0;
+        } else{
+            rtnVal = temp.get(0).getScore();
+        }
 
         return rtnVal;
     }
@@ -205,7 +212,11 @@ public class FeelingService {
 
         for(int i =0; i<temp.size(); i++){
             HashMap<String, Integer> hashMap = new HashMap<>();
-            String dTemp = temp.get(i).getPublishDate().toString();
+            Date gDate = temp.get(i).getPublishDate();
+            cal.setTime(gDate);
+            cal.add(Calendar.HOUR, -9);
+            gDate = cal.getTime();
+            String dTemp = gDate.toString();
             dTemp = dTemp.substring(8,10);
             hashMap.put(dTemp, temp.get(i).getScore());
             listMap.add(hashMap);
