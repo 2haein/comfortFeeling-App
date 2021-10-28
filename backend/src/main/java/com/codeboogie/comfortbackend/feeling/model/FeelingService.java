@@ -18,9 +18,6 @@ public class FeelingService {
     @Autowired
     private MongoTemplate mongoTemplate; //몽고DB 템플릿 불러오기
 
-//    @Autowired
-//    private FeelingRepository feelingRepository;
-
     public Feeling insert(final Feeling feeling) {
         if(feeling == null) {
             throw new NullPointerException("Data Null");
@@ -47,11 +44,27 @@ public class FeelingService {
         mongoTemplate.updateFirst(query, update, "feeling");
     }
 
-    public void remove(String key, String value) {
-        Criteria criteria = new Criteria(key);
-        criteria.is(value);
+    public void remove(HashMap<String, String> data) throws ParseException {
+        Query query = new Query();
+        Criteria criteria = new Criteria();
 
-        Query query = new Query(criteria);
+        Criteria criteria_arr[] = new Criteria[2];
+
+        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        String startDate = data.get("publishDate") + "T00:00:00.000Z";
+        Date sDate = inputFormat.parse(startDate);
+        // 시간대가 UTC로 되기 때문에 9시간 추가해야 한국 시간대 맞춰짐
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(sDate);
+        cal.add(Calendar.HOUR, 9);
+        sDate = cal.getTime();
+        cal.add(Calendar.DATE, 1);
+        Date eDate = cal.getTime();
+
+        criteria_arr[0] = Criteria.where("userId").is(Long.parseLong(data.get("userId")));
+        criteria_arr[1] = Criteria.where("publishDate").gte(sDate).lte(eDate);
+
+        query.addCriteria(criteria.andOperator(criteria_arr));
 
         mongoTemplate.remove(query, "feeling");
 

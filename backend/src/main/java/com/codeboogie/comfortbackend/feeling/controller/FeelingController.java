@@ -46,13 +46,12 @@ public class FeelingController {
             e.printStackTrace();
         }
     }
-
+    //삭제 (userId, publishDate) 전송
     @RequestMapping(path="/remove", method={ RequestMethod.GET, RequestMethod.POST })
-    public @ResponseBody void remove(@RequestBody final Feeling feeling) {
-        String key = "id";
-        String value = feeling.getId();
+    public @ResponseBody void remove(@RequestBody HashMap<String, String> data) {
+        System.out.println("안드로이드 -> 서버로 Post 삭제:"+ data);
         try {
-            feelingService.remove(key, value);
+            feelingService.remove(data);
         } catch(final Exception e) {
             e.printStackTrace();
         }
