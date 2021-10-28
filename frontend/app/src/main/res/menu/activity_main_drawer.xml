@@ -9,9 +9,9 @@
             android:icon="@drawable/ic_menu_rate_star_small_on"
             android:title="@string/menu_home" />
         <item
-            android:id="@+id/nav_mypost"
+            android:id="@+id/nav_completion"
             android:icon="@drawable/post"
-            android:title="@string/menu_mypost" />
+            android:title="@string/menu_completion" />
         <item
             android:id="@+id/nav_history"
             android:icon="@drawable/ic_menu_rate_star_small_on"
