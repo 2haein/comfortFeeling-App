@@ -142,14 +142,19 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
         binding.write.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                 PostFragment postFragment = new PostFragment();
+                CompletionFragment completionFragment = new CompletionFragment();
                 isPost = checkPostHistory();
                 if(isPost != 0){
-                    Intent intent = new Intent(getActivity(), PopupActivity.class);
                     Toast.makeText(getActivity(), "오늘의 감정기록이 존재합니다!",Toast.LENGTH_SHORT).show();
-                    startActivity(intent);
+                    /*
+                    Bundle bundle = new Bundle();
+                    completionFragment.setArguments(bundle); //seq 변수 값 전달.
+                    transaction.replace(R.id.completion_fragment, completionFragment); //프레임 레이아웃에서 detailFragment로 변경
+                    transaction.addToBackStack(null);
+                    transaction.commit(); //저장해라 commit
+                    */
                 }
                 else{
                     if(getPickedLat==0.0){
@@ -477,19 +482,19 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
         marker.setMarkerType(MapPOIItem.MarkerType.CustomImage);
 
         if(score == 1){
-            marker.setCustomImageResourceId(R.drawable.emotion1);
+            marker.setCustomImageResourceId(R.drawable.emoji_marker1);
         }
         else if(score == 2){
-            marker.setCustomImageResourceId(R.drawable.emotion2);
+            marker.setCustomImageResourceId(R.drawable.emoji_marker2);
         }
         else if(score == 3){
-            marker.setCustomImageResourceId(R.drawable.emotion3);
+            marker.setCustomImageResourceId(R.drawable.emoji_marker3);
         }
         else if(score == 4){
-            marker.setCustomImageResourceId(R.drawable.emotion4);
+            marker.setCustomImageResourceId(R.drawable.emoji_marker4);
         }
         else if(score == 5){
-            marker.setCustomImageResourceId(R.drawable.emotion5);
+            marker.setCustomImageResourceId(R.drawable.emoji_marker5);
         }
         else{
             marker.setCustomImageResourceId(R.drawable.custom_marker_red);

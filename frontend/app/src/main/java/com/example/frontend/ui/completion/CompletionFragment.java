@@ -1,5 +1,6 @@
 package com.example.frontend.ui.completion;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -11,11 +12,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.frontend.MainActivity;
 import com.example.frontend.R;
@@ -86,6 +89,23 @@ public class CompletionFragment extends Fragment {
         feel_btn4 = (ImageView) root.findViewById(R.id.imageView4);
         feel_btn5 = (ImageView) root.findViewById(R.id.imageView5);
         comment_layout = (LinearLayout) root.findViewById(R.id.comment_layout);
+        comment_et = (EditText) root.findViewById(R.id.comment_et);
+        reg_button = (Button) root.findViewById(R.id.reg_button);
+
+        reg_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                RegCmt regCmt = new RegCmt();
+                regCmt.execute(userId, comment_et.getText().toString(), board_seq);
+            }
+        });
+
+        Bundle bundle = getArguments();  //번들 받기. getArguments() 메소드로 받음.
+
+        if(bundle != null){
+            board_seq = bundle.getString("seq");
+            System.out.println("seq=" + board_seq); //확인
+        }
 
 
         try {
@@ -95,10 +115,10 @@ public class CompletionFragment extends Fragment {
             jsonObject = new JSONObject( getTodayHistory());
 
             // Database 의 데이터들을 변수로 저장한 후 해당 TextView 에 데이터 입력
+
+            board_seq = jsonObject.optString("id");
             String content = jsonObject.optString("text");
             String publishDate = jsonObject.optString("publishDate");
-            double xcoord = Double.parseDouble(jsonObject.optString("xcoord"));
-            double ycoord = Double.parseDouble(jsonObject.optString("ycoord"));
             SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
             Date pDate = inputFormat.parse(publishDate);
             inputFormat.applyPattern("yyyy-MM-dd HH:mm:ss");
@@ -107,6 +127,7 @@ public class CompletionFragment extends Fragment {
 
             content_tv.setText(content);
             date_tv.setText(newDateForm);
+
             switch (score) {
                 case 1: feel_btn1.setImageResource(R.drawable.color_emoji1);
                     break;
@@ -126,39 +147,25 @@ public class CompletionFragment extends Fragment {
                     break;
             }
 
+            LoadCmt loadCmt = new LoadCmt();
+            loadCmt.execute(board_seq);
+
+
         } catch (ParseException e) {
             e.printStackTrace();
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        Log.i(TAG, "board값" + board_seq);
         return root;
 
     }
 
-    public String getHistory(){
-        String rtnStr="";
-        int postNum=0;
-        String url = CommonMethod.ipConfig +"/api/loadHistory";
-
-        try{
-            String jsonString = new JSONObject()
-                    .put("_id", board_seq)
-                    .toString();
-
-            //REST API
-            RequestHttpURLConnection.NetworkAsyncTask networkTask = new RequestHttpURLConnection.NetworkAsyncTask(url, jsonString);
-            rtnStr = networkTask.execute().get();
-
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-
-        return rtnStr;
-    }
 
     public void onPause() {
         super.onPause();
     }
+
 
     // 게시물의 댓글을 읽어오는 함수
     class LoadCmt extends AsyncTask<String, Void, String> {
@@ -268,7 +275,6 @@ public class CompletionFragment extends Fragment {
         }
     }
 
-
     public String getTodayHistory(){
         SimpleDateFormat sformat = new SimpleDateFormat("yyyy-MM-dd");
         Date now = new Date();
@@ -294,6 +300,110 @@ public class CompletionFragment extends Fragment {
         return rtnStr;
 
     }
+
+    // 댓글을 등록하는 함수
+    class RegCmt extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            Log.d(TAG, "onPreExecute");
+        }
+
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            Log.d(TAG, "onPostExecute, " + result);
+
+            // 결과값이 성공으로 나오면
+            if(result.equals("success")){
+
+                //댓글 입력창의 글자는 공백으로 만듦
+                comment_et.setText("");
+
+                // 소프트 키보드 숨김처리
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(comment_et.getWindowToken(), 0);
+
+                // 토스트메시지 출력
+                Toast.makeText(getActivity(), "댓글이 등록되었습니다.", Toast.LENGTH_SHORT).show();
+
+                // 댓글 불러오는 함수 호출
+                LoadCmt loadCmt = new LoadCmt();
+                loadCmt.execute(board_seq);
+
+            }else
+            {
+                Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT).show();
+            }
+        }
+
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            String userid = params[0];
+            String content = params[1];
+            String board_seq = params[2];
+
+            SimpleDateFormat sformat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+            Date now = new Date();
+            String getTime = sformat.format(now);
+
+            String server_url =  CommonMethod.ipConfig + "/api/addCmt";
+
+
+            URL url;
+            String response = "";
+            try {
+                url = new URL(server_url);
+
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setReadTimeout(15000);
+                conn.setConnectTimeout(15000);
+                conn.setRequestMethod("POST");
+                conn.setDoInput(true);
+                conn.setDoOutput(true);
+                Uri.Builder builder = new Uri.Builder()
+                        .appendQueryParameter("userId", userid)
+                        .appendQueryParameter("context", content)
+                        .appendQueryParameter("feeling_id", board_seq)
+                        .appendQueryParameter("publishDate", getTime)
+                        .appendQueryParameter("show", "1");
+                String query = builder.build().getEncodedQuery();
+
+                OutputStream os = conn.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(
+                        new OutputStreamWriter(os, "UTF-8"));
+                writer.write(query);
+                writer.flush();
+                writer.close();
+                os.close();
+
+                conn.connect();
+                int responseCode=conn.getResponseCode();
+
+                if (responseCode == HttpsURLConnection.HTTP_OK) {
+                    String line;
+                    BufferedReader br=new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                    while ((line=br.readLine()) != null) {
+                        response+=line;
+                    }
+                }
+                else {
+                    response="";
+
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return response;
+        }
+    }
+
 
 
 }

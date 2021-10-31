@@ -107,7 +107,7 @@ public class DetailFragment extends Fragment {
             board_seq = bundle.getString("seq");
             System.out.println("seq=" + board_seq); //확인
         }
-
+        Log.i(TAG, "board값" + board_seq);
         try {
             // 결과값이 JSONArray 형태로 넘어오기 때문에
             // JSONArray, JSONObject 를 사용해서 파싱
