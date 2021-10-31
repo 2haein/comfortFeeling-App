@@ -33,6 +33,7 @@ import com.example.frontend.common.ProfileData;
 import com.example.frontend.databinding.FragmentDetailBinding;
 import com.example.frontend.http.CommonMethod;
 
+import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapPoint;
 import net.daum.mf.map.api.MapView;
 
@@ -169,6 +170,9 @@ public class DetailFragment extends Fragment {
 
             // 중심점 변경 + 줌 레벨 변경
             mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(xcoord, ycoord), 3, true);
+            MapPoint mapPoint = MapPoint.mapPointWithGeoCoord(xcoord, ycoord);
+
+            setMapMarker(mapView, mapPoint,score);
 
 
             // 해당 게시물에 대한 댓글 불러오는 함수 호출, 파라미터로 게시물 번호 넘김
@@ -235,6 +239,38 @@ public class DetailFragment extends Fragment {
 
         AlertDialog msgDlg = msgBuilder.create();
         msgDlg.show();
+    }
+
+    public void setMapMarker(MapView mapView, MapPoint mapPoint, int score) {
+        MapPOIItem marker = new MapPOIItem();
+        marker.setItemName("현재 위치");
+        marker.setMapPoint(mapPoint);
+        marker.setMarkerType(MapPOIItem.MarkerType.CustomImage);
+
+        if(score == 1){
+            marker.setCustomImageResourceId(R.drawable.emoji_marker1);
+        }
+        else if(score == 2){
+            marker.setCustomImageResourceId(R.drawable.emoji_marker2);
+        }
+        else if(score == 3){
+            marker.setCustomImageResourceId(R.drawable.emoji_marker3);
+        }
+        else if(score == 4){
+            marker.setCustomImageResourceId(R.drawable.emoji_marker4);
+        }
+        else if(score == 5){
+            marker.setCustomImageResourceId(R.drawable.emoji_marker5);
+        }
+        else{
+            marker.setCustomImageResourceId(R.drawable.custom_marker_red);
+        }
+
+        marker.setCustomImageAutoscale(true);
+        marker.setCustomImageAnchor(0.5f, 1.0f);
+        marker.setDraggable(true);
+        mapView.addPOIItem(marker);
+
     }
 
 
