@@ -1,5 +1,6 @@
 package com.example.frontend.ui.history;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -68,7 +69,7 @@ public class DetailFragment extends Fragment {
     TextView content_tv, date_tv;
     LinearLayout comment_layout;
     EditText comment_et;
-    Button reg_button;
+    Button reg_button, delete_btn;
     ImageView feel_btn1, feel_btn2, feel_btn3, feel_btn4, feel_btn5;
 
     String board_seq;
