@@ -10,9 +10,12 @@ import android.view.Menu;
 import com.bumptech.glide.Glide;
 import com.example.frontend.callback.SessionCallback;
 import com.example.frontend.common.ProfileData;
+import com.example.frontend.ui.completion.CompletionFragment;
 import com.example.frontend.ui.main.HomeFragment;
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -26,6 +29,7 @@ import android.widget.TextView;
 
 
 import com.example.frontend.databinding.ActivityMainBinding;
+import com.google.android.material.snackbar.Snackbar;
 import com.kakao.auth.Session;
 import com.kakao.network.ErrorResult;
 import com.kakao.usermgmt.UserManagement;
@@ -41,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
     // menu item initialization
     private SessionCallback sessionCallback = new SessionCallback();
     public String strUserId;
-
+    CompletionFragment completionFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +83,8 @@ public class MainActivity extends AppCompatActivity {
                 .error(R.mipmap.ic_launcher_round)
                 .fallback(R.mipmap.ic_launcher_round)
                 .into(profileImageUrl);
+
+        completionFragment = new CompletionFragment();
 
     }
 
@@ -129,5 +135,13 @@ public class MainActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
+    //프래그먼트 이동용
+    public void onFragmentChange(int index){
+        if(index == 1){
+            getSupportFragmentManager().beginTransaction().
+                    replace(R.id.nav_host_fragment_content_main , completionFragment).addToBackStack(null).commit();
 
+        }
+        //여기서 다른 프래그먼트로 이동하는 기능 구현가능
+    }
 }

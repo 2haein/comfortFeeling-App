@@ -51,7 +51,7 @@ import java.util.Date;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public class CompletionFragment extends Fragment {
+public class CompletionFragment extends Fragment{
 
     final private String TAG = getClass().getSimpleName();
     private @NonNull
@@ -68,6 +68,7 @@ public class CompletionFragment extends Fragment {
 
     String board_seq;
     String userId;
+    HomeFragment homeFragment;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -75,7 +76,7 @@ public class CompletionFragment extends Fragment {
         binding = FragmentCompletionBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         MainActivity activity = (MainActivity) getActivity();
-        HomeFragment homeFragment = new HomeFragment();
+        homeFragment = new HomeFragment();
         board_seq = homeFragment.sendBoardseq();
 
         userId = ProfileData.getUserId();
@@ -183,7 +184,7 @@ public class CompletionFragment extends Fragment {
             super.onPostExecute(result);
             Log.d(TAG, "onPostExecute, " + result);
 
-// 댓글을 뿌릴 LinearLayout 자식뷰 모두 제거
+// 댓글을 뿌릴 LinearLayout 자식뷰 모두 제거F
             comment_layout.removeAllViews();
 
             try {

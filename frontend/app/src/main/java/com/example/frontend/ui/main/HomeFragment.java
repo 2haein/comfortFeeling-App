@@ -76,8 +76,19 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
     private int cnt;
     private String[] array;
 
+    MainActivity activity;
 
     private MarkerEventListener eventListener = new MarkerEventListener();
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        activity = (MainActivity) getActivity();
+    }
+    @Override
+    public void onDetach() {
+        super.onDetach();
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -144,14 +155,14 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
             public void onClick(View view) {
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                 PostFragment postFragment = new PostFragment();
-                CompletionFragment completionFragment = new CompletionFragment();
                 isPost = checkPostHistory();
                 if(isPost != 0){
                     Toast.makeText(getActivity(), "오늘의 감정기록이 존재합니다!",Toast.LENGTH_SHORT).show();
+                    activity.onFragmentChange(1);
                     /*
                     Bundle bundle = new Bundle();
                     completionFragment.setArguments(bundle); //seq 변수 값 전달.
-                    transaction.replace(R.id.completion_fragment, completionFragment); //프레임 레이아웃에서 detailFragment로 변경
+                    transaction.replace(R.id.completion_fragment, completionFragment);
                     transaction.addToBackStack(null);
                     transaction.commit(); //저장해라 commit
                     */
@@ -165,7 +176,7 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
                     bundle.putDouble("lat", getPickedLat);
                     bundle.putDouble("lon", getPickedLng);
                     postFragment.setArguments(bundle); //seq 변수 값 전달.
-                    transaction.replace(R.id.home_fragment, postFragment); //프레임 레이아웃에서 detailFragment로 변경
+                    transaction.replace(R.id.home_fragment, postFragment);
                     transaction.addToBackStack(null);
                     transaction.commit(); //저장해라 commit
                     Toast.makeText(getActivity(), "오늘의 감정기록!",Toast.LENGTH_SHORT).show();
