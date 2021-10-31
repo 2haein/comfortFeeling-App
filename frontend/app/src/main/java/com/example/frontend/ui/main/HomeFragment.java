@@ -40,9 +40,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class HomeFragment extends Fragment implements MapView.CurrentLocationEventListener, MapView.MapViewEventListener {
 
@@ -74,7 +76,7 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
     private String board_seq;
     ViewGroup mapViewContainer;
     private int cnt;
-    private String[] array;
+    private List<String> markers= new ArrayList<>();
 
     MainActivity activity;
 
@@ -258,8 +260,12 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
 
         isPost = checkPostHistory();
         Log.i(LOG_TAG, String.format("isPost값입니다.: %d", isPost));
-        if(isPost == 0){
+        if(isPost == 0 && markers.size() == 0){
             setMapMarker(mapView, mapPoint,0);
+            markers.add("1");
+        } else{
+            Toast.makeText(getActivity(), "마커를 다른 곳에 표시하려면 지도상의 존재하는 마커를 제거해주세요!",
+                    Toast.LENGTH_SHORT).show();
         }
         if(isPost != 0){
             Toast.makeText(getActivity(), "하루에 한 번만 등록 가능!",
@@ -278,8 +284,12 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
         getPickedLng = mapPoint.getMapPointGeoCoord().longitude;
         isPost = checkPostHistory();
         Log.i(LOG_TAG, String.format("isPost값입니다.: %d", isPost));
-        if(isPost == 0){
-            setMapMarker(mapView, mapPoint, 0);
+        if(isPost == 0 && markers.size() == 0){
+            setMapMarker(mapView, mapPoint,0);
+            markers.add("1");
+        } else{
+            Toast.makeText(getActivity(), "마커를 다른 곳에 표시하려면 지도상의 존재하는 마커를 제거해주세요!",
+                    Toast.LENGTH_SHORT).show();
         }
         if(isPost != 0){
             Toast.makeText(getActivity(), "하루에 한 번만 등록 가능!",
@@ -413,6 +423,9 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
                                 Toast.LENGTH_SHORT).show();
                     }
                     else if(pos==1){
+                        if(markers.size()!=0) {
+                            markers.clear();
+                        }
                         mapView.removePOIItem(mapPOIItem);
                         removePosting();
                     }
