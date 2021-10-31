@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
@@ -56,7 +57,6 @@ public class PostFragment extends Fragment {
         View root = binding.getRoot();
 
         edit_text = (EditText)root.findViewById(R.id.editTextTextMultiLine);
-//        feel_rate = (RatingBar)findViewById(R.id.ratingBar);
         feel_btn1 = (ImageView)root.findViewById(R.id.imageView1);
         feel_btn2 = (ImageView)root.findViewById(R.id.imageView2);
         feel_btn3 = (ImageView)root.findViewById(R.id.imageView3);
@@ -76,55 +76,55 @@ public class PostFragment extends Fragment {
         feel_btn1.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                feel_btn1.setBackgroundColor(Color.YELLOW);
-                feel_btn2.setBackgroundColor(Color.WHITE);
-                feel_btn3.setBackgroundColor(Color.WHITE);
-                feel_btn4.setBackgroundColor(Color.WHITE);
-                feel_btn5.setBackgroundColor(Color.WHITE);
+                feel_btn1.setImageResource(R.drawable.color_emoji1);
+                feel_btn2.setImageResource(R.drawable.emotion2);
+                feel_btn3.setImageResource(R.drawable.emotion3);
+                feel_btn4.setImageResource(R.drawable.emotion4);
+                feel_btn5.setImageResource(R.drawable.emotion5);
                 rating = 1;
             }
         });
         feel_btn2.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                feel_btn1.setBackgroundColor(Color.WHITE);
-                feel_btn2.setBackgroundColor(Color.YELLOW);
-                feel_btn3.setBackgroundColor(Color.WHITE);
-                feel_btn4.setBackgroundColor(Color.WHITE);
-                feel_btn5.setBackgroundColor(Color.WHITE);
+                feel_btn1.setImageResource(R.drawable.emotion1);
+                feel_btn2.setImageResource(R.drawable.color_emoji2);
+                feel_btn3.setImageResource(R.drawable.emotion3);
+                feel_btn4.setImageResource(R.drawable.emotion4);
+                feel_btn5.setImageResource(R.drawable.emotion5);
                 rating = 2;
             }
         });
         feel_btn3.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                feel_btn1.setBackgroundColor(Color.WHITE);
-                feel_btn2.setBackgroundColor(Color.WHITE);
-                feel_btn3.setBackgroundColor(Color.YELLOW);
-                feel_btn4.setBackgroundColor(Color.WHITE);
-                feel_btn5.setBackgroundColor(Color.WHITE);
+                feel_btn1.setImageResource(R.drawable.emotion1);
+                feel_btn2.setImageResource(R.drawable.emotion2);
+                feel_btn3.setImageResource(R.drawable.color_emoji3);
+                feel_btn4.setImageResource(R.drawable.emotion4);
+                feel_btn5.setImageResource(R.drawable.emotion5);
                 rating = 3;
             }
         });
         feel_btn4.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                feel_btn1.setBackgroundColor(Color.WHITE);
-                feel_btn2.setBackgroundColor(Color.WHITE);
-                feel_btn3.setBackgroundColor(Color.WHITE);
-                feel_btn4.setBackgroundColor(Color.YELLOW);
-                feel_btn5.setBackgroundColor(Color.WHITE);
+                feel_btn1.setImageResource(R.drawable.emotion1);
+                feel_btn2.setImageResource(R.drawable.emotion2);
+                feel_btn3.setImageResource(R.drawable.emotion3);
+                feel_btn4.setImageResource(R.drawable.color_emoji4);
+                feel_btn5.setImageResource(R.drawable.emotion5);
                 rating = 4;
             }
         });
         feel_btn5.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                feel_btn1.setBackgroundColor(Color.WHITE);
-                feel_btn2.setBackgroundColor(Color.WHITE);
-                feel_btn3.setBackgroundColor(Color.WHITE);
-                feel_btn4.setBackgroundColor(Color.WHITE);
-                feel_btn5.setBackgroundColor(Color.YELLOW);
+                feel_btn1.setImageResource(R.drawable.emotion1);
+                feel_btn2.setImageResource(R.drawable.emotion2);
+                feel_btn3.setImageResource(R.drawable.emotion3);
+                feel_btn4.setImageResource(R.drawable.emotion4);
+                feel_btn5.setImageResource(R.drawable.color_emoji5);
                 rating = 5;
             }
         });

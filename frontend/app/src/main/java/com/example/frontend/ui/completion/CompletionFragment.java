@@ -87,17 +87,6 @@ public class CompletionFragment extends Fragment {
         feel_btn5 = (ImageView) root.findViewById(R.id.imageView5);
         comment_layout = (LinearLayout) root.findViewById(R.id.comment_layout);
 
-        /*
-        Bundle bundle = getArguments();  //번들 받기. getArguments() 메소드로 받음.
-
-        if (bundle != null) {
-            board_seq = bundle.getString("seq");
-            System.out.println("seq=" + board_seq); //확인
-        }
-
-         */
-
-
 
         try {
             // 결과값이 JSONArray 형태로 넘어오기 때문에
@@ -118,37 +107,16 @@ public class CompletionFragment extends Fragment {
 
             content_tv.setText(content);
             date_tv.setText(newDateForm);
-
             switch (score) {
-                case 1: feel_btn1.setBackgroundColor(Color.YELLOW);
-                    feel_btn2.setBackgroundColor(Color.WHITE);
-                    feel_btn3.setBackgroundColor(Color.WHITE);
-                    feel_btn4.setBackgroundColor(Color.WHITE);
-                    feel_btn5.setBackgroundColor(Color.WHITE);
+                case 1: feel_btn1.setImageResource(R.drawable.color_emoji1);
                     break;
-                case 2 : feel_btn1.setBackgroundColor(Color.WHITE);
-                    feel_btn2.setBackgroundColor(Color.YELLOW);
-                    feel_btn3.setBackgroundColor(Color.WHITE);
-                    feel_btn4.setBackgroundColor(Color.WHITE);
-                    feel_btn5.setBackgroundColor(Color.WHITE);
+                case 2 : feel_btn2.setImageResource(R.drawable.color_emoji2);
                     break;
-                case 3 : feel_btn1.setBackgroundColor(Color.WHITE);
-                    feel_btn2.setBackgroundColor(Color.WHITE);
-                    feel_btn3.setBackgroundColor(Color.YELLOW);
-                    feel_btn4.setBackgroundColor(Color.WHITE);
-                    feel_btn5.setBackgroundColor(Color.WHITE);
+                case 3 : feel_btn3.setImageResource(R.drawable.color_emoji3);
                     break;
-                case 4 : feel_btn1.setBackgroundColor(Color.WHITE);
-                    feel_btn2.setBackgroundColor(Color.WHITE);
-                    feel_btn3.setBackgroundColor(Color.WHITE);
-                    feel_btn4.setBackgroundColor(Color.YELLOW);
-                    feel_btn5.setBackgroundColor(Color.WHITE);
+                case 4 : feel_btn4.setImageResource(R.drawable.color_emoji4);
                     break;
-                case 5 : feel_btn1.setBackgroundColor(Color.WHITE);
-                    feel_btn2.setBackgroundColor(Color.WHITE);
-                    feel_btn3.setBackgroundColor(Color.WHITE);
-                    feel_btn4.setBackgroundColor(Color.WHITE);
-                    feel_btn5.setBackgroundColor(Color.YELLOW);
+                case 5 : feel_btn5.setImageResource(R.drawable.color_emoji5);
                     break;
                 default : feel_btn1.setBackgroundColor(Color.WHITE);
                     feel_btn2.setBackgroundColor(Color.WHITE);

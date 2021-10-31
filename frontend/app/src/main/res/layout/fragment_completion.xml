@@ -7,7 +7,7 @@
     android:background="#FFFFFF"
     android:orientation="vertical"
     android:padding="16dp"
-    tools:context=".ui.completion.CompletionFragment">
+    tools:context=".ui.history.DetailFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -114,8 +114,36 @@
                 android:padding="16dp"
                 android:text="댓글" />
 
-
+            <LinearLayout
+                android:id="@+id/comment_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="8dp" />
         </LinearLayout>
     </ScrollView>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/comment_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#eeeeee"
+            android:hint="댓글 내용을 입력하세요"
+            android:padding="8dp"
+            tools:ignore="TouchTargetSizeCheck" />
+
+        <Button
+            android:id="@+id/reg_button"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:padding="8dp"
+            android:text="등록하기"
+            tools:ignore="TouchTargetSizeCheck" />
+    </LinearLayout>
 </LinearLayout>

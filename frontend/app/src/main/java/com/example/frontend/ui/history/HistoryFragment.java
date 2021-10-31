@@ -95,15 +95,15 @@ public class HistoryFragment extends Fragment {
                 seqList.add(seq);
 
                 switch (score) {
-                    case 1 : adapter.addItem(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.emotion1), seq, title, "감정점수 = "+score, "  등록일 = "+newDateForm);
+                    case 1 : adapter.addItem(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.color_emoji1), seq, title, "감정점수 = "+score, "  등록일 = "+newDateForm);
                             break;
-                    case 2 : adapter.addItem(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.emotion2), seq, title, "감정점수 = "+score, "  등록일 = "+newDateForm);
+                    case 2 : adapter.addItem(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.color_emoji2), seq, title, "감정점수 = "+score, "  등록일 = "+newDateForm);
                         break;
-                    case 3 : adapter.addItem(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.emotion3), seq, title, "감정점수 = "+score, "  등록일 = "+newDateForm);
+                    case 3 : adapter.addItem(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.color_emoji3), seq, title, "감정점수 = "+score, "  등록일 = "+newDateForm);
                         break;
-                    case 4 : adapter.addItem(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.emotion4), seq, title, "감정점수 = "+score, "  등록일 = "+newDateForm);
+                    case 4 : adapter.addItem(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.color_emoji4), seq, title, "감정점수 = "+score, "  등록일 = "+newDateForm);
                         break;
-                    case 5 : adapter.addItem(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.emotion5), seq, title, "감정점수 = "+score, "  등록일 = "+newDateForm);
+                    case 5 : adapter.addItem(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.color_emoji5), seq, title, "감정점수 = "+score, "  등록일 = "+newDateForm);
                         break;
                     default:adapter.addItem(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.x_button), seq, title, "감정점수 = "+score, "  등록일 = "+newDateForm);
                         break;

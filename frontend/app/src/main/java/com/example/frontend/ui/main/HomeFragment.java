@@ -138,7 +138,6 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
         }
 
 
-
         //플로팅 버튼 처리
         binding.write.setOnClickListener(new View.OnClickListener() {
             @Override
