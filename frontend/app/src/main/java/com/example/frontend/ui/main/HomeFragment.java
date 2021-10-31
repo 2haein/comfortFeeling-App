@@ -404,7 +404,7 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
                     FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                     PostFragment postFragment = new PostFragment();
 
-                    Toast.makeText(getActivity(),items[pos],Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(),items[pos],Toast.LENGTH_SHORT).show();
                     int count = checkPostHistory();
                     // 각 버튼별로 수행할 일
                     if(pos == 0 && count == 0){
