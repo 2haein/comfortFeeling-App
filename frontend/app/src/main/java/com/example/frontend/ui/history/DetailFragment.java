@@ -1,6 +1,7 @@
 package com.example.frontend.ui.history;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -8,6 +9,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.frontend.MainActivity;
+import com.example.frontend.PostFragment;
 import com.example.frontend.R;
 import com.example.frontend.RequestHttpURLConnection;
 import com.example.frontend.common.ProfileData;
@@ -69,6 +73,8 @@ public class DetailFragment extends Fragment {
 
     String board_seq;
     String userId;
+    String publishDate;
+    String newDateForm;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -91,6 +97,7 @@ public class DetailFragment extends Fragment {
         comment_layout = (LinearLayout) root.findViewById(R.id.comment_layout);
         comment_et = (EditText) root.findViewById(R.id.comment_et);
         reg_button = (Button) root.findViewById(R.id.reg_button);
+        delete_btn = (Button) root.findViewById(R.id.delete_btn);
 
         // 등록하기 버튼을 눌렀을 때 댓글 등록 함수 호출
         reg_button.setOnClickListener(new View.OnClickListener() {
@@ -98,6 +105,13 @@ public class DetailFragment extends Fragment {
             public void onClick(View view) {
                 RegCmt regCmt = new RegCmt();
                 regCmt.execute(userId, comment_et.getText().toString(), board_seq);
+            }
+        });
+
+        delete_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDialog();
             }
         });
 
@@ -116,13 +130,13 @@ public class DetailFragment extends Fragment {
 
             // Database 의 데이터들을 변수로 저장한 후 해당 TextView 에 데이터 입력
             String content = jsonObject.optString("text");
-            String publishDate = jsonObject.optString("publishDate");
+            publishDate = jsonObject.optString("publishDate");
             double xcoord = Double.parseDouble(jsonObject.optString("xcoord"));
             double ycoord = Double.parseDouble(jsonObject.optString("ycoord"));
             SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
             Date pDate = inputFormat.parse(publishDate);
             inputFormat.applyPattern("yyyy-MM-dd HH:mm:ss");
-            String newDateForm = inputFormat.format(pDate);
+            newDateForm = inputFormat.format(pDate);
 
             int score = Integer.parseInt(jsonObject.optString("score"));
 
@@ -195,6 +209,31 @@ public class DetailFragment extends Fragment {
         }
 
         return rtnStr;
+    }
+
+    void showDialog() {
+        AlertDialog.Builder msgBuilder = new AlertDialog.Builder(getActivity())
+                .setTitle("글을 삭제하시겠습니까?")
+                .setMessage("나의 히스토리 글을 삭제합니다")
+                .setPositiveButton("네", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        deleteHistory();
+                        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                        HistoryFragment historyFragment = new HistoryFragment();
+                        transaction.replace(R.id.detail_fragment, historyFragment); //프레임 레이아웃에서 detailFragment로 변경
+                        transaction.addToBackStack(null);
+                        transaction.commit(); //저장해라 commit
+
+
+                    }
+                })
+                .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {}
+                });
+
+        AlertDialog msgDlg = msgBuilder.create();
+        msgDlg.show();
     }
 
 
@@ -405,6 +444,36 @@ public class DetailFragment extends Fragment {
             }
 
             return response;
+        }
+    }
+
+    //댓글 삭제
+    public void deleteHistory(){
+
+        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+        Date pDate = null;
+        String nDateForm;
+        try {
+            pDate = inputFormat.parse(publishDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        inputFormat.applyPattern("yyyy-MM-dd");
+        nDateForm = inputFormat.format(pDate);
+
+        String url = CommonMethod.ipConfig +"/api/remove";
+        try{
+            String jsonString = new JSONObject()
+                    .put("userId", userId)
+                    .put("publishDate", nDateForm)
+                    .toString();
+
+            //REST API
+            RequestHttpURLConnection.NetworkAsyncTask networkTask = new RequestHttpURLConnection.NetworkAsyncTask(url, jsonString);
+            networkTask.execute();
+
+        }catch(Exception e){
+            e.printStackTrace();
         }
     }
 }

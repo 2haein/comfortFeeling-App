@@ -7,6 +7,7 @@
     android:background="#FFFFFF"
     android:orientation="vertical"
     android:padding="16dp"
+    android:id="@+id/detail_fragment"
     tools:context=".ui.history.DetailFragment">
 
     <ScrollView
@@ -32,18 +33,25 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="100dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="16dp"
                     android:text="작성일" />
 
                 <TextView
                     android:id="@+id/date_tv"
-                    android:layout_width="match_parent"
+                    android:layout_width="170dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="#eeeeee"
                     android:padding="16dp" />
+
+                <Button
+                    android:id="@+id/delete_btn"
+                    android:layout_width="60dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="글 삭제" />
 
             </LinearLayout>
 
