@@ -115,9 +115,11 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
 
         // 여기부터 마커 가져오기
         cnt = getPostNum(); //게시글 수
+        String getPostContent = getPostContent();
         try {
-            JSONArray jsonArray = new JSONArray(getPostContent());
-            for(int i=0;i<jsonArray.length();i++) {
+        if(!getPostContent.equals("")) {
+            JSONArray jsonArray = new JSONArray(getPostContent);
+            for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 String xx = jsonObject.optString("xcoord");
                 String yy = jsonObject.optString("ycoord");
@@ -133,11 +135,11 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
             }
             JSONObject jsonObject = jsonArray.getJSONObject(0);
             String name = jsonObject.optString("userId");
-            if(name.equals(strUserId)){
+            if (name.equals(strUserId)) {
                 board_seq = jsonObject.optString("id");
             }
 
-
+        }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -570,7 +572,6 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
              RequestHttpURLConnection.NetworkAsyncTask networkTask = new RequestHttpURLConnection.NetworkAsyncTask(url, jsonString);
              rtnStr = networkTask.execute().get();
 
-
              Log.i(LOG_TAG, String.format("postData: (%s)", rtnStr));
 
 
@@ -600,7 +601,9 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
             //REST API
             RequestHttpURLConnection.NetworkAsyncTask networkTask = new RequestHttpURLConnection.NetworkAsyncTask(url, jsonString);
             rtnStr = networkTask.execute().get();
-            if(rtnStr != "") {
+            if(rtnStr.equals("")) {
+                postNum = 0;
+            } else {
                 postNum = Integer.parseInt(rtnStr);
             }
             Toast.makeText(getActivity(), "마커 가져왔습니다.", Toast.LENGTH_LONG).show();
