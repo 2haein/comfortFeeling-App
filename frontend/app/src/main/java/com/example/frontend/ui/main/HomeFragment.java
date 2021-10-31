@@ -58,12 +58,11 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
      * KAKAO MAP 선언
      * */
     private MapView mapView;
-
-
     MapPoint currentMapPoint;
 
     ArrayList<Double> x_marker = new ArrayList<Double>();
     ArrayList<Double> y_marker = new ArrayList<Double>();
+    ArrayList<Integer> post_score = new ArrayList<Integer>();
     private Double mCurrentLng;
     private Double mCurrentLat;
     private Double getPickedLng=0.0;
@@ -111,8 +110,11 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 String xx = jsonObject.optString("xcoord");
                 String yy = jsonObject.optString("ycoord");
+                String score = jsonObject.optString("score");
                 Double x1 = Double.parseDouble(xx);
                 Double y1 = Double.parseDouble(yy);
+                int sscore = Integer.parseInt(score);
+                post_score.add(sscore);
                 x_marker.add(x1);
                 y_marker.add(y1);
                 Log.i(LOG_TAG, String.format("numberx: %f", x_marker.get(i)));
@@ -132,7 +134,7 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
         //make marker
         for(int i=0; i<cnt; i++){
             MapPoint mapPoint = MapPoint.mapPointWithGeoCoord(x_marker.get(i), y_marker.get(i));
-            setMapMarker(mapView, mapPoint);
+            setMapMarker(mapView, mapPoint, post_score.get(i));
         }
 
 
@@ -240,7 +242,7 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
         isPost = checkPostHistory();
         Log.i(LOG_TAG, String.format("isPost값입니다.: %d", isPost));
         if(isPost == 0){
-            setMapMarker(mapView, mapPoint);
+            setMapMarker(mapView, mapPoint,0);
         }
         if(isPost != 0){
             Toast.makeText(getActivity(), "하루에 한 번만 등록 가능!",
@@ -260,7 +262,7 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
         isPost = checkPostHistory();
         Log.i(LOG_TAG, String.format("isPost값입니다.: %d", isPost));
         if(isPost == 0){
-            setMapMarker(mapView, mapPoint);
+            setMapMarker(mapView, mapPoint, 0);
         }
         if(isPost != 0){
             Toast.makeText(getActivity(), "하루에 한 번만 등록 가능!",
@@ -468,13 +470,32 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
     }
 
 
-    public void setMapMarker(MapView mapView, MapPoint mapPoint) {
+    public void setMapMarker(MapView mapView, MapPoint mapPoint, int score) {
         MapPOIItem marker = new MapPOIItem();
         marker.setItemName("현재 위치");
         marker.setMapPoint(mapPoint);
         Log.d(LOG_TAG, "마커위치 => " + mapPoint);
         marker.setMarkerType(MapPOIItem.MarkerType.CustomImage);
-        marker.setCustomImageResourceId(R.drawable.custom_marker_red);
+
+        if(score == 1){
+            marker.setCustomImageResourceId(R.drawable.emotion1);
+        }
+        else if(score == 2){
+            marker.setCustomImageResourceId(R.drawable.emotion2);
+        }
+        else if(score == 3){
+            marker.setCustomImageResourceId(R.drawable.emotion3);
+        }
+        else if(score == 4){
+            marker.setCustomImageResourceId(R.drawable.emotion4);
+        }
+        else if(score == 5){
+            marker.setCustomImageResourceId(R.drawable.emotion5);
+        }
+        else{
+            marker.setCustomImageResourceId(R.drawable.custom_marker_red);
+        }
+
         marker.setCustomImageAutoscale(true);
         marker.setCustomImageAnchor(0.5f, 1.0f);
         marker.setDraggable(true);
