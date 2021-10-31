@@ -75,7 +75,6 @@ public class CompletionFragment extends Fragment{
                              Bundle savedInstanceState) {
         binding = FragmentCompletionBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-        MainActivity activity = (MainActivity) getActivity();
         homeFragment = new HomeFragment();
         board_seq = homeFragment.sendBoardseq();
 

@@ -69,7 +69,6 @@ public class HistoryFragment extends Fragment {
         dateList.clear();
         seqList.clear();
 
-        MainActivity activity = (MainActivity) getActivity();
         userId = ProfileData.getUserId();
 
         try {

@@ -82,7 +82,6 @@ public class DetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentDetailBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-        MainActivity activity = (MainActivity) getActivity();
 
 
         userId = ProfileData.getUserId();
