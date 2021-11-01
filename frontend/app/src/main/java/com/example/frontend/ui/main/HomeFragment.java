@@ -370,18 +370,8 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
 
         @Override
         public View getCalloutBalloon(MapPOIItem poiItem) {
-            //만약 남의 마커면 처리
-            for(int i=0; i<posting_list.size(); i++){
-                if(posting_list.get(i).equals(strUserId)){
-                    ((TextView) mCalloutBalloon.findViewById(R.id.title)).setText(poiItem.getItemName());
-                    ((TextView) mCalloutBalloon.findViewById(R.id.desc)).setText("클릭");
-                }
-                else{ //마커 주인이 다른사람인 경우
-
-
-                }
-            }
-
+            ((TextView) mCalloutBalloon.findViewById(R.id.title)).setText(poiItem.getItemName());
+            ((TextView) mCalloutBalloon.findViewById(R.id.desc)).setText("클릭!");
             return mCalloutBalloon;
         }
 
@@ -404,61 +394,60 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
 
         }
 
+        // 마커의 풍선 클릭 시
         @Override
         public void onCalloutBalloonOfPOIItemTouched(MapView mapView, MapPOIItem mapPOIItem, MapPOIItem.CalloutBalloonButtonType calloutBalloonButtonType) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setTitle("선택하세요");
 
-            builder.setItems(R.array.LAN, new DialogInterface.OnClickListener(){
-                @Override
-                public void onClick(DialogInterface dialog, int pos)
-                {
-                    String[] items = getResources().getStringArray(R.array.LAN);
-                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                    PostFragment postFragment = new PostFragment();
+            if(mapPOIItem.getTag()==0){
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("선택하세요");
 
-                    Toast.makeText(getActivity(),items[pos],Toast.LENGTH_SHORT).show();
-                    int count = checkPostHistory();
-                    // 각 버튼별로 수행할 일
-                    if(pos == 0 && count == 0){
+                builder.setItems(R.array.LAN, new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface dialog, int pos)
+                    {
+                        String[] items = getResources().getStringArray(R.array.LAN);
+                        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                        PostFragment postFragment = new PostFragment();
 
-                        Bundle bundle = new Bundle();
-                        bundle.putDouble("lat", getPickedLat);
-                        bundle.putDouble("lon", getPickedLng);
-                        postFragment.setArguments(bundle); //seq 변수 값 전달.
-                        transaction.replace(R.id.home_fragment, postFragment); //프레임 레이아웃에서 detailFragment로 변경
-                        transaction.addToBackStack(null);
-                        transaction.commit(); //저장해라 commit
+                        Toast.makeText(getActivity(),items[pos],Toast.LENGTH_SHORT).show();
+                        int count = checkPostHistory();
+                        // 각 버튼별로 수행할 일
+                        if(pos == 0 && count == 0){
 
-                    }
-                    else if(pos == 0 && count == 1){
-                        Toast.makeText(getActivity(), "하루에 한 번만 등록 가능!",
-                                Toast.LENGTH_SHORT).show();
-                    }
-                    else if(pos==1){
-                        if(markers.size()!=0) {
-                            markers.clear();
+                            Bundle bundle = new Bundle();
+                            bundle.putDouble("lat", getPickedLat);
+                            bundle.putDouble("lon", getPickedLng);
+                            postFragment.setArguments(bundle); //seq 변수 값 전달.
+                            transaction.replace(R.id.home_fragment, postFragment); //프레임 레이아웃에서 detailFragment로 변경
+                            transaction.addToBackStack(null);
+                            transaction.commit(); //저장해라 commit
+
                         }
-                        mapView.removePOIItem(mapPOIItem);
-                        removePosting();
-                    }
-                    else if(pos==2){
-                        //내 글인 경우
-                        if(mapPOIItem.getTag() == 0){
+                        else if(pos == 0 && count == 1){
+                            Toast.makeText(getActivity(), "하루에 한 번만 등록 가능!",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                        else if(pos==1){
+                            if(markers.size()!=0) {
+                                markers.clear();
+                            }
+                            mapView.removePOIItem(mapPOIItem);
+                            removePosting();
+                        }
+                        else if(pos==2){
                             activity.onFragmentChange(1, mapPOIItem.getTag());
                         }
-                        else{
-                            activity.onFragmentChange(1, mapPOIItem.getTag());
-                        }
-                        //내 글이 아닌 경우
-
-
                     }
-                }
-            });
+                });
 
-            AlertDialog alertDialog = builder.create();
-            alertDialog.show();
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+            }
+            else{
+                activity.onFragmentChange(1, mapPOIItem.getTag());
+            }
+
 
         }
 
@@ -525,7 +514,7 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
     public void setMapMarker(MapView mapView, MapPoint mapPoint, int score, String user_list) {
         MapPOIItem marker = new MapPOIItem();
         int tagNum=1;
-        marker.setItemName("현재 위치");
+        marker.setItemName("감정 일기");
         if(strUserId.equals(user_list)){
             //이 마커가 사용자가 생성한 마커일 경우
             marker.setTag(0);
