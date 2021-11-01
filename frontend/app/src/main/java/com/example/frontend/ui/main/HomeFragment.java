@@ -65,6 +65,8 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
     ArrayList<Double> x_marker = new ArrayList<Double>();
     ArrayList<Double> y_marker = new ArrayList<Double>();
     ArrayList<Integer> post_score = new ArrayList<Integer>();
+    ArrayList<String> posting_list = new ArrayList<String>(); //글목록 리스트
+    ArrayList<String> array_user = new ArrayList<String>();
     private Double mCurrentLng;
     private Double mCurrentLat;
     private Double getPickedLng=0.0;
@@ -119,29 +121,34 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
         cnt = getPostNum(); //게시글 수
         String getPostContent = getPostContent();
         try {
-        if(!getPostContent.equals("")) {
-            JSONArray jsonArray = new JSONArray(getPostContent);
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                String xx = jsonObject.optString("xcoord");
-                String yy = jsonObject.optString("ycoord");
-                String score = jsonObject.optString("score");
-                Double x1 = Double.parseDouble(xx);
-                Double y1 = Double.parseDouble(yy);
-                int sscore = Integer.parseInt(score);
-                post_score.add(sscore);
-                x_marker.add(x1);
-                y_marker.add(y1);
-                Log.i(LOG_TAG, String.format("numberx: %f", x_marker.get(i)));
-                Log.i(LOG_TAG, String.format("numbery: %f", y_marker.get(i)));
-            }
-            JSONObject jsonObject = jsonArray.getJSONObject(0);
-            String name = jsonObject.optString("userId");
-            if (name.equals(strUserId)) {
-                board_seq = jsonObject.optString("id");
-            }
+            if(!getPostContent.equals("")) {
+                JSONArray jsonArray = new JSONArray(getPostContent);
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    String list = jsonObject.optString("userId");
+                    String xx = jsonObject.optString("xcoord");
+                    String yy = jsonObject.optString("ycoord");
+                    String score = jsonObject.optString("score");
+                    Double x1 = Double.parseDouble(xx);
+                    Double y1 = Double.parseDouble(yy);
+                    int sscore = Integer.parseInt(score);
+                    array_user.add(list);
+                    post_score.add(sscore);
+                    posting_list.add(list);
+                    x_marker.add(x1);
+                    y_marker.add(y1);
+                    Log.i(LOG_TAG, String.format("numberx: %f", x_marker.get(i)));
+                    Log.i(LOG_TAG, String.format("numbery: %f", y_marker.get(i)));
+                    Log.i(LOG_TAG, String.format("posting_list: %s", posting_list.get(i)));
+                    Log.i(LOG_TAG, String.format("user_list: %s", array_user.get(i)));
+                }
+                JSONObject jsonObject = jsonArray.getJSONObject(0);
+                String name = jsonObject.optString("userId");
+                if (name.equals(strUserId)) {
+                    board_seq = jsonObject.optString("id");
+                }
 
-        }
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -149,7 +156,7 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
         //make marker
         for(int i=0; i<cnt; i++){
             MapPoint mapPoint = MapPoint.mapPointWithGeoCoord(x_marker.get(i), y_marker.get(i));
-            setMapMarker(mapView, mapPoint, post_score.get(i));
+            setMapMarker(mapView, mapPoint, post_score.get(i), array_user.get(i));
         }
 
 
@@ -162,7 +169,7 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
                 isPost = checkPostHistory();
                 if(isPost != 0){
                     Toast.makeText(getActivity(), "오늘의 감정기록이 존재합니다!",Toast.LENGTH_SHORT).show();
-                    activity.onFragmentChange(1);
+                    activity.onFragmentChange(1, 0);
                     /*
                     Bundle bundle = new Bundle();
                     completionFragment.setArguments(bundle); //seq 변수 값 전달.
@@ -261,7 +268,7 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
         isPost = checkPostHistory();
         Log.i(LOG_TAG, String.format("isPost값입니다.: %d", isPost));
         if(isPost == 0 && markers.size() == 0){
-            setMapMarker(mapView, mapPoint,0);
+            setMapMarker(mapView, mapPoint,0, strUserId);
             markers.add("1");
         } else{
             Toast.makeText(getActivity(), "마커를 다른 곳에 표시하려면 지도상의 존재하는 마커를 제거해주세요!",
@@ -285,12 +292,12 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
         isPost = checkPostHistory();
         Log.i(LOG_TAG, String.format("isPost값입니다.: %d", isPost));
         if(isPost == 0 && markers.size() == 0){
-            setMapMarker(mapView, mapPoint,0);
+            setMapMarker(mapView, mapPoint,0, strUserId);
             markers.add("1");
         } else{ Toast.makeText(getActivity(), "마커를 다른 곳에 표시하려면 지도상의 존재하는 마커를 제거해주세요!",
-                    Toast.LENGTH_SHORT).show(); }
+                Toast.LENGTH_SHORT).show(); }
         if(isPost != 0){ Toast.makeText(getActivity(), "하루에 한 번만 등록 가능!",
-                    Toast.LENGTH_SHORT).show(); }
+                Toast.LENGTH_SHORT).show(); }
     }
 
     @Override
@@ -363,8 +370,18 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
 
         @Override
         public View getCalloutBalloon(MapPOIItem poiItem) {
-            ((TextView) mCalloutBalloon.findViewById(R.id.title)).setText(poiItem.getItemName());
-            ((TextView) mCalloutBalloon.findViewById(R.id.desc)).setText("클릭");
+            //만약 남의 마커면 처리
+            for(int i=0; i<posting_list.size(); i++){
+                if(posting_list.get(i).equals(strUserId)){
+                    ((TextView) mCalloutBalloon.findViewById(R.id.title)).setText(poiItem.getItemName());
+                    ((TextView) mCalloutBalloon.findViewById(R.id.desc)).setText("클릭");
+                }
+                else{ //마커 주인이 다른사람인 경우
+
+
+                }
+            }
+
             return mCalloutBalloon;
         }
 
@@ -424,6 +441,18 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
                         }
                         mapView.removePOIItem(mapPOIItem);
                         removePosting();
+                    }
+                    else if(pos==2){
+                        //내 글인 경우
+                        if(mapPOIItem.getTag() == 0){
+                            activity.onFragmentChange(1, mapPOIItem.getTag());
+                        }
+                        else{
+                            activity.onFragmentChange(1, mapPOIItem.getTag());
+                        }
+                        //내 글이 아닌 경우
+
+
                     }
                 }
             });
@@ -493,11 +522,20 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
     }
 
 
-    public void setMapMarker(MapView mapView, MapPoint mapPoint, int score) {
+    public void setMapMarker(MapView mapView, MapPoint mapPoint, int score, String user_list) {
         MapPOIItem marker = new MapPOIItem();
+        int tagNum=1;
         marker.setItemName("현재 위치");
+        if(strUserId.equals(user_list)){
+            //이 마커가 사용자가 생성한 마커일 경우
+            marker.setTag(0);
+        }
+        else{
+            tagNum = Integer.parseInt(user_list);
+            marker.setTag(tagNum);
+        }
         marker.setMapPoint(mapPoint);
-        Log.d(LOG_TAG, "마커위치 => " + mapPoint);
+        //Log.i(LOG_TAG, String.format("마커태그값" + marker.getTag()));
         marker.setMarkerType(MapPOIItem.MarkerType.CustomImage);
         if(score == 1){
             marker.setCustomImageResourceId(R.drawable.emoji_marker1);
@@ -561,32 +599,32 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
 
 
     //db에서 글 내용 가져오기
-     public String getPostContent(){
-         SimpleDateFormat sformat = new SimpleDateFormat("yyyy-MM-dd");
-         Date now = new Date();
-         String getTime = sformat.format(now);
-         String rtnStr="";
+    public String getPostContent(){
+        SimpleDateFormat sformat = new SimpleDateFormat("yyyy-MM-dd");
+        Date now = new Date();
+        String getTime = sformat.format(now);
+        String rtnStr="";
 
-         String url = CommonMethod.ipConfig + "/api/loadData"; // 글 정보
-         try{
-             String jsonString = new JSONObject()
-                     .put("publishDate", getTime)
-                     .toString();
+        String url = CommonMethod.ipConfig + "/api/loadData"; // 글 정보
+        try{
+            String jsonString = new JSONObject()
+                    .put("publishDate", getTime)
+                    .toString();
 
-             //REST API
-             RequestHttpURLConnection.NetworkAsyncTask networkTask = new RequestHttpURLConnection.NetworkAsyncTask(url, jsonString);
-             rtnStr = networkTask.execute().get();
+            //REST API
+            RequestHttpURLConnection.NetworkAsyncTask networkTask = new RequestHttpURLConnection.NetworkAsyncTask(url, jsonString);
+            rtnStr = networkTask.execute().get();
 
-             Log.i(LOG_TAG, String.format("postData: (%s)", rtnStr));
+            Log.i(LOG_TAG, String.format("postData: (%s)", rtnStr));
 
 
-         }catch(Exception e){
-             e.printStackTrace();
-         }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
 
-         return rtnStr;
+        return rtnStr;
 
-     }
+    }
 
 
     //당일 글 갯수

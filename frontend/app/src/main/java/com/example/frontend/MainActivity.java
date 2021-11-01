@@ -136,7 +136,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //프래그먼트 이동용
-    public void onFragmentChange(int index){
+    public void onFragmentChange(int index, int tag){
+        CompletionFragment completionFragment = new CompletionFragment();
+        Bundle bundle = new Bundle(1);
+        bundle.putInt("key", tag);
+        completionFragment.setArguments(bundle);
         if(index == 1){
             getSupportFragmentManager().beginTransaction().
                     replace(R.id.nav_host_fragment_content_main , completionFragment).addToBackStack(null).commit();

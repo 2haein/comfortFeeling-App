@@ -47,6 +47,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -56,8 +57,6 @@ public class CompletionFragment extends Fragment{
     final private String TAG = getClass().getSimpleName();
     private @NonNull
     FragmentCompletionBinding binding;
-    private MapView mapView;
-    ViewGroup mapViewContainer;
 
     // 사용할 컴포넌트 선언
     TextView content_tv, date_tv;
@@ -65,6 +64,14 @@ public class CompletionFragment extends Fragment{
     EditText comment_et;
     Button reg_button;
     ImageView feel_btn1, feel_btn2, feel_btn3, feel_btn4, feel_btn5;
+
+    int tag;
+    ArrayList<String> uid = new ArrayList<String>();
+    ArrayList<String> postid = new ArrayList<String>();
+    ArrayList<String> text = new ArrayList<String>();
+    ArrayList<String> pubDate = new ArrayList<String>();
+    ArrayList<Integer> oscore = new ArrayList<Integer>();
+
 
     String board_seq;
     String userId;
@@ -77,7 +84,6 @@ public class CompletionFragment extends Fragment{
         View root = binding.getRoot();
         homeFragment = new HomeFragment();
         board_seq = homeFragment.sendBoardseq();
-
         userId = ProfileData.getUserId();
 
         // 컴포넌트 초기화
@@ -100,62 +106,142 @@ public class CompletionFragment extends Fragment{
             }
         });
 
-        Bundle bundle = getArguments();  //번들 받기. getArguments() 메소드로 받음.
-
+        Bundle bundle = getArguments();
         if(bundle != null){
+            tag = bundle.getInt("key"); //마커 눌렀을 때 태그(userId)가져옴
             board_seq = bundle.getString("seq");
             System.out.println("seq=" + board_seq); //확인
         }
+        Log.i(TAG, "tag값" + tag);
 
-
+        //일단 모든 글 파싱
+        String allPostInfo = getTodayAllHistory();
+        Log.i(TAG, "AllPostInfo값" + allPostInfo);
         try {
-            // 결과값이 JSONArray 형태로 넘어오기 때문에
-            // JSONArray, JSONObject 를 사용해서 파싱
-            JSONObject jsonObject = null;
-            jsonObject = new JSONObject( getTodayHistory());
+            JSONArray jsonArray = new JSONArray(allPostInfo);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                String uuid = jsonObject.optString("userId");
+                String idid = jsonObject.optString("id");
+                String content = jsonObject.optString("text");
+                String publishDate = jsonObject.optString("publishDate");
+                SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+                Date pDate = inputFormat.parse(publishDate);
+                inputFormat.applyPattern("yyyy-MM-dd HH:mm:ss");
+                String newDateForm = inputFormat.format(pDate);
+                int score = Integer.parseInt(jsonObject.optString("score"));
 
-            // Database 의 데이터들을 변수로 저장한 후 해당 TextView 에 데이터 입력
-
-            board_seq = jsonObject.optString("id");
-            String content = jsonObject.optString("text");
-            String publishDate = jsonObject.optString("publishDate");
-            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
-            Date pDate = inputFormat.parse(publishDate);
-            inputFormat.applyPattern("yyyy-MM-dd HH:mm:ss");
-            String newDateForm = inputFormat.format(pDate);
-            int score = Integer.parseInt(jsonObject.optString("score"));
-
-            content_tv.setText(content);
-            date_tv.setText(newDateForm);
-
-            switch (score) {
-                case 1: feel_btn1.setImageResource(R.drawable.color_emoji1);
-                    break;
-                case 2 : feel_btn2.setImageResource(R.drawable.color_emoji2);
-                    break;
-                case 3 : feel_btn3.setImageResource(R.drawable.color_emoji3);
-                    break;
-                case 4 : feel_btn4.setImageResource(R.drawable.color_emoji4);
-                    break;
-                case 5 : feel_btn5.setImageResource(R.drawable.color_emoji5);
-                    break;
-                default : feel_btn1.setBackgroundColor(Color.WHITE);
-                    feel_btn2.setBackgroundColor(Color.WHITE);
-                    feel_btn3.setBackgroundColor(Color.WHITE);
-                    feel_btn4.setBackgroundColor(Color.WHITE);
-                    feel_btn5.setBackgroundColor(Color.WHITE);
-                    break;
+                uid.add(uuid);
+                postid.add(idid);
+                text.add(content);
+                pubDate.add(newDateForm);
+                oscore.add(score);
+                Log.i(TAG, String.format("All_uid: %s", uid.get(i)));
+                Log.i(TAG, String.format("All_id: %s", postid.get(i)));
+                Log.i(TAG, String.format("All_content: %s", text.get(i)));
+                Log.i(TAG, String.format("All_pubDate: %s", pubDate.get(i)));
+                Log.i(TAG, String.format("All_score: %d", oscore.get(i)));
             }
-
-            LoadCmt loadCmt = new LoadCmt();
-            loadCmt.execute(board_seq);
-
-
         } catch (ParseException e) {
             e.printStackTrace();
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+
+        //글 주인이 자신의 글을 보려고 할 때 실행
+       if(tag==0){
+           try {
+               // 결과값이 JSONArray 형태로 넘어오기 때문에
+               // JSONArray, JSONObject 를 사용해서 파싱
+               JSONObject jsonObject = new JSONObject(getTodayHistory());
+               // Database 의 데이터들을 변수로 저장한 후 해당 TextView 에 데이터 입력
+               board_seq = jsonObject.optString("id");
+               String content = jsonObject.optString("text");
+               String publishDate = jsonObject.optString("publishDate");
+               SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+               Date pDate = inputFormat.parse(publishDate);
+               inputFormat.applyPattern("yyyy-MM-dd HH:mm:ss");
+               String newDateForm = inputFormat.format(pDate);
+               int score = Integer.parseInt(jsonObject.optString("score"));
+
+               content_tv.setText(content);
+               date_tv.setText(newDateForm);
+
+               switch (score) {
+                   case 1: feel_btn1.setImageResource(R.drawable.color_emoji1);
+                       break;
+                   case 2 : feel_btn2.setImageResource(R.drawable.color_emoji2);
+                       break;
+                   case 3 : feel_btn3.setImageResource(R.drawable.color_emoji3);
+                       break;
+                   case 4 : feel_btn4.setImageResource(R.drawable.color_emoji4);
+                       break;
+                   case 5 : feel_btn5.setImageResource(R.drawable.color_emoji5);
+                       break;
+                   default : feel_btn1.setBackgroundColor(Color.WHITE);
+                       feel_btn2.setBackgroundColor(Color.WHITE);
+                       feel_btn3.setBackgroundColor(Color.WHITE);
+                       feel_btn4.setBackgroundColor(Color.WHITE);
+                       feel_btn5.setBackgroundColor(Color.WHITE);
+                       break;
+               }
+               LoadCmt loadCmt = new LoadCmt();
+               loadCmt.execute(board_seq);
+
+
+           } catch (ParseException e) {
+               e.printStackTrace();
+           } catch (JSONException e) {
+               e.printStackTrace();
+           }
+
+       }
+       else {
+           String temp = Integer.toString(tag);
+           int cnt = uid.indexOf(temp);
+           if (cnt != -1) { //찾는 값이 존재하면
+               try {
+                   board_seq = postid.get(cnt);
+                   content_tv.setText(text.get(cnt));
+                   date_tv.setText(pubDate.get(cnt));
+
+                   switch (oscore.get(cnt)) {
+                       case 1:
+                           feel_btn1.setImageResource(R.drawable.color_emoji1);
+                           break;
+                       case 2:
+                           feel_btn2.setImageResource(R.drawable.color_emoji2);
+                           break;
+                       case 3:
+                           feel_btn3.setImageResource(R.drawable.color_emoji3);
+                           break;
+                       case 4:
+                           feel_btn4.setImageResource(R.drawable.color_emoji4);
+                           break;
+                       case 5:
+                           feel_btn5.setImageResource(R.drawable.color_emoji5);
+                           break;
+                       default:
+                           feel_btn1.setBackgroundColor(Color.WHITE);
+                           feel_btn2.setBackgroundColor(Color.WHITE);
+                           feel_btn3.setBackgroundColor(Color.WHITE);
+                           feel_btn4.setBackgroundColor(Color.WHITE);
+                           feel_btn5.setBackgroundColor(Color.WHITE);
+                           break;
+                   }
+
+                   LoadCmt loadCmt = new LoadCmt();
+                   loadCmt.execute(board_seq);
+
+               } catch (Exception e) {
+                   e.printStackTrace();
+               }
+
+
+           }
+       }
+
         Log.i(TAG, "board값" + board_seq);
         return root;
 
@@ -275,6 +361,7 @@ public class CompletionFragment extends Fragment{
         }
     }
 
+    // 사용자 당일의 기록 가져오기
     public String getTodayHistory(){
         SimpleDateFormat sformat = new SimpleDateFormat("yyyy-MM-dd");
         Date now = new Date();
@@ -291,7 +378,7 @@ public class CompletionFragment extends Fragment{
             //REST API
             RequestHttpURLConnection.NetworkAsyncTask networkTask = new RequestHttpURLConnection.NetworkAsyncTask(url, jsonString);
             rtnStr = networkTask.execute().get();
-            Log.d(TAG, String.format("값알아보기 %s", rtnStr));
+            Log.i(TAG, String.format("getTodayHistory: %s", rtnStr));
 
         }catch(Exception e){
             e.printStackTrace();
@@ -300,6 +387,35 @@ public class CompletionFragment extends Fragment{
         return rtnStr;
 
     }
+
+    // 오늘 존재하는 모든 감정기록 가져오기(다른 사람 것도)
+    public String getTodayAllHistory(){
+        SimpleDateFormat sformat = new SimpleDateFormat("yyyy-MM-dd");
+        Date now = new Date();
+        String getTime = sformat.format(now);
+        String rtnStr="";
+
+        String url = CommonMethod.ipConfig + "/api/loadData"; // 글 정보
+        try{
+            String jsonString = new JSONObject()
+                    .put("publishDate", getTime)
+                    .toString();
+
+            //REST API
+            RequestHttpURLConnection.NetworkAsyncTask networkTask = new RequestHttpURLConnection.NetworkAsyncTask(url, jsonString);
+            rtnStr = networkTask.execute().get();
+
+            Log.i(TAG, String.format("getTodayAllHistory: %s", rtnStr));
+
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        return rtnStr;
+
+    }
+
 
     // 댓글을 등록하는 함수
     class RegCmt extends AsyncTask<String, Void, String> {
