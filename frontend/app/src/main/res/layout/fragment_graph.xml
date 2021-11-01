@@ -10,14 +10,14 @@
     <com.github.mikephil.charting.charts.BarChart
         android:id="@+id/chart"
         android:layout_width="match_parent"
-        android:layout_height="354dp"
+        android:layout_height="394dp"
         app:layout_constraintBottom_toTopOf="@+id/representTextView"
         app:layout_constraintTop_toBottomOf="@+id/DateView"
         tools:layout_editor_absoluteX="2dp" />
 
     <TextView
         android:id="@+id/representTextView"
-        android:layout_width="186dp"
+        android:layout_width="match_parent"
         android:layout_height="54dp"
         android:gravity="center"
         android:text="TextView"
@@ -32,12 +32,12 @@
 
     <TextView
         android:id="@+id/scoreText"
-        android:layout_width="186dp"
-        android:layout_height="54dp"
+        android:layout_width="107dp"
+        android:layout_height="48dp"
         android:layout_marginBottom="4dp"
         android:gravity="center"
         android:text="TextView"
-        android:textSize="17dp"
+        android:textSize="19dp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

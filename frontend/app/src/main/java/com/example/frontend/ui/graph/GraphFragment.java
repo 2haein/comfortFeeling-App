@@ -56,6 +56,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class GraphFragment extends Fragment {
@@ -66,6 +67,9 @@ public class GraphFragment extends Fragment {
     private String todayScore = "0";
     private String todayDate;
     private String monthDate;
+    private int totalMonthCount=0;
+    private float totalScore=0;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -92,6 +96,9 @@ public class GraphFragment extends Fragment {
         userId = ProfileData.getUserId();
         SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
         todayDate = sdf2.format(date);
+        SimpleDateFormat monthFormat = new SimpleDateFormat("MM");
+
+        String month = monthFormat.format(date);
 
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 MM월 dd일");
@@ -101,17 +108,13 @@ public class GraphFragment extends Fragment {
         /**
          * 그래프 API1: Score 점수 받아오기
          * */
-        textView.setText("오늘의 감정 점수");
+        textView.setText(month+"월 간의 감정 점수 평균");
         if(userId != null){
             todayScore = getTodayScore(userId, todayDate);
         }
         if(todayScore != null) {
             if (todayScore=="" || Integer.parseInt(todayScore) == 0) {
                 textView2.setText("아직 오늘의 감정이 기록되지 않았습니다!");
-            } else {
-                textView2.setText(todayScore + "점");
-                textView2.setTextSize(20);
-                textView2.setTextColor(Color.parseColor("#ff8d07"));
             }
         }
 
@@ -160,7 +163,8 @@ public class GraphFragment extends Fragment {
                             e.printStackTrace();
                         }
                     }
-
+                    totalMonthCount += 1;
+                    totalScore += Integer.parseInt(dayScore);
                     entries.add(new BarEntry(Integer.parseInt(day), Integer.parseInt(dayScore)));
                     System.out.println(jsonMonthObj);
                 }
@@ -185,13 +189,20 @@ public class GraphFragment extends Fragment {
 //            float weight = (float) record.getWeight();
 //            values.add(new Entry(dateTime, weight));
 //        }
+//        float resultScore = totalScore/totalMonthCount;
+        if(totalMonthCount == 0){
+            textView2.setText("해당 월의 감정이 등록되지 않았습니다");
+        }else {
+            String resultScore = String.format("%.2f", totalScore / totalMonthCount);
+            textView2.setText(resultScore + "점");
+        }
 
         BarDataSet barDataSet = new BarDataSet(entries, "감정 점수");
 //        barDataSet.setLineWidth(3);
 //        barDataSet.setCircleRadius(8);
 //        barDataSet.setCircleColor(Color.parseColor("#FFBB86FC"));
 //        barDataSet.setCircleColorHole(Color.parseColor("#FF6200EE"));
-        barDataSet.setColor(Color.parseColor("#FFBB86FC"));
+        barDataSet.setColor(Color.parseColor("#ff8d07"));
 //        barDataSet.setDrawCircleHole(true);
 //        barDataSet.setDrawCircles(true);
 //        barDataSet.setDrawHorizontalHighlightIndicator(false);
@@ -209,7 +220,11 @@ public class GraphFragment extends Fragment {
         xAxis.setGranularity(1.0f);
         xAxis.enableGridDashedLine(8, 24, 0);
         xAxis.setLabelCount(10, true); //X축의 데이터를 최대 몇개 까지 나타낼지에 대한 설정 5개 force가 true 이면 반드시 보여줌
-        xAxis.setAxisMaximum(31);
+        if(month.equals("01") || month.equals("03") || month.equals("05")|| month.equals("07") || month.equals("08")|| month.equals("10")|| month.equals("12")) {
+            xAxis.setAxisMaximum(31);
+        } else {
+            xAxis.setAxisMaximum(30);
+        }
 
 
         YAxis yLAxis = BarChart.getAxisLeft();
@@ -226,7 +241,7 @@ public class GraphFragment extends Fragment {
 
         Description description = new Description();
         description.setText("(일)/Day");
-        description.setTextSize(10);
+        description.setTextSize(15);
 
         BarChart.setDoubleTapToZoomEnabled(false);
         BarChart.setDrawGridBackground(false);
