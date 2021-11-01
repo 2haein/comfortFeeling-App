@@ -7,17 +7,17 @@
     android:layout_height="match_parent"
     tools:context=".ui.graph.GraphFragment">
 
-    <com.github.mikephil.charting.charts.LineChart
+    <com.github.mikephil.charting.charts.BarChart
         android:id="@+id/chart"
         android:layout_width="match_parent"
-        android:layout_height="450dp"
+        android:layout_height="394dp"
         app:layout_constraintBottom_toTopOf="@+id/representTextView"
         app:layout_constraintTop_toBottomOf="@+id/DateView"
-        tools:layout_editor_absoluteX="0dp"/>
+        tools:layout_editor_absoluteX="2dp" />
 
     <TextView
         android:id="@+id/representTextView"
-        android:layout_width="186dp"
+        android:layout_width="match_parent"
         android:layout_height="54dp"
         android:gravity="center"
         android:text="TextView"
@@ -32,12 +32,12 @@
 
     <TextView
         android:id="@+id/scoreText"
-        android:layout_width="186dp"
-        android:layout_height="54dp"
+        android:layout_width="107dp"
+        android:layout_height="48dp"
         android:layout_marginBottom="4dp"
         android:gravity="center"
         android:text="TextView"
-        android:textSize="17dp"
+        android:textSize="25dp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -48,15 +48,35 @@
 
     <TextView
         android:id="@+id/DateView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="235dp"
+        android:layout_height="45dp"
         android:gravity="center"
         android:text="TextView"
         android:textSize="20dp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/chart"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.44"
-        tools:layout_editor_absoluteX="16dp" />
+        app:layout_constraintBottom_toTopOf="@id/chart"
+        app:layout_constraintEnd_toStartOf="@+id/imageButton2"
+        app:layout_constraintStart_toEndOf="@+id/imageButton"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="59dp"
+        android:layout_height="38dp"
+        android:src="@android:drawable/ic_media_previous"
+        app:layout_constraintBottom_toBottomOf="@+id/DateView"
+        app:layout_constraintEnd_toStartOf="@+id/DateView"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageButton
+        android:id="@+id/imageButton2"
+        android:layout_width="59dp"
+        android:layout_height="42dp"
+        android:src="@android:drawable/ic_media_next"
+        app:layout_constraintBottom_toBottomOf="@+id/DateView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/DateView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

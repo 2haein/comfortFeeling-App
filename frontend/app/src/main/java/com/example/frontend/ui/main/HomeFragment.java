@@ -287,14 +287,10 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
         if(isPost == 0 && markers.size() == 0){
             setMapMarker(mapView, mapPoint,0);
             markers.add("1");
-        } else{
-            Toast.makeText(getActivity(), "마커를 다른 곳에 표시하려면 지도상의 존재하는 마커를 제거해주세요!",
-                    Toast.LENGTH_SHORT).show();
-        }
-        if(isPost != 0){
-            Toast.makeText(getActivity(), "하루에 한 번만 등록 가능!",
-                    Toast.LENGTH_SHORT).show();
-        }
+        } else{ Toast.makeText(getActivity(), "마커를 다른 곳에 표시하려면 지도상의 존재하는 마커를 제거해주세요!",
+                    Toast.LENGTH_SHORT).show(); }
+        if(isPost != 0){ Toast.makeText(getActivity(), "하루에 한 번만 등록 가능!",
+                    Toast.LENGTH_SHORT).show(); }
     }
 
     @Override
@@ -486,17 +482,14 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
 
     @Override
     public void onCurrentLocationDeviceHeadingUpdate(MapView mapView, float v) {
-
     }
 
     @Override
     public void onCurrentLocationUpdateFailed(MapView mapView) {
-
     }
 
     @Override
     public void onCurrentLocationUpdateCancelled(MapView mapView) {
-
     }
 
 
@@ -506,7 +499,6 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
         marker.setMapPoint(mapPoint);
         Log.d(LOG_TAG, "마커위치 => " + mapPoint);
         marker.setMarkerType(MapPOIItem.MarkerType.CustomImage);
-
         if(score == 1){
             marker.setCustomImageResourceId(R.drawable.emoji_marker1);
         }
@@ -619,7 +611,7 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
             } else {
                 postNum = Integer.parseInt(rtnStr);
             }
-            Toast.makeText(getActivity(), "마커 가져왔습니다.", Toast.LENGTH_LONG).show();
+//            Toast.makeText(getActivity(), "마커 가져왔습니다.", Toast.LENGTH_SHORT).show();
             Log.i(LOG_TAG, String.format("numdb: (%d)", postNum));
 
         }catch(Exception e){
@@ -646,7 +638,7 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
             //REST API
             RequestHttpURLConnection.NetworkAsyncTask networkTask = new RequestHttpURLConnection.NetworkAsyncTask(url, jsonString);
             rtnStr = networkTask.execute().get();
-            Toast.makeText(getActivity(), "게시글 삭제", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "게시글 삭제", Toast.LENGTH_SHORT).show();
 
         }catch(Exception e){
             e.printStackTrace();

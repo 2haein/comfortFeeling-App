@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,11 +21,15 @@ import com.example.frontend.common.ProfileData;
 import com.example.frontend.databinding.FragmentGraphBinding;
 import com.example.frontend.http.CommonMethod;
 import com.github.mikephil.charting.animation.Easing;
+import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.CandleEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
@@ -47,21 +52,29 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class GraphFragment extends Fragment {
 
     private FragmentGraphBinding binding;
-    private LineChart lineChart;
+    private BarChart BarChart;
     private String userId;
     private String todayScore = "0";
     private String todayDate;
     private String monthDate;
+    private int totalMonthCount=0;
+    private float totalScore=0;
+    private String MonthScore   ="init";
+    private BarDataSet barDataSet;
+    private BarChart barChart;
+    private String month;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -69,45 +82,39 @@ public class GraphFragment extends Fragment {
         binding = FragmentGraphBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        lineChart = (LineChart) binding.chart;
-        List<Entry> entries = new ArrayList<>();
-        lineChart.clear();
-        entries.add(new Entry(0, 0));
-//        entries.add(new Entry(2, 2));
-//        entries.add(new Entry(3, 3));
-//        entries.add(new Entry(4, 2));
-//        entries.add(new Entry(5, 5));
+        barChart = (BarChart) binding.chart;
 
         long now = System.currentTimeMillis();
         Date date = new Date(now);
 
         final TextView textView = binding.representTextView;
+        ImageButton imageButton1 = binding.imageButton;
+        ImageButton imageButton2 = binding.imageButton2;
         TextView textView2 = binding.scoreText;
         textView2.setText("아직 오늘의 감정이 기록되지 않았습니다!");
         TextView dateView = binding.DateView;
         userId = ProfileData.getUserId();
         SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
         todayDate = sdf2.format(date);
+        SimpleDateFormat monthFormat = new SimpleDateFormat("MM");
+
+        month = monthFormat.format(date);
 
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 MM월 dd일");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 MM월");
         String getTime = sdf.format(date);
         dateView.setText(getTime);
 
         /**
          * 그래프 API1: Score 점수 받아오기
          * */
-        textView.setText("오늘의 감정 점수");
+        textView.setText(month+"월 간의 평균 감정 점수");
         if(userId != null){
             todayScore = getTodayScore(userId, todayDate);
         }
         if(todayScore != null) {
             if (todayScore=="" || Integer.parseInt(todayScore) == 0) {
                 textView2.setText("아직 오늘의 감정이 기록되지 않았습니다!");
-            } else {
-                textView2.setText(todayScore + "점");
-                textView2.setTextSize(20);
-                textView2.setTextColor(Color.parseColor("#ff8d07"));
             }
         }
 
@@ -118,10 +125,81 @@ public class GraphFragment extends Fragment {
          * */
         SimpleDateFormat sdf3 = new SimpleDateFormat("yyyy-MM");
         monthDate = sdf3.format(date);
-        String MonthScore   ="init";
+
         if(userId != null){
             MonthScore = getMonthScore(userId, monthDate);
         }
+
+        /**
+         * 그래프 데이터 세팅*/
+        barDataSet = new BarDataSet(getMonthEntry(), "감정 점수");
+        drawGraph();
+        
+        /**
+         * 달력 기능
+         * */
+        Calendar cal = Calendar.getInstance( );
+
+        imageButton1.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                cal.add ( cal.MONTH, - 1 );
+                String time = sdf.format(cal.getTime());
+                monthDate = sdf3.format(cal.getTime());
+                dateView.setText(time);
+                MonthScore = getMonthScore(userId, monthDate);
+                barDataSet = new BarDataSet(getMonthEntry(), "감정 점수");
+                drawGraph();
+            }
+
+        });
+        imageButton2.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                cal.add ( cal.MONTH, + 1 );
+                String time = sdf.format(cal.getTime());
+                monthDate = sdf3.format(cal.getTime());
+                dateView.setText(time);
+                MonthScore = getMonthScore(userId, monthDate);
+                barDataSet = new BarDataSet(getMonthEntry(), "감정 점수");
+                drawGraph();
+            }
+
+        });
+
+
+
+
+        textView2.setTextColor(Color.parseColor("#ff8d07"));
+        if(totalMonthCount == 0){
+            textView2.setText("해당 월의 감정이 등록되지 않았습니다");
+        }else {
+            String resultScore = String.format("%.2f", totalScore / totalMonthCount);
+            textView2.setText(resultScore + "점");
+        }
+
+//        barDataSet.setLineWidth(3);
+//        barDataSet.setCircleRadius(8);
+//        barDataSet.setCircleColor(Color.parseColor("#FFBB86FC"));
+//        barDataSet.setCircleColorHole(Color.parseColor("#FF6200EE"));
+//        barDataSet.setDrawCircleHole(true);
+//        barDataSet.setDrawCircles(true);
+//        barDataSet.setDrawHorizontalHighlightIndicator(false);
+//        barDataSet.setDrawHighlightIndicators(false);
+
+
+
+        return root;
+    }
+
+    // 그래프 월별 데이터 얻는 함수
+    public List<BarEntry> getMonthEntry(){
+        List<BarEntry> entries = new ArrayList<>();
+        entries.add(new BarEntry(0, 0));
+//        entries.add(new Entry(2, 2));
+//        entries.add(new Entry(3, 3));
+//        entries.add(new Entry(4, 2));
+//        entries.add(new Entry(5, 5));
         /**
          * Input String
          * [
@@ -131,7 +209,7 @@ public class GraphFragment extends Fragment {
          *    }
          * ]
          * Simple Way to Convert String to JSON
-        * */
+         * */
         JSONArray jsonArr = null;
         if(MonthScore != null) {
             try {
@@ -156,48 +234,28 @@ public class GraphFragment extends Fragment {
                             e.printStackTrace();
                         }
                     }
-
-                    entries.add(new Entry(Integer.parseInt(day), Integer.parseInt(dayScore)));
+                    totalMonthCount += 1;
+                    totalScore += Integer.parseInt(dayScore);
+                    entries.add(new BarEntry(Integer.parseInt(day), Integer.parseInt(dayScore)));
                     System.out.println(jsonMonthObj);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
-//        arrayDate = MonthScore;
-//        if(TodayScore== null || TodayScore == "0") {
-//            textView2.setText("아직 오늘의 감정이 기록되지 않았습니다!");
-//        } else {
-//            textView2.setText(TodayScore+"점");
-//            textView2.setTextSize(20);
-//            textView2.setTextColor(Color.parseColor("#ff8d07"));
-//        }
+        return entries;
+    }
 
 
+    // 그래프 함수
+    public void drawGraph(){
+        barDataSet.setColor(Color.parseColor("#ff8d07"));
+        barDataSet.setDrawValues(false);
 
+        BarData BarData = new BarData();
+        BarData.addDataSet(barDataSet);
 
-//        for (Record record : records) { //values에 데이터를 담는 과정
-//            long dateTime = record.getDateTime();
-//            float weight = (float) record.getWeight();
-//            values.add(new Entry(dateTime, weight));
-//        }
-
-        LineDataSet lineDataSet = new LineDataSet(entries, "감정 점수");
-        lineDataSet.setLineWidth(3);
-        lineDataSet.setCircleRadius(8);
-        lineDataSet.setCircleColor(Color.parseColor("#FFBB86FC"));
-        lineDataSet.setCircleColorHole(Color.parseColor("#FF6200EE"));
-        lineDataSet.setColor(Color.parseColor("#FFBB86FC"));
-        lineDataSet.setDrawCircleHole(true);
-        lineDataSet.setDrawCircles(true);
-        lineDataSet.setDrawHorizontalHighlightIndicator(false);
-        lineDataSet.setDrawHighlightIndicators(false);
-        lineDataSet.setDrawValues(false);
-
-        LineData lineData = new LineData();
-        lineData.addDataSet(lineDataSet);
-
-        XAxis xAxis = lineChart.getXAxis();
+        XAxis xAxis = barChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setTextColor(Color.BLACK);
         xAxis.setTextSize(12);
@@ -205,12 +263,16 @@ public class GraphFragment extends Fragment {
         xAxis.setGranularity(1.0f);
         xAxis.enableGridDashedLine(8, 24, 0);
         xAxis.setLabelCount(10, true); //X축의 데이터를 최대 몇개 까지 나타낼지에 대한 설정 5개 force가 true 이면 반드시 보여줌
-        xAxis.setAxisMaximum(31);
+        if(month.equals("01") || month.equals("03") || month.equals("05")|| month.equals("07") || month.equals("08")|| month.equals("10")|| month.equals("12")) {
+            xAxis.setAxisMaximum(31);
+        } else {
+            xAxis.setAxisMaximum(30);
+        }
 
 
-        YAxis yLAxis = lineChart.getAxisLeft();
+        YAxis yLAxis = barChart.getAxisLeft();
         yLAxis.setTextColor(Color.BLACK);
-        YAxis yRAxis = lineChart.getAxisRight();
+        YAxis yRAxis = barChart.getAxisRight();
         yLAxis.setAxisMaximum(5);
         yLAxis.setAxisMinimum(0);
         yLAxis.setTextSize(12);
@@ -222,28 +284,18 @@ public class GraphFragment extends Fragment {
 
         Description description = new Description();
         description.setText("(일)/Day");
-        description.setTextSize(10);
+        description.setTextSize(15);
 
-        lineChart.setDoubleTapToZoomEnabled(false);
-        lineChart.setDrawGridBackground(false);
-        lineChart.setDescription(description);
-        lineChart.animateY(1500, Easing.EasingOption.EaseInCubic);
-        lineChart.invalidate();
+        barChart.setDoubleTapToZoomEnabled(false);
+        barChart.setDrawGridBackground(false);
+        barChart.setDescription(description);
+        barChart.animateY(1500, Easing.EasingOption.EaseInCubic);
+        barChart.invalidate();
 
-        lineChart.setData(lineData);
+        barChart.setData(BarData);
         MyMarkerView marker = new MyMarkerView(this, R.layout.markerviewtext);
-
-//        MyMarkerView marker2 = new MyMarkerView(this, R.layout.fragment_graph);
-        marker.setChartView(lineChart);
-//        marker2.setChartView(lineChart);
-        lineChart.setMarker(marker);
-//        lineChart.setMarker(marker2);
-
-
-//        CandleEntry ce = null;
-//        textView2.setText((int) ce.getY());
-
-        return root;
+        marker.setChartView(barChart);
+        barChart.setMarker(marker);
     }
 
     // 서버와 연동하기
