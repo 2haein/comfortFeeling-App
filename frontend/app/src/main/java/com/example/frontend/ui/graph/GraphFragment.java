@@ -20,11 +20,15 @@ import com.example.frontend.common.ProfileData;
 import com.example.frontend.databinding.FragmentGraphBinding;
 import com.example.frontend.http.CommonMethod;
 import com.github.mikephil.charting.animation.Easing;
+import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.CandleEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
@@ -57,7 +61,7 @@ import java.util.Map;
 public class GraphFragment extends Fragment {
 
     private FragmentGraphBinding binding;
-    private LineChart lineChart;
+    private BarChart BarChart;
     private String userId;
     private String todayScore = "0";
     private String todayDate;
@@ -69,10 +73,10 @@ public class GraphFragment extends Fragment {
         binding = FragmentGraphBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        lineChart = (LineChart) binding.chart;
-        List<Entry> entries = new ArrayList<>();
-        lineChart.clear();
-        entries.add(new Entry(0, 0));
+        BarChart = (BarChart) binding.chart;
+        List<BarEntry> entries = new ArrayList<>();
+        BarChart.clear();
+        entries.add(new BarEntry(0, 0));
 //        entries.add(new Entry(2, 2));
 //        entries.add(new Entry(3, 3));
 //        entries.add(new Entry(4, 2));
@@ -157,7 +161,7 @@ public class GraphFragment extends Fragment {
                         }
                     }
 
-                    entries.add(new Entry(Integer.parseInt(day), Integer.parseInt(dayScore)));
+                    entries.add(new BarEntry(Integer.parseInt(day), Integer.parseInt(dayScore)));
                     System.out.println(jsonMonthObj);
                 }
             } catch (JSONException e) {
@@ -182,22 +186,22 @@ public class GraphFragment extends Fragment {
 //            values.add(new Entry(dateTime, weight));
 //        }
 
-        LineDataSet lineDataSet = new LineDataSet(entries, "감정 점수");
-        lineDataSet.setLineWidth(3);
-        lineDataSet.setCircleRadius(8);
-        lineDataSet.setCircleColor(Color.parseColor("#FFBB86FC"));
-        lineDataSet.setCircleColorHole(Color.parseColor("#FF6200EE"));
-        lineDataSet.setColor(Color.parseColor("#FFBB86FC"));
-        lineDataSet.setDrawCircleHole(true);
-        lineDataSet.setDrawCircles(true);
-        lineDataSet.setDrawHorizontalHighlightIndicator(false);
-        lineDataSet.setDrawHighlightIndicators(false);
-        lineDataSet.setDrawValues(false);
+        BarDataSet barDataSet = new BarDataSet(entries, "감정 점수");
+//        barDataSet.setLineWidth(3);
+//        barDataSet.setCircleRadius(8);
+//        barDataSet.setCircleColor(Color.parseColor("#FFBB86FC"));
+//        barDataSet.setCircleColorHole(Color.parseColor("#FF6200EE"));
+        barDataSet.setColor(Color.parseColor("#FFBB86FC"));
+//        barDataSet.setDrawCircleHole(true);
+//        barDataSet.setDrawCircles(true);
+//        barDataSet.setDrawHorizontalHighlightIndicator(false);
+//        barDataSet.setDrawHighlightIndicators(false);
+        barDataSet.setDrawValues(false);
 
-        LineData lineData = new LineData();
-        lineData.addDataSet(lineDataSet);
+        BarData BarData = new BarData();
+        BarData.addDataSet(barDataSet);
 
-        XAxis xAxis = lineChart.getXAxis();
+        XAxis xAxis = BarChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setTextColor(Color.BLACK);
         xAxis.setTextSize(12);
@@ -208,9 +212,9 @@ public class GraphFragment extends Fragment {
         xAxis.setAxisMaximum(31);
 
 
-        YAxis yLAxis = lineChart.getAxisLeft();
+        YAxis yLAxis = BarChart.getAxisLeft();
         yLAxis.setTextColor(Color.BLACK);
-        YAxis yRAxis = lineChart.getAxisRight();
+        YAxis yRAxis = BarChart.getAxisRight();
         yLAxis.setAxisMaximum(5);
         yLAxis.setAxisMinimum(0);
         yLAxis.setTextSize(12);
@@ -224,19 +228,19 @@ public class GraphFragment extends Fragment {
         description.setText("(일)/Day");
         description.setTextSize(10);
 
-        lineChart.setDoubleTapToZoomEnabled(false);
-        lineChart.setDrawGridBackground(false);
-        lineChart.setDescription(description);
-        lineChart.animateY(1500, Easing.EasingOption.EaseInCubic);
-        lineChart.invalidate();
+        BarChart.setDoubleTapToZoomEnabled(false);
+        BarChart.setDrawGridBackground(false);
+        BarChart.setDescription(description);
+        BarChart.animateY(1500, Easing.EasingOption.EaseInCubic);
+        BarChart.invalidate();
 
-        lineChart.setData(lineData);
+        BarChart.setData(BarData);
         MyMarkerView marker = new MyMarkerView(this, R.layout.markerviewtext);
 
 //        MyMarkerView marker2 = new MyMarkerView(this, R.layout.fragment_graph);
-        marker.setChartView(lineChart);
+        marker.setChartView(BarChart);
 //        marker2.setChartView(lineChart);
-        lineChart.setMarker(marker);
+        BarChart.setMarker(marker);
 //        lineChart.setMarker(marker2);
 
 
