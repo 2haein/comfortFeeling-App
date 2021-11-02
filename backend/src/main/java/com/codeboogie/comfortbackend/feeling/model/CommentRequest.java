@@ -21,4 +21,5 @@ public class CommentRequest {
     private String context; //작성한 글
     private Date publishDate; //작성한 날짜
     private int show; // 0 : 글 표시 1 : 글 삭제 상태
+    private int report; // 신고 수
 }

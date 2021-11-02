@@ -12,6 +12,7 @@ public class CommentAdapter {
                 .context(commentRequest.getContext())
                 .publishDate(commentRequest.getPublishDate())
                 .show(commentRequest.getShow())
+                .report(commentRequest.getReport())
                 .build();
     }
 

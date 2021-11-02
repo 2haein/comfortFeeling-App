@@ -25,7 +25,7 @@ public class FeelingService {
         return mongoTemplate.insert(feeling);
     }
 
-    public void update(final Feeling feeling) {
+    public void update(final Feeling feeling) throws ParseException {
         if(feeling == null) {
             throw new NullPointerException("Data Null");
         }
@@ -34,9 +34,12 @@ public class FeelingService {
 
         Query query = new Query();
 
+        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        Date sDate = inputFormat.parse(feeling.getPublishDate().toString());
+
         Update update = new Update();
         update.set("score", feeling.getScore());
-        update.set("publishDate", feeling.getPublishDate());
+        update.set("publishDate", sDate);
         update.set("text", feeling.getText());
         update.set("xcoord", feeling.getXcoord());
         update.set("ycoord", feeling.getYcoord());

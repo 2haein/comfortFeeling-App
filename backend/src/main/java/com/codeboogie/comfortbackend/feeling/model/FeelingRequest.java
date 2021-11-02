@@ -24,4 +24,6 @@ public class FeelingRequest {
     private String text; //작성한 글
     private Double xcoord; //글 작성 위치 x 좌표
     private Double ycoord; //글 작성 위치 y 좌표
+    private Double anon_xcoord; //타 사용자가 보기 위한 임의의 x 좌표
+    private Double anon_ycoord; //타 사용자가 보기 위한 임의의 y 좌표
 }

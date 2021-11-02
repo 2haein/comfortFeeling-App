@@ -15,6 +15,8 @@ public class FeelingAdapter {
                 .text(feelingRequest.getText())
                 .xcoord(feelingRequest.getXcoord())
                 .ycoord(feelingRequest.getYcoord())
+                .anon_xcoord(feelingRequest.getAnon_xcoord())
+                .anon_ycoord(feelingRequest.getAnon_ycoord())
                 .build();
     }
 
