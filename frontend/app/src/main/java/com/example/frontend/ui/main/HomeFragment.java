@@ -155,8 +155,18 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
 
         //make marker
         for(int i=0; i<cnt; i++){
-            MapPoint mapPoint = MapPoint.mapPointWithGeoCoord(x_marker.get(i), y_marker.get(i));
-            setMapMarker(mapView, mapPoint, post_score.get(i), array_user.get(i));
+            //지하철 한 정거장 거리 정도로 랜덤하게 마커 생성
+            double virtual_x = (Math.random() * (0.025- (-0.025)) - 0.025);
+            double virtual_y = (Math.random() * (0.025- (-0.025)) - 0.025);
+            if(strUserId.equals(array_user.get(i))){
+                MapPoint mapPoint = MapPoint.mapPointWithGeoCoord(x_marker.get(i), y_marker.get(i));
+                setMapMarker(mapView, mapPoint, post_score.get(i), array_user.get(i));
+            }
+            else{
+                MapPoint mapPoint = MapPoint.mapPointWithGeoCoord(x_marker.get(i)+virtual_x, y_marker.get(i)+virtual_y);
+                setMapMarker(mapView, mapPoint, post_score.get(i), array_user.get(i));
+            }
+
         }
 
 
