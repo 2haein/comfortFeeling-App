@@ -109,13 +109,9 @@ public class GraphFragment extends Fragment {
          * 그래프 API1: Score 점수 받아오기
          * */
         textView.setText(month+"월 간의 평균 감정 점수");
+
         if(userId != null){
             todayScore = getTodayScore(userId, todayDate);
-        }
-        if(todayScore != null) {
-            if (todayScore=="" || Integer.parseInt(todayScore) == 0) {
-                textView2.setText("아직 오늘의 감정이 기록되지 않았습니다!");
-            }
         }
 
         /**
@@ -134,6 +130,15 @@ public class GraphFragment extends Fragment {
          * 그래프 데이터 세팅*/
         barDataSet = new BarDataSet(getMonthEntry(), "감정 점수");
         drawGraph();
+        textView2.setTextColor(Color.parseColor("#ff8d07"));
+        if(totalMonthCount == 0){
+            textView2.setText("해당 월의 감정이 등록되지 않았습니다");
+            textView2.setTextSize(12);
+        }else {
+            String resultScore = String.format("%.2f", totalScore / totalMonthCount);
+            textView2.setText(resultScore + "점");
+            textView2.setTextSize(25);
+        }
         
         /**
          * 달력 기능
@@ -143,26 +148,52 @@ public class GraphFragment extends Fragment {
         imageButton1.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
+                totalScore = 0;
+                totalMonthCount = 0;
                 cal.add ( cal.MONTH, - 1 );
                 String time = sdf.format(cal.getTime());
                 monthDate = sdf3.format(cal.getTime());
+                month = monthFormat.format(cal.getTime());
                 dateView.setText(time);
                 MonthScore = getMonthScore(userId, monthDate);
                 barDataSet = new BarDataSet(getMonthEntry(), "감정 점수");
                 drawGraph();
+
+                textView.setText(month+"월 간의 평균 감정 점수");
+                if(totalMonthCount == 0){
+                    textView2.setText("해당 월의 감정이 등록되지 않았습니다");
+                    textView2.setTextSize(12);
+                }else {
+                    String resultScore = String.format("%.2f", totalScore / totalMonthCount);
+                    textView2.setText(resultScore + "점");
+                    textView2.setTextSize(25);
+                }
             }
 
         });
         imageButton2.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
+                totalScore = 0;
+                totalMonthCount= 0;
                 cal.add ( cal.MONTH, + 1 );
                 String time = sdf.format(cal.getTime());
                 monthDate = sdf3.format(cal.getTime());
+                month = monthFormat.format(cal.getTime());
                 dateView.setText(time);
                 MonthScore = getMonthScore(userId, monthDate);
                 barDataSet = new BarDataSet(getMonthEntry(), "감정 점수");
                 drawGraph();
+
+                textView.setText(month+"월 간의 평균 감정 점수");
+                if(totalMonthCount == 0){
+                    textView2.setText("해당 월의 감정이 등록되지 않았습니다");
+                    textView2.setTextSize(12);
+                }else {
+                    String resultScore = String.format("%.2f", totalScore / totalMonthCount);
+                    textView2.setText(resultScore + "점");
+                    textView2.setTextSize(25);
+                }
             }
 
         });
@@ -170,13 +201,7 @@ public class GraphFragment extends Fragment {
 
 
 
-        textView2.setTextColor(Color.parseColor("#ff8d07"));
-        if(totalMonthCount == 0){
-            textView2.setText("해당 월의 감정이 등록되지 않았습니다");
-        }else {
-            String resultScore = String.format("%.2f", totalScore / totalMonthCount);
-            textView2.setText(resultScore + "점");
-        }
+
 
 //        barDataSet.setLineWidth(3);
 //        barDataSet.setCircleRadius(8);
