@@ -1,6 +1,7 @@
 package com.codeboogie.comfortbackend.feeling.controller;
 
 import com.codeboogie.comfortbackend.feeling.model.Comment;
+import com.codeboogie.comfortbackend.feeling.model.CommentReport;
 import com.codeboogie.comfortbackend.feeling.model.FeelingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -124,6 +125,22 @@ public class FeelingController {
         System.out.println("안드로이드 -> 서버로 Post 댓글 요청 :"+ data);
 
         return feelingService.loadCmt(data);
+    }
+
+    //댓글 신고 중복 방지
+    @RequestMapping(path="/checkReportCmt", method={ RequestMethod.GET, RequestMethod.POST })
+    public @ResponseBody int checkReportCmt(@RequestBody HashMap<String, String> data) {
+        System.out.println("안드로이드 -> 서버로 Post 댓글 신고 중복 방지 :"+ data);
+
+        return feelingService.checkReportCmt(data);
+    }
+
+    //댓글 신고
+    @RequestMapping(path="/reportCmt", method={ RequestMethod.GET, RequestMethod.POST })
+    public @ResponseBody void reportCmt(@RequestBody final CommentReport commentReport) {
+        System.out.println("안드로이드 -> 서버로 Post 댓글 삭제 :"+ commentReport);
+
+        feelingService.reportCmt(commentReport);
     }
 
     // 그래프 조회 년월일 전송 받을시 스코어 리턴

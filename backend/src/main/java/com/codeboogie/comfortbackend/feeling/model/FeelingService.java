@@ -211,6 +211,19 @@ public class FeelingService {
 
         return mongoTemplate.find(query, Comment.class, "comment" );
     }
+    public int checkReportCmt(HashMap<String, String> data) {
+        Query query = new Query().addCriteria(Criteria.where("feeling_id").is(data.get("feeling_id"))
+                .andOperator(Criteria.where("comment_id").is(data.get("comment_id"))));
+
+        return (int) mongoTemplate.count(query, "commentReport");
+    }
+
+    public void reportCmt(final CommentReport commentReport) {
+        if(commentReport == null) {
+            throw new NullPointerException("Data Null");
+        }
+        mongoTemplate.insert(commentReport);
+    }
 
     public int getGraph(String userId, String publishDate) throws Exception {
         Query query = new Query();

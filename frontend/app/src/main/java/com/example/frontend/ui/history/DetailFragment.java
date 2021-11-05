@@ -307,6 +307,9 @@ public class DetailFragment extends Fragment {
                     View customView = layoutInflater.inflate(R.layout.history_comment, null);
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
 
+
+                    String _id = jsonObject.optString("id");
+                    String feeling_id = jsonObject.optString("feeling_id");
                     String content = jsonObject.optString("context");
                     String crt_dt = jsonObject.optString("publishDate");
                     SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
@@ -316,6 +319,19 @@ public class DetailFragment extends Fragment {
 
                     ((TextView)customView.findViewById(R.id.cmt_content_tv)).setText(content);
                     ((TextView)customView.findViewById(R.id.cmt_date_tv)).setText(newDateForm);
+                    TextView textView_btn;
+                    textView_btn = customView.findViewById(R.id.cmt_report_btn);
+                    textView_btn.setOnClickListener(new View.OnClickListener(){
+                        public void onClick(View view) {
+                            if(checkReportCmt(_id, feeling_id) == 0) {
+                                reportCmt(jsonObject);
+                                Toast.makeText(view.getContext(), "신고 완료", Toast.LENGTH_LONG).show();
+                            }
+                            else
+                                Toast.makeText(view.getContext(), "이미 신고하셨습니다", Toast.LENGTH_LONG).show();
+
+                        }
+                    });
 
 // 댓글 레이아웃에 custom_comment 의 디자인에 데이터를 담아서 추가
                     comment_layout.addView(customView);
@@ -502,6 +518,50 @@ public class DetailFragment extends Fragment {
             String jsonString = new JSONObject()
                     .put("userId", userId)
                     .put("publishDate", nDateForm)
+                    .toString();
+
+            //REST API
+            RequestHttpURLConnection.NetworkAsyncTask networkTask = new RequestHttpURLConnection.NetworkAsyncTask(url, jsonString);
+            networkTask.execute();
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+    //댓글 신고 중복 확인
+    public int checkReportCmt(String _id, String feeling_id) {
+        String url = CommonMethod.ipConfig +"/api/checkReportCmt";
+        int count = 0;
+        String rtnStr = "0";
+        try{
+            String jsonString = new JSONObject()
+                    .put("comment_id", _id)
+                    .put("feeling_id", feeling_id)
+                    .toString();
+
+            //REST API
+            RequestHttpURLConnection.NetworkAsyncTask networkTask = new RequestHttpURLConnection.NetworkAsyncTask(url, jsonString);
+            rtnStr = networkTask.execute().get();
+
+            //리스트 길이 확인
+            count = Integer.parseInt(rtnStr);
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        return count;
+    }
+
+    //댓글 신고
+    public void reportCmt(JSONObject jsonObject){
+        String url = CommonMethod.ipConfig +"/api/reportCmt";
+        try{
+            String jsonString = new JSONObject()
+                    .put("feeling_id", jsonObject.optString("feeling_id"))
+                    .put("comment_id", jsonObject.optString("id"))
+                    .put("userId", userId)
+                    .put("report", 1)
                     .toString();
 
             //REST API

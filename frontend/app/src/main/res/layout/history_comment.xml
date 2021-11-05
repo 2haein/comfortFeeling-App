@@ -36,10 +36,17 @@
         android:textColor="#333333"
         android:layout_height="wrap_content"
         android:text="content" />
+
+    <TextView
+        android:id="@+id/cmt_report_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:text="신고하기" />
+
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:layout_margin="16dp"
-        android:background="#000000"
-        />
+        android:background="#000000" />
 </LinearLayout>
