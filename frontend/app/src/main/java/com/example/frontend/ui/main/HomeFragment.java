@@ -22,7 +22,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.frontend.MainActivity;
-import com.example.frontend.PopupActivity;
 import com.example.frontend.PostFragment;
 import com.example.frontend.R;
 import com.example.frontend.RequestHttpURLConnection;
@@ -40,7 +39,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -156,8 +154,8 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
         //make marker
         for(int i=0; i<cnt; i++){
             //지하철 한 정거장 거리 정도로 랜덤하게 마커 생성
-            double virtual_x = (Math.random() * (0.025- (-0.025)) - 0.025);
-            double virtual_y = (Math.random() * (0.025- (-0.025)) - 0.025);
+            double virtual_x = (Math.random() * (0.015- (-0.015)) -0.015);
+            double virtual_y = (Math.random() * (0.015- (-0.015)) -0.015);
             if(strUserId.equals(array_user.get(i))){
                 MapPoint mapPoint = MapPoint.mapPointWithGeoCoord(x_marker.get(i), y_marker.get(i));
                 setMapMarker(mapView, mapPoint, post_score.get(i), array_user.get(i));
@@ -412,6 +410,7 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle("선택하세요");
 
+                int count = checkPostHistory(); //글 썼으면 1, 안썼으면 0
                 builder.setItems(R.array.LAN, new DialogInterface.OnClickListener(){
                     @Override
                     public void onClick(DialogInterface dialog, int pos)
@@ -421,7 +420,6 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
                         PostFragment postFragment = new PostFragment();
 
                         Toast.makeText(getActivity(),items[pos],Toast.LENGTH_SHORT).show();
-                        int count = checkPostHistory();
                         // 각 버튼별로 수행할 일
                         if(pos == 0 && count == 0){
 
