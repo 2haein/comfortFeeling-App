@@ -175,4 +175,9 @@ public class HistoryFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
 }

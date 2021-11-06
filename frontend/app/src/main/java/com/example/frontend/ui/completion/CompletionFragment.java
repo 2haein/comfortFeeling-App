@@ -105,6 +105,7 @@ public class CompletionFragment extends Fragment{
             public void onClick(View view) {
                 RegCmt regCmt = new RegCmt();
                 regCmt.execute(userId, comment_et.getText().toString(), board_seq);
+
             }
         });
 
@@ -552,11 +553,8 @@ public class CompletionFragment extends Fragment{
                 int responseCode=conn.getResponseCode();
 
                 if (responseCode == HttpsURLConnection.HTTP_OK) {
-                    String line;
                     BufferedReader br=new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                    while ((line=br.readLine()) != null) {
-                        response+=line;
-                    }
+                    response="success";
                 }
                 else {
                     response="";
@@ -580,6 +578,9 @@ public class CompletionFragment extends Fragment{
             //REST API
             RequestHttpURLConnection.NetworkAsyncTask networkTask = new RequestHttpURLConnection.NetworkAsyncTask(url, jsonString);
             networkTask.execute();
+
+            LoadCmt loadCmt = new LoadCmt();
+            loadCmt.execute(board_seq);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -626,10 +627,17 @@ public class CompletionFragment extends Fragment{
             RequestHttpURLConnection.NetworkAsyncTask networkTask = new RequestHttpURLConnection.NetworkAsyncTask(url, jsonString);
             networkTask.execute();
 
+            LoadCmt loadCmt = new LoadCmt();
+            loadCmt.execute(board_seq);
+
         }catch(Exception e){
             e.printStackTrace();
         }
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
 
 }
