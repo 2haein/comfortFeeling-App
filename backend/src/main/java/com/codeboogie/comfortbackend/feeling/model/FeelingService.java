@@ -239,6 +239,20 @@ public class FeelingService {
         mongoTemplate.updateFirst(query, update, "comment");
     }
 
+    //댓글 사용자 제한 걸기 (아직 미반영)
+    public int limitCmt(HashMap<String, String> data) {
+        int limit=0;
+        Query query = new Query();
+        Criteria criteria = new Criteria();
+        Criteria criteria_arr[] = new Criteria[2];
+        criteria_arr[0] = Criteria.where("show").is(1);
+        criteria_arr[1] = Criteria.where("userId").is(data.get("userId"));
+        query.addCriteria(criteria.andOperator(criteria_arr));
+        limit = (int) mongoTemplate.count(query,"comment");
+
+        return limit;
+    }
+
     public int getGraph(String userId, String publishDate) throws Exception {
         Query query = new Query();
         Criteria criteria = new Criteria();

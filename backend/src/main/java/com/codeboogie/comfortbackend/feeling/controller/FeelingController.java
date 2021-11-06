@@ -127,6 +127,16 @@ public class FeelingController {
         return feelingService.loadCmt(data);
     }
 
+    //댓글 삭제
+    @RequestMapping(path="/deleteCmt", method={ RequestMethod.GET, RequestMethod.POST })
+    public @ResponseBody void deleteCmt(@RequestBody HashMap<String, String> data) {
+        String comment_id = data.get("comment_id");
+        System.out.println("안드로이드 -> 서버로 Post 댓글 삭제 :"+ comment_id);
+
+        feelingService.deleteCmt(comment_id);
+    }
+
+
     //댓글 신고 중복 방지
     @RequestMapping(path="/checkReportCmt", method={ RequestMethod.GET, RequestMethod.POST })
     public @ResponseBody int checkReportCmt(@RequestBody HashMap<String, String> data) {
@@ -138,9 +148,17 @@ public class FeelingController {
     //댓글 신고
     @RequestMapping(path="/reportCmt", method={ RequestMethod.GET, RequestMethod.POST })
     public @ResponseBody void reportCmt(@RequestBody final CommentReport commentReport) {
-        System.out.println("안드로이드 -> 서버로 Post 댓글 삭제 :"+ commentReport);
+        System.out.println("안드로이드 -> 서버로 Post 댓글 신고 :"+ commentReport);
 
         feelingService.reportCmt(commentReport);
+    }
+
+    //사용자 댓글 개수 확인 (댓글 제한을 위해)
+    @RequestMapping(path="/limitCmt", method={ RequestMethod.GET, RequestMethod.POST })
+    public @ResponseBody int limitCmt(@RequestBody HashMap<String, String> data) {
+        System.out.println("안드로이드 -> 서버로 Post 댓글 개수 확인 :"+ data);
+
+        return feelingService.limitCmt(data);
     }
 
     // 그래프 조회 년월일 전송 받을시 스코어 리턴

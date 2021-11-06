@@ -10,8 +10,10 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -77,6 +79,7 @@ public class DetailFragment extends Fragment {
     String userId;
     String publishDate;
     String newDateForm;
+    MainActivity activity = new MainActivity();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -106,6 +109,7 @@ public class DetailFragment extends Fragment {
             public void onClick(View view) {
                 RegCmt regCmt = new RegCmt();
                 regCmt.execute(userId, comment_et.getText().toString(), board_seq);
+                Navigation.findNavController(requireActivity(), R.id.detail_fragment).navigate(R.id.detail_fragment);
             }
         });
 
@@ -188,9 +192,16 @@ public class DetailFragment extends Fragment {
         return root;
     }
 
+    @Override
     public void onPause() {
         super.onPause();
         mapViewContainer.removeAllViews();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 
     //당일 글 갯수
@@ -229,6 +240,24 @@ public class DetailFragment extends Fragment {
                         transaction.commit(); //저장해라 commit
 
 
+                    }
+                })
+                .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {}
+                });
+
+        AlertDialog msgDlg = msgBuilder.create();
+        msgDlg.show();
+    }
+
+    void deleteCmtDialog(String _id) {
+        AlertDialog.Builder msgBuilder = new AlertDialog.Builder(getActivity())
+                .setTitle("댓글을 삭제하시겠습니까?")
+                .setMessage("댓글을 삭제합니다")
+                .setPositiveButton("네", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        deleteCmt(_id);
                     }
                 })
                 .setNegativeButton("취소", new DialogInterface.OnClickListener() {
@@ -319,6 +348,15 @@ public class DetailFragment extends Fragment {
 
                     ((TextView)customView.findViewById(R.id.cmt_content_tv)).setText(content);
                     ((TextView)customView.findViewById(R.id.cmt_date_tv)).setText(newDateForm);
+                    if(jsonObject.optString("userId").equals(userId)){
+                        customView.findViewById(R.id.cmt_remove_btn).setVisibility(View.VISIBLE);
+                        TextView removeCmt_btn = customView.findViewById(R.id.cmt_remove_btn);
+                        removeCmt_btn.setOnClickListener(new View.OnClickListener(){
+                            public void onClick(View view){
+                                deleteCmtDialog(_id);
+                            }
+                        });
+                    }
                     TextView textView_btn;
                     textView_btn = customView.findViewById(R.id.cmt_report_btn);
                     textView_btn.setOnClickListener(new View.OnClickListener(){
@@ -433,6 +471,7 @@ public class DetailFragment extends Fragment {
             {
                 Toast.makeText(getActivity(), result, Toast.LENGTH_SHORT).show();
             }
+
         }
 
 
@@ -499,7 +538,7 @@ public class DetailFragment extends Fragment {
         }
     }
 
-    //댓글 삭제
+    //글 삭제
     public void deleteHistory(){
 
         SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
@@ -528,6 +567,23 @@ public class DetailFragment extends Fragment {
             e.printStackTrace();
         }
     }
+
+    public void deleteCmt(String _id) {
+        String url = CommonMethod.ipConfig + "/api/deleteCmt";
+        try {
+            String jsonString = new JSONObject()
+                    .put("comment_id", _id)
+                    .toString();
+
+            //REST API
+            RequestHttpURLConnection.NetworkAsyncTask networkTask = new RequestHttpURLConnection.NetworkAsyncTask(url, jsonString);
+            networkTask.execute();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     //댓글 신고 중복 확인
     public int checkReportCmt(String _id, String feeling_id) {
         String url = CommonMethod.ipConfig +"/api/checkReportCmt";
