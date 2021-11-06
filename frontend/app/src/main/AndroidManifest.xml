@@ -42,12 +42,6 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".PopupActivity"
-            android:theme="@style/Theme.FrontEnd.NoActionBar"
-            android:label="@string/app_name" />
-
-
 
     </application>
 
