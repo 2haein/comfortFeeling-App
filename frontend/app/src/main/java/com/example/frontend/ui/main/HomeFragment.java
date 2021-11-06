@@ -174,17 +174,12 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
             public void onClick(View view) {
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                 PostFragment postFragment = new PostFragment();
+                CompletionFragment completionFragment = new CompletionFragment();
+
                 isPost = checkPostHistory();
                 if(isPost != 0){
                     Toast.makeText(getActivity(), "오늘의 감정기록이 존재합니다!",Toast.LENGTH_SHORT).show();
                     activity.onFragmentChange(1, 0);
-                    /*
-                    Bundle bundle = new Bundle();
-                    completionFragment.setArguments(bundle); //seq 변수 값 전달.
-                    transaction.replace(R.id.completion_fragment, completionFragment);
-                    transaction.addToBackStack(null);
-                    transaction.commit(); //저장해라 commit
-                    */
                 }
                 else{
                     if(getPickedLat==0.0){

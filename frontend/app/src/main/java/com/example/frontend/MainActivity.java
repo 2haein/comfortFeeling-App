@@ -131,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+        getSupportFragmentManager().popBackStack("completefrag", FragmentManager.POP_BACK_STACK_INCLUSIVE);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
@@ -143,8 +144,7 @@ public class MainActivity extends AppCompatActivity {
         completionFragment.setArguments(bundle);
         if(index == 1){
             getSupportFragmentManager().beginTransaction().
-                    replace(R.id.nav_host_fragment_content_main , completionFragment).addToBackStack(null).commit();
-
+                    replace(R.id.nav_host_fragment_content_main , completionFragment).addToBackStack("completefrag").commit();
         }
         //여기서 다른 프래그먼트로 이동하는 기능 구현가능
     }
