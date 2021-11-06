@@ -406,44 +406,65 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
                 builder.setTitle("선택하세요");
 
                 int count = checkPostHistory(); //글 썼으면 1, 안썼으면 0
-                builder.setItems(R.array.LAN, new DialogInterface.OnClickListener(){
-                    @Override
-                    public void onClick(DialogInterface dialog, int pos)
-                    {
-                        String[] items = getResources().getStringArray(R.array.LAN);
-                        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                        PostFragment postFragment = new PostFragment();
+                if(count==0){
+                    builder.setItems(R.array.LAN, new DialogInterface.OnClickListener(){
+                        @Override
+                        public void onClick(DialogInterface dialog, int pos)
+                        {
+                            String[] items = getResources().getStringArray(R.array.LAN);
+                            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                            PostFragment postFragment = new PostFragment();
 
-                        Toast.makeText(getActivity(),items[pos],Toast.LENGTH_SHORT).show();
-                        // 각 버튼별로 수행할 일
-                        if(pos == 0 && count == 0){
+                            Toast.makeText(getActivity(),items[pos],Toast.LENGTH_SHORT).show();
+                            // 각 버튼별로 수행할 일
+                            if(pos == 0){
 
-                            Bundle bundle = new Bundle();
-                            bundle.putDouble("lat", getPickedLat);
-                            bundle.putDouble("lon", getPickedLng);
-                            postFragment.setArguments(bundle); //seq 변수 값 전달.
-                            transaction.replace(R.id.home_fragment, postFragment); //프레임 레이아웃에서 detailFragment로 변경
-                            transaction.addToBackStack(null);
-                            transaction.commit(); //저장해라 commit
+                                Bundle bundle = new Bundle();
+                                bundle.putDouble("lat", getPickedLat);
+                                bundle.putDouble("lon", getPickedLng);
+                                postFragment.setArguments(bundle); //seq 변수 값 전달.
+                                transaction.replace(R.id.home_fragment, postFragment); //프레임 레이아웃에서 detailFragment로 변경
+                                transaction.addToBackStack(null);
+                                transaction.commit(); //저장해라 commit
 
-                        }
-                        else if(pos == 0 && count == 1){
-                            Toast.makeText(getActivity(), "하루에 한 번만 등록 가능!",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                        else if(pos==1){
-                            if(markers.size()!=0) {
-                                markers.clear();
                             }
-                            mapView.removePOIItem(mapPOIItem);
-                            removePosting();
+                            else if(pos==1){
+                                if(markers.size()!=0) {
+                                    markers.clear();
+                                }
+                                mapView.removePOIItem(mapPOIItem);
+                                removePosting();
+                            }
+                            else if(pos==2){
+                                activity.onFragmentChange(1, mapPOIItem.getTag());
+                            }
                         }
-                        else if(pos==2){
-                            activity.onFragmentChange(1, mapPOIItem.getTag());
-                        }
-                    }
-                });
+                    });
+                }
+                else{
+                    builder.setItems(R.array.LAN2, new DialogInterface.OnClickListener(){
+                        @Override
+                        public void onClick(DialogInterface dialog, int pos)
+                        {
+                            String[] items = getResources().getStringArray(R.array.LAN2);
+                            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                            PostFragment postFragment = new PostFragment();
 
+                            Toast.makeText(getActivity(),items[pos],Toast.LENGTH_SHORT).show();
+                            // 각 버튼별로 수행할 일
+                            if(pos == 0){
+                                if(markers.size()!=0) {
+                                    markers.clear();
+                                }
+                                mapView.removePOIItem(mapPOIItem);
+                                removePosting();
+                            }
+                            else if(pos==1){
+                                activity.onFragmentChange(1, mapPOIItem.getTag());
+                            }
+                        }
+                    });
+                }
                 AlertDialog alertDialog = builder.create();
                 alertDialog.show();
             }
