@@ -579,6 +579,9 @@ public class CompletionFragment extends Fragment{
             RequestHttpURLConnection.NetworkAsyncTask networkTask = new RequestHttpURLConnection.NetworkAsyncTask(url, jsonString);
             networkTask.execute();
 
+            LoadCmt loadCmt = new LoadCmt();
+            loadCmt.execute(board_seq);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -624,10 +627,17 @@ public class CompletionFragment extends Fragment{
             RequestHttpURLConnection.NetworkAsyncTask networkTask = new RequestHttpURLConnection.NetworkAsyncTask(url, jsonString);
             networkTask.execute();
 
+            LoadCmt loadCmt = new LoadCmt();
+            loadCmt.execute(board_seq);
+
         }catch(Exception e){
             e.printStackTrace();
         }
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
 
 }

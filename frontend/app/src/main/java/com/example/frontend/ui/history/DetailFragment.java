@@ -34,6 +34,7 @@ import com.example.frontend.RequestHttpURLConnection;
 import com.example.frontend.common.ProfileData;
 import com.example.frontend.databinding.FragmentDetailBinding;
 import com.example.frontend.http.CommonMethod;
+import com.example.frontend.ui.completion.CompletionFragment;
 
 import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapPoint;
@@ -576,6 +577,9 @@ public class DetailFragment extends Fragment {
             RequestHttpURLConnection.NetworkAsyncTask networkTask = new RequestHttpURLConnection.NetworkAsyncTask(url, jsonString);
             networkTask.execute();
 
+            LoadCmt loadCmt = new LoadCmt();
+            loadCmt.execute(board_seq);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -621,8 +625,16 @@ public class DetailFragment extends Fragment {
             RequestHttpURLConnection.NetworkAsyncTask networkTask = new RequestHttpURLConnection.NetworkAsyncTask(url, jsonString);
             networkTask.execute();
 
+            LoadCmt loadCmt = new LoadCmt();
+            loadCmt.execute(board_seq);
+
         }catch(Exception e){
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 }
