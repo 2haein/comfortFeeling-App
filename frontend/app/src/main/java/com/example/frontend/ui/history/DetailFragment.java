@@ -109,7 +109,6 @@ public class DetailFragment extends Fragment {
             public void onClick(View view) {
                 RegCmt regCmt = new RegCmt();
                 regCmt.execute(userId, comment_et.getText().toString(), board_seq);
-                Navigation.findNavController(requireActivity(), R.id.detail_fragment).navigate(R.id.detail_fragment);
             }
         });
 
@@ -464,7 +463,8 @@ public class DetailFragment extends Fragment {
             // 토스트메시지 출력
                 Toast.makeText(getActivity(), "댓글이 등록되었습니다.", Toast.LENGTH_SHORT).show();
 
-// 댓글 불러오는 함수 호출
+
+            // 댓글 불러오는 함수 호출
                 LoadCmt loadCmt = new LoadCmt();
                 loadCmt.execute(board_seq);
             }else
@@ -520,11 +520,8 @@ public class DetailFragment extends Fragment {
                 int responseCode=conn.getResponseCode();
 
                 if (responseCode == HttpsURLConnection.HTTP_OK) {
-                    String line;
                     BufferedReader br=new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                    while ((line=br.readLine()) != null) {
-                        response+=line;
-                    }
+                    response="success";
                 }
                 else {
                     response="";
