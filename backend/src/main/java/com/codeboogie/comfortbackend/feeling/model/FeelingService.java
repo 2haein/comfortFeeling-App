@@ -202,12 +202,13 @@ public class FeelingService {
     }
 
    public List<Comment> loadCmt(HashMap<String, String> data) {
+        Query query = new Query();
+        Criteria criteria = new Criteria();
+        Criteria criteria_arr[] = new Criteria[2];
+        criteria_arr[0] = Criteria.where("feeling_id").is(data.get("feeling_id"));
+        criteria_arr[1] = Criteria.where("show").is(1);
 
-        Criteria criteria = new Criteria("feeling_id");
-        criteria.is(data.get("feeling_id"));
-
-
-        Query query = new Query(criteria);
+        query.addCriteria(criteria.andOperator(criteria_arr));
 
         return mongoTemplate.find(query, Comment.class, "comment" );
     }
@@ -223,6 +224,19 @@ public class FeelingService {
             throw new NullPointerException("Data Null");
         }
         mongoTemplate.insert(commentReport);
+
+        Query query = new Query().addCriteria(Criteria.where("comment_id").is(commentReport.getComment_id()));
+        int reportCount = (int) mongoTemplate.count(query, "commentReport");
+        if(reportCount>5) deleteCmt(commentReport.getComment_id());
+
+    }
+
+    //신고 누적으로 인한 댓글 삭제
+    public void deleteCmt(String comment_id) {
+        Query query = new Query().addCriteria(Criteria.where("_id").is(new ObjectId(comment_id)));
+        Update update = new Update();
+        update.set("show", 0);
+        mongoTemplate.updateFirst(query, update, "comment");
     }
 
     public int getGraph(String userId, String publishDate) throws Exception {
