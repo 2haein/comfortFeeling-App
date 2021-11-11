@@ -61,8 +61,8 @@ public class OtherCompletionFragment extends Fragment{
     private FragmentOcompletionBinding binding;
 
     // 사용할 컴포넌트 선언
-    TextView content_tv, date_tv;
-    LinearLayout comment_layout, cmt_report_lay;
+    TextView content_tv, date_tv, comment_text;
+    LinearLayout comment_layout, comment_add, cmt_report_lay;
     EditText comment_et;
     Button reg_button;
     ImageView feel_btn1, feel_btn2, feel_btn3, feel_btn4, feel_btn5;
@@ -73,6 +73,7 @@ public class OtherCompletionFragment extends Fragment{
     ArrayList<String> text = new ArrayList<String>();
     ArrayList<String> pubDate = new ArrayList<String>();
     ArrayList<Integer> oscore = new ArrayList<Integer>();
+    ArrayList<Integer> comment = new ArrayList<Integer>();
 
 
     String board_seq;
@@ -133,12 +134,15 @@ public class OtherCompletionFragment extends Fragment{
                 inputFormat.applyPattern("yyyy-MM-dd HH:mm:ss");
                 String newDateForm = inputFormat.format(pDate);
                 int score = Integer.parseInt(jsonObject.optString("score"));
+                int comment_col = Integer.parseInt(jsonObject.optString("comment"));
 
                 uid.add(uuid);
                 postid.add(idid);
                 text.add(content);
                 pubDate.add(newDateForm);
                 oscore.add(score);
+                comment.add(comment_col);
+
                 Log.i(TAG, String.format("All_uid: %s", uid.get(i)));
                 Log.i(TAG, String.format("All_id: %s", postid.get(i)));
                 Log.i(TAG, String.format("All_content: %s", text.get(i)));
@@ -182,10 +186,23 @@ public class OtherCompletionFragment extends Fragment{
                         feel_btn4.setBackgroundColor(Color.WHITE);
                         feel_btn5.setBackgroundColor(Color.WHITE);
                         break;
-                }
+                                        }
 
+                int cmt_view = 1;
+                try{
+                    cmt_view = comment.get(cnt);
+                } catch (Exception e){
+
+                }
+                // 해당 게시물에 대한 댓글 불러오는 함수 호출, 파라미터로 게시물 번호 넘김
                 LoadCmt loadCmt = new LoadCmt();
-                loadCmt.execute(board_seq);
+                if(cmt_view == 1){
+                    loadCmt.execute(board_seq);
+                }else{
+                    comment_layout.setVisibility(View.GONE);
+                    comment_add.setVisibility(View.GONE);
+                    comment_text.setText("댓글창 OFF");
+                }
 
             } catch (Exception e) {
                 e.printStackTrace();
