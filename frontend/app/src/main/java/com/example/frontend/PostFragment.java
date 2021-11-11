@@ -1,8 +1,16 @@
 package com.example.frontend;
 
+import static android.app.Activity.RESULT_OK;
+
+import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +23,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -29,6 +38,7 @@ import com.example.frontend.http.CommonMethod;
 
 import org.json.JSONObject;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -37,6 +47,8 @@ public class PostFragment extends Fragment {
     public EditText edit_text;
     public Button back_btn;
     public Button submit_btn;
+    public ImageView camera_btn;
+    public ImageView camera_image;
     public RatingBar feel_rate;
     public ImageView feel_btn1, feel_btn2, feel_btn3, feel_btn4, feel_btn5;
     private Switch commentYN;
@@ -45,7 +57,7 @@ public class PostFragment extends Fragment {
     private int rating;
     private FragmentPostBinding binding;
     private Double lat, lon;
-
+    File file;
 
 
     @Override
@@ -70,6 +82,12 @@ public class PostFragment extends Fragment {
         back_btn = (Button)root.findViewById(R.id.back_btn);
         submit_btn = (Button)root.findViewById(R.id.button);
 
+
+//        File sdcard = Environment.getExternalStorageDirectory();
+//        file = new File(sdcard, "capture.jpg");
+        camera_btn = (ImageView)root.findViewById(R.id.cameraView);
+        camera_image = (ImageView)root.findViewById(R.id.cameraImage);
+
         Bundle bundle = getArguments();  //번들 받기. getArguments() 메소드로 받음.
 
         if(bundle != null){
@@ -77,6 +95,13 @@ public class PostFragment extends Fragment {
             lon = bundle.getDouble("lon");
 
         }
+
+        camera_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                capture();
+            }
+        });
 
         feel_btn1.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -202,7 +227,23 @@ public class PostFragment extends Fragment {
 
     }
 
+    public void capture(){
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setDataAndType(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+        startActivityForResult(intent, 200);
+    }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == 200 && resultCode == RESULT_OK && data != null && data.getData() != null) {
+
+            Uri selectedImageUri = data.getData();
+            camera_image.setImageURI(selectedImageUri);
+
+        }
+
+    }
 
 
 

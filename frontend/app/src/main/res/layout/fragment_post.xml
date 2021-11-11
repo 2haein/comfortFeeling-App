@@ -151,5 +151,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:id="@+id/cameraImage"
+        android:layout_width="85dp"
+        android:layout_height="69dp"
+        android:src="@drawable/ch_img_background"
+        app:layout_constraintEnd_toStartOf="@+id/cameraView"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
