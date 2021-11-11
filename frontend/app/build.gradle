@@ -65,7 +65,4 @@ dependencies {
     }
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.2'
 
-    //tedpermission
-    implementation 'gun0912.ted:tedpermission:2.2.3'//권한 요청을 위한 팝업을 쉽게 구성하기 위해
-
 }
