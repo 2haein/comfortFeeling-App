@@ -216,7 +216,10 @@ public class CompletionFragment extends Fragment{
                 inputFormat.applyPattern("yyyy-MM-dd HH:mm:ss");
                 String newDateForm = inputFormat.format(pDate);
                 int score = Integer.parseInt(jsonObject.optString("score"));
-                int isComment = Integer.parseInt(jsonObject.optString("comment"));
+                int isComment;
+                if(!jsonObject.optString("comment").equals("")) {
+                    isComment = Integer.parseInt(jsonObject.optString("comment"));
+                } else {isComment = 0;}
 
                 uid.add(uuid);
                 postid.add(idid);
@@ -251,7 +254,10 @@ public class CompletionFragment extends Fragment{
             inputFormat.applyPattern("yyyy-MM-dd HH:mm:ss");
             String newDateForm = inputFormat.format(pDate);
             score = Integer.parseInt(jsonObject.optString("score"));
-            int isComment = Integer.parseInt(jsonObject.optString("comment"));
+            int isComment;
+            if(!jsonObject.optString("comment").equals("")) {
+                isComment = Integer.parseInt(jsonObject.optString("comment"));
+            } else {isComment = 0;}
             String xx = jsonObject.optString("xcoord");
             String yy = jsonObject.optString("ycoord");
             x = Double.parseDouble(xx);
@@ -288,10 +294,15 @@ public class CompletionFragment extends Fragment{
                     feel_btn5.setBackgroundColor(Color.WHITE);
                     break;
             }
+            int cmt_view;
+            if(!jsonObject.optString("comment").equals("")) {
+                cmt_view = Integer.parseInt(jsonObject.optString("comment"));
+            } else {cmt_view = 0;}
 
-            int cmt_view = Integer.parseInt(jsonObject.optString("comment"));
             try{
-                cmt_view = Integer.parseInt(jsonObject.getString("comment"));
+                if(!jsonObject.optString("comment").equals("")) {
+                    cmt_view = Integer.parseInt(jsonObject.optString("comment"));
+                } else {cmt_view = 0;}
             } catch (Exception e){
 
             }
@@ -306,13 +317,11 @@ public class CompletionFragment extends Fragment{
             }
 
 
-        } catch (ParseException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
+        } catch (ParseException | JSONException e) {
             e.printStackTrace();
         }
 
-       //글 수정할 때 실행
+        //글 수정할 때 실행
        edit_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
