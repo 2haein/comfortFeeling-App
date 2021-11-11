@@ -37,7 +37,18 @@
         android:layout_height="wrap_content"
         android:text="content" />
 
+    <TextView
+        android:id="@+id/cmt_remove_btn"
+        android:layout_width="match_parent"
+        android:layout_height="26dp"
+        android:layout_weight="1"
+        android:gravity="right"
+        android:text="삭제"
+        android:textStyle="bold"
+        android:visibility="invisible" />
+
     <LinearLayout
+        android:id="@+id/cmt_report_lay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -49,20 +60,13 @@
             android:layout_weight="1" />
 
         <TextView
-            android:id="@+id/cmt_remove_btn"
-            android:layout_width="74dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="삭제"
-            android:visibility="invisible"
-            android:textStyle="bold" />
-
-        <TextView
             android:id="@+id/cmt_report_btn"
             android:layout_width="76dp"
             android:layout_height="match_parent"
-            android:gravity="right"
-            android:text="신고하기" />
+            android:gravity="bottom|right"
+            android:text="@string/Report"
+            android:textColor="#FF0000"
+            android:textSize="12sp" />
     </LinearLayout>
 
     <View

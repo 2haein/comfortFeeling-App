@@ -62,7 +62,7 @@ public class OtherCompletionFragment extends Fragment{
 
     // 사용할 컴포넌트 선언
     TextView content_tv, date_tv;
-    LinearLayout comment_layout;
+    LinearLayout comment_layout, cmt_report_lay;
     EditText comment_et;
     Button reg_button;
     ImageView feel_btn1, feel_btn2, feel_btn3, feel_btn4, feel_btn5;
@@ -266,6 +266,7 @@ public class OtherCompletionFragment extends Fragment{
                     String feeling_id = jsonObject.optString("feeling_id");
                     String content = jsonObject.optString("context");
                     String crt_dt = jsonObject.optString("publishDate");
+                    String cmt_userId = jsonObject.optString("userId");
                     SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
                     Date pDate = inputFormat.parse(crt_dt);
                     inputFormat.applyPattern("yyyy-MM-dd HH:mm:ss");
@@ -284,17 +285,24 @@ public class OtherCompletionFragment extends Fragment{
                     }
                     TextView textView_btn;
                     textView_btn = customView.findViewById(R.id.cmt_report_btn);
-                    textView_btn.setOnClickListener(new View.OnClickListener(){
-                        public void onClick(View view) {
-                            if(checkReportCmt(_id, feeling_id) == 0) {
-                                reportCmt(jsonObject);
-                                Toast.makeText(view.getContext(), "신고 완료", Toast.LENGTH_LONG).show();
-                            }
-                            else
-                                Toast.makeText(view.getContext(), "이미 신고하셨습니다", Toast.LENGTH_LONG).show();
+                    cmt_report_lay = customView.findViewById(R.id.cmt_report_lay);
+                    Log.i(TAG, "id값 " + cmt_userId + " " + userId);
+                    if(cmt_userId.equals(userId)){
+                        cmt_report_lay.setVisibility(customView.GONE);
+                    }
+                    else{
+                        textView_btn.setOnClickListener(new View.OnClickListener(){
+                            public void onClick(View view) {
+                                if(checkReportCmt(_id, feeling_id) == 0) {
+                                    reportCmt(jsonObject);
+                                    Toast.makeText(view.getContext(), "신고 완료", Toast.LENGTH_LONG).show();
+                                }
+                                else
+                                    Toast.makeText(view.getContext(), "이미 신고하셨습니다", Toast.LENGTH_LONG).show();
 
-                        }
-                    });
+                            }
+                        });
+                    }
 
 // 댓글 레이아웃에 custom_comment 의 디자인에 데이터를 담아서 추가
                     comment_layout.addView(customView);
