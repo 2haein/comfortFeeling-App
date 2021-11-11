@@ -6,9 +6,9 @@
     android:layout_height="match_parent"
     android:background="#FFFFFF"
     android:orientation="vertical"
-    android:id="@+id/completion_fragment"
+    android:id="@+id/ocompletion_fragment"
     android:padding="16dp"
-    tools:context=".ui.completion.CompletionFragment">
+    tools:context=".ui.completion.OtherCompletionFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -45,13 +45,6 @@
                     android:layout_weight="1"
                     android:background="#eeeeee"
                     android:padding="16dp" />
-
-                <Button
-                    android:id="@+id/edit_btn"
-                    android:layout_width="60dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="글 수정" />
 
             </LinearLayout>
 
@@ -109,23 +102,11 @@
                     android:textSize="19dp"
                     android:textStyle="bold" />
 
-                <Switch
-                    android:id="@+id/switch1"
-                    android:layout_width="102dp"
-                    android:layout_height="48dp"
-                    android:checked="true"
-                    android:text="댓글창"
-                    app:layout_constraintBottom_toTopOf="@+id/emotion_relative"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.936"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.92" />
 
             </LinearLayout>
 
 
-            <EditText
+            <TextView
                 android:id="@+id/content_tv"
                 android:layout_width="match_parent"
                 android:layout_height="115dp"

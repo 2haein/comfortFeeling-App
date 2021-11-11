@@ -3,14 +3,12 @@ package com.example.frontend.ui.completion;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,11 +16,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +29,7 @@ import com.example.frontend.common.ProfileData;
 import com.example.frontend.databinding.FragmentCompletionBinding;
 import com.example.frontend.databinding.FragmentDetailBinding;
 import com.example.frontend.databinding.FragmentHistoryBinding;
+import com.example.frontend.databinding.FragmentOcompletionBinding;
 import com.example.frontend.http.CommonMethod;
 import com.example.frontend.ui.history.DetailFragment;
 import com.example.frontend.ui.main.HomeFragment;
@@ -49,7 +46,6 @@ import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.ParseException;
@@ -59,19 +55,17 @@ import java.util.Date;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public class CompletionFragment extends Fragment{
+public class OtherCompletionFragment extends Fragment{
 
     final private String TAG = getClass().getSimpleName();
-    private @NonNull
-    FragmentCompletionBinding binding;
+    private FragmentOcompletionBinding binding;
 
     // 사용할 컴포넌트 선언
-    TextView date_tv, comment_text;
-    LinearLayout comment_layout, comment_add;
-    EditText comment_et, content_tv;
-    Button reg_button, edit_btn;
+    TextView content_tv, date_tv;
+    LinearLayout comment_layout;
+    EditText comment_et;
+    Button reg_button;
     ImageView feel_btn1, feel_btn2, feel_btn3, feel_btn4, feel_btn5;
-    private Switch commentYN;
 
     int tag;
     ArrayList<String> uid = new ArrayList<String>();
@@ -79,27 +73,23 @@ public class CompletionFragment extends Fragment{
     ArrayList<String> text = new ArrayList<String>();
     ArrayList<String> pubDate = new ArrayList<String>();
     ArrayList<Integer> oscore = new ArrayList<Integer>();
-    ArrayList<Integer> isCommentt = new ArrayList<Integer>();
 
-    String board_seq; //post id
-    String userId; //user id
-    Date publishDatetoPut;
-    double x, y, vx, vy;
+
+    String board_seq;
+    String userId;
     HomeFragment homeFragment;
-    private int rating;
-    private int comment;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentCompletionBinding.inflate(inflater, container, false);
+        binding = FragmentOcompletionBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         homeFragment = new HomeFragment();
         board_seq = homeFragment.sendBoardseq();
         userId = ProfileData.getUserId();
 
         // 컴포넌트 초기화
-        content_tv = (EditText) root.findViewById(R.id.content_tv);
+        content_tv = (TextView) root.findViewById(R.id.content_tv);
         date_tv = (TextView) root.findViewById(R.id.date_tv);
         feel_btn1 = (ImageView) root.findViewById(R.id.imageView1);
         feel_btn2 = (ImageView) root.findViewById(R.id.imageView2);
@@ -109,65 +99,6 @@ public class CompletionFragment extends Fragment{
         comment_layout = (LinearLayout) root.findViewById(R.id.comment_layout);
         comment_et = (EditText) root.findViewById(R.id.comment_et);
         reg_button = (Button) root.findViewById(R.id.reg_button);
-        edit_btn = (Button) root.findViewById(R.id.edit_btn);
-
-        feel_btn1.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                feel_btn1.setImageResource(R.drawable.color_emoji1);
-                feel_btn2.setImageResource(R.drawable.emotion2);
-                feel_btn3.setImageResource(R.drawable.emotion3);
-                feel_btn4.setImageResource(R.drawable.emotion4);
-                feel_btn5.setImageResource(R.drawable.emotion5);
-                rating = 1;
-            }
-        });
-        feel_btn2.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                feel_btn1.setImageResource(R.drawable.emotion1);
-                feel_btn2.setImageResource(R.drawable.color_emoji2);
-                feel_btn3.setImageResource(R.drawable.emotion3);
-                feel_btn4.setImageResource(R.drawable.emotion4);
-                feel_btn5.setImageResource(R.drawable.emotion5);
-                rating = 2;
-            }
-        });
-        feel_btn3.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                feel_btn1.setImageResource(R.drawable.emotion1);
-                feel_btn2.setImageResource(R.drawable.emotion2);
-                feel_btn3.setImageResource(R.drawable.color_emoji3);
-                feel_btn4.setImageResource(R.drawable.emotion4);
-                feel_btn5.setImageResource(R.drawable.emotion5);
-                rating = 3;
-            }
-        });
-        feel_btn4.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                feel_btn1.setImageResource(R.drawable.emotion1);
-                feel_btn2.setImageResource(R.drawable.emotion2);
-                feel_btn3.setImageResource(R.drawable.emotion3);
-                feel_btn4.setImageResource(R.drawable.color_emoji4);
-                feel_btn5.setImageResource(R.drawable.emotion5);
-                rating = 4;
-            }
-        });
-        feel_btn5.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                feel_btn1.setImageResource(R.drawable.emotion1);
-                feel_btn2.setImageResource(R.drawable.emotion2);
-                feel_btn3.setImageResource(R.drawable.emotion3);
-                feel_btn4.setImageResource(R.drawable.emotion4);
-                feel_btn5.setImageResource(R.drawable.color_emoji5);
-                rating = 5;
-            }
-        });
-        comment_text = (TextView)root.findViewById(R.id.comment_text);
-        comment_add = (LinearLayout) root.findViewById(R.id.comment_add);
 
         reg_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -175,19 +106,6 @@ public class CompletionFragment extends Fragment{
                 RegCmt regCmt = new RegCmt();
                 regCmt.execute(userId, comment_et.getText().toString(), board_seq);
 
-            }
-        });
-
-        commentYN = (Switch) root.findViewById(R.id.switch1);
-        commentYN.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(b) {
-                    comment = 1;
-
-                }else{
-                    comment = 0;
-                }
             }
         });
 
@@ -215,20 +133,17 @@ public class CompletionFragment extends Fragment{
                 inputFormat.applyPattern("yyyy-MM-dd HH:mm:ss");
                 String newDateForm = inputFormat.format(pDate);
                 int score = Integer.parseInt(jsonObject.optString("score"));
-                int isComment = Integer.parseInt(jsonObject.optString("comment"));
 
                 uid.add(uuid);
                 postid.add(idid);
                 text.add(content);
                 pubDate.add(newDateForm);
                 oscore.add(score);
-                isCommentt.add(isComment);
                 Log.i(TAG, String.format("All_uid: %s", uid.get(i)));
                 Log.i(TAG, String.format("All_id: %s", postid.get(i)));
                 Log.i(TAG, String.format("All_content: %s", text.get(i)));
                 Log.i(TAG, String.format("All_pubDate: %s", pubDate.get(i)));
                 Log.i(TAG, String.format("All_score: %d", oscore.get(i)));
-                Log.i(TAG, String.format("All_isComment: %d", isCommentt.get(i)));
             }
         } catch (ParseException e) {
             e.printStackTrace();
@@ -236,182 +151,49 @@ public class CompletionFragment extends Fragment{
             e.printStackTrace();
         }
 
+        String temp = Integer.toString(tag);
+        int cnt = uid.indexOf(temp);
+        if (cnt != -1) { //찾는 값이 존재하면
+            try {
+                board_seq = postid.get(cnt);
+                content_tv.setText(text.get(cnt));
+                date_tv.setText(pubDate.get(cnt));
 
-        //글 주인이 자신의 글을 보려고 할 때 실행
-       if(tag==0){
-           try {
-               // 결과값이 JSONArray 형태로 넘어오기 때문에
-               // JSONArray, JSONObject 를 사용해서 파싱
-               JSONObject jsonObject = new JSONObject(getTodayHistory());
-               // Database 의 데이터들을 변수로 저장한 후 해당 TextView 에 데이터 입력
-               board_seq = jsonObject.optString("id");
-               String content = jsonObject.optString("text");
-               String publishDate = jsonObject.optString("publishDate");
-               SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
-               Date pDate = inputFormat.parse(publishDate);
-               publishDatetoPut = pDate;
-               inputFormat.applyPattern("yyyy-MM-dd HH:mm:ss");
-               String newDateForm = inputFormat.format(pDate);
-               int score = Integer.parseInt(jsonObject.optString("score"));
-               String xx = jsonObject.optString("xcoord");
-               String yy = jsonObject.optString("ycoord");
-               x = Double.parseDouble(xx);
-               y = Double.parseDouble(yy);
-
-               Log.i(TAG, String.format("post_id_check:" + board_seq));
-               content_tv.setText(content);
-               content_tv.setSelection(content_tv.length());
-               date_tv.setText(newDateForm);
-
-               switch (score) {
-                   case 1: feel_btn1.setImageResource(R.drawable.color_emoji1);
-                       break;
-                   case 2 : feel_btn2.setImageResource(R.drawable.color_emoji2);
-                       break;
-                   case 3 : feel_btn3.setImageResource(R.drawable.color_emoji3);
-                       break;
-                   case 4 : feel_btn4.setImageResource(R.drawable.color_emoji4);
-                       break;
-                   case 5 : feel_btn5.setImageResource(R.drawable.color_emoji5);
-                       break;
-                   default : feel_btn1.setBackgroundColor(Color.WHITE);
-                       feel_btn2.setBackgroundColor(Color.WHITE);
-                       feel_btn3.setBackgroundColor(Color.WHITE);
-                       feel_btn4.setBackgroundColor(Color.WHITE);
-                       feel_btn5.setBackgroundColor(Color.WHITE);
-                       break;
-               }
-
-               int cmt_view = Integer.parseInt(jsonObject.optString("comment"));
-               try{
-                   cmt_view = Integer.parseInt(jsonObject.getString("comment"));
-               } catch (Exception e){
-
-               }
-               // 해당 게시물에 대한 댓글 불러오는 함수 호출, 파라미터로 게시물 번호 넘김
-               LoadCmt loadCmt = new LoadCmt();
-               if(cmt_view == 1){
-                   loadCmt.execute(board_seq);
-               }else{
-                   comment_layout.setVisibility(View.GONE);
-                   comment_add.setVisibility(View.GONE);
-                   comment_text.setText("댓글창 OFF");
-               }
-
-
-           } catch (ParseException e) {
-               e.printStackTrace();
-           } catch (JSONException e) {
-               e.printStackTrace();
-           }
-
-       }
-       else {
-           String temp = Integer.toString(tag);
-           int cnt = uid.indexOf(temp);
-           if (cnt != -1) { //찾는 값이 존재하면
-               try {
-                   board_seq = postid.get(cnt);
-                   content_tv.setText(text.get(cnt));
-                   date_tv.setText(pubDate.get(cnt));
-
-                   switch (oscore.get(cnt)) {
-                       case 1:
-                           feel_btn1.setImageResource(R.drawable.color_emoji1);
-                           break;
-                       case 2:
-                           feel_btn2.setImageResource(R.drawable.color_emoji2);
-                           break;
-                       case 3:
-                           feel_btn3.setImageResource(R.drawable.color_emoji3);
-                           break;
-                       case 4:
-                           feel_btn4.setImageResource(R.drawable.color_emoji4);
-                           break;
-                       case 5:
-                           feel_btn5.setImageResource(R.drawable.color_emoji5);
-                           break;
-                       default:
-                           feel_btn1.setBackgroundColor(Color.WHITE);
-                           feel_btn2.setBackgroundColor(Color.WHITE);
-                           feel_btn3.setBackgroundColor(Color.WHITE);
-                           feel_btn4.setBackgroundColor(Color.WHITE);
-                           feel_btn5.setBackgroundColor(Color.WHITE);
-                           break;
-                   }
-
-                   LoadCmt loadCmt = new LoadCmt();
-                   loadCmt.execute(board_seq);
-
-               } catch (Exception e) {
-                   e.printStackTrace();
-               }
-
-
-           }
-       }
-
-        Log.i(TAG, "board값" + board_seq);
-
-
-       //글 수정할 때 실행
-       edit_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(!getTodayHistory().equals("")){
-                    //REST API 주소
-                    String url = CommonMethod.ipConfig+ "/api/update";
-                    SimpleDateFormat sformat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-                    Date now = new Date();
-                    String getTime = sformat.format(now);
-                    Log.i(TAG, "getTime값" + getTime);
-                    try{
-                        String jsonString = new JSONObject()
-                                .put("id", board_seq)
-                                .put("userId", ProfileData.getUserId())
-                                .put("text", content_tv.getText().toString())
-                                .put("score", rating)
-                                .put("publishDate", getTime)
-                                //.put("updateDate", getTime)
-                                .put("xcoord", x)
-                                .put("ycoord", y)
-                                .put("anon_xcoord", 0.0)
-                                .put("anon_ycoord", 0.0)
-                                .put("comment", comment)
-                                .toString();
-
-                        //REST API
-                        RequestHttpURLConnection.NetworkAsyncTask networkTask = new RequestHttpURLConnection.NetworkAsyncTask(url, jsonString);
-                        networkTask.execute();
-
-                        Toast.makeText(getActivity().getApplicationContext(), "글이 수정되었습니다! ", Toast.LENGTH_LONG).show();
-
-                        Intent intent = new Intent(getActivity().getApplicationContext(), MainActivity.class);
-
-                        startActivity(intent);
-
-                    }catch(Exception e){
-                        e.printStackTrace();
-                    }
-
+                switch (oscore.get(cnt)) {
+                    case 1:
+                        feel_btn1.setImageResource(R.drawable.color_emoji1);
+                        break;
+                    case 2:
+                        feel_btn2.setImageResource(R.drawable.color_emoji2);
+                        break;
+                    case 3:
+                        feel_btn3.setImageResource(R.drawable.color_emoji3);
+                        break;
+                    case 4:
+                        feel_btn4.setImageResource(R.drawable.color_emoji4);
+                        break;
+                    case 5:
+                        feel_btn5.setImageResource(R.drawable.color_emoji5);
+                        break;
+                    default:
+                        feel_btn1.setBackgroundColor(Color.WHITE);
+                        feel_btn2.setBackgroundColor(Color.WHITE);
+                        feel_btn3.setBackgroundColor(Color.WHITE);
+                        feel_btn4.setBackgroundColor(Color.WHITE);
+                        feel_btn5.setBackgroundColor(Color.WHITE);
+                        break;
                 }
 
+                LoadCmt loadCmt = new LoadCmt();
+                loadCmt.execute(board_seq);
 
-
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        });
 
 
-
-
-
-
-
-
-
-
-
-
+        }
+        Log.i(TAG, "board값" + board_seq);
         return root;
 
     }
@@ -578,32 +360,6 @@ public class CompletionFragment extends Fragment{
         }
     }
 
-    // 사용자 당일의 기록 가져오기
-    public String getTodayHistory(){
-        SimpleDateFormat sformat = new SimpleDateFormat("yyyy-MM-dd");
-        Date now = new Date();
-        String getTime = sformat.format(now);
-        String rtnStr="";
-
-        String url = CommonMethod.ipConfig + "/api/loadTodayHistory"; // 글 정보
-        try{
-            String jsonString = new JSONObject()
-                    .put("userId", userId)
-                    .put("publishDate", getTime)
-                    .toString();
-
-            //REST API
-            RequestHttpURLConnection.NetworkAsyncTask networkTask = new RequestHttpURLConnection.NetworkAsyncTask(url, jsonString);
-            rtnStr = networkTask.execute().get();
-            Log.i(TAG, String.format("getTodayHistory: %s", rtnStr));
-
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-
-        return rtnStr;
-
-    }
 
     // 오늘 존재하는 모든 감정기록 가져오기(다른 사람 것도)
     public String getTodayAllHistory(){

@@ -93,8 +93,8 @@
             android:ems="10"
             android:gravity="start|top"
             android:hint="내용을 써주세요!"
-            android:textColorHint="#808080"
             android:inputType="textMultiLine"
+            android:textColorHint="#808080"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -140,6 +140,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.92" />
+
+    <ImageView
+        android:id="@+id/cameraView"
+        android:layout_width="64dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_menu_camera"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/cameraImage"
+        android:layout_width="85dp"
+        android:layout_height="69dp"
+        android:src="@drawable/ch_img_background"
+        app:layout_constraintEnd_toStartOf="@+id/cameraView"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
