@@ -93,8 +93,8 @@
             android:ems="10"
             android:gravity="start|top"
             android:hint="내용을 써주세요!"
-            android:textColorHint="#808080"
             android:inputType="textMultiLine"
+            android:textColorHint="#808080"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 

@@ -40,7 +40,7 @@
 
                 <TextView
                     android:id="@+id/date_tv"
-                    android:layout_width="170dp"
+                    android:layout_width="160dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="#eeeeee"
@@ -95,19 +95,43 @@
                     android:src="@drawable/emotion5" />
             </LinearLayout>
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:text="내용"
-                android:textSize="19dp"
-                android:textStyle="bold"
-                android:textColor="@color/black" />
+                android:orientation="horizontal">
 
-            <TextView
+                <TextView
+                    android:layout_width="198dp"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:text="내용"
+                    android:textColor="@color/black"
+                    android:textSize="19dp"
+                    android:textStyle="bold" />
+
+                <Switch
+                    android:id="@+id/switch1"
+                    android:layout_width="102dp"
+                    android:layout_height="48dp"
+                    android:checked="true"
+                    android:text="댓글창"
+                    app:layout_constraintBottom_toTopOf="@+id/emotion_relative"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.936"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.92" />
+
+            </LinearLayout>
+
+
+            <EditText
                 android:id="@+id/content_tv"
                 android:layout_width="match_parent"
                 android:layout_height="115dp"
+                android:ems="10"
+                android:gravity="start|top"
+                android:inputType="textMultiLine"
                 android:background="#eeeeee"
                 android:textSize="15dp"
                 android:textColor="@color/black"

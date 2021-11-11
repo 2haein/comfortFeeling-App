@@ -3,12 +3,14 @@ package com.example.frontend.ui.completion;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,9 +18,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,6 +49,7 @@ import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.ParseException;
@@ -61,11 +66,12 @@ public class CompletionFragment extends Fragment{
     FragmentCompletionBinding binding;
 
     // 사용할 컴포넌트 선언
-    TextView content_tv, date_tv, comment_text;
+    TextView date_tv, comment_text;
     LinearLayout comment_layout, comment_add;
-    EditText comment_et;
-    Button reg_button;
+    EditText comment_et, content_tv;
+    Button reg_button, edit_btn;
     ImageView feel_btn1, feel_btn2, feel_btn3, feel_btn4, feel_btn5;
+    private Switch commentYN;
 
     int tag;
     ArrayList<String> uid = new ArrayList<String>();
@@ -73,11 +79,15 @@ public class CompletionFragment extends Fragment{
     ArrayList<String> text = new ArrayList<String>();
     ArrayList<String> pubDate = new ArrayList<String>();
     ArrayList<Integer> oscore = new ArrayList<Integer>();
+    ArrayList<Integer> isCommentt = new ArrayList<Integer>();
 
-
-    String board_seq;
-    String userId;
+    String board_seq; //post id
+    String userId; //user id
+    Date publishDatetoPut;
+    double x, y, vx, vy;
     HomeFragment homeFragment;
+    private int rating;
+    private int comment;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -89,7 +99,7 @@ public class CompletionFragment extends Fragment{
         userId = ProfileData.getUserId();
 
         // 컴포넌트 초기화
-        content_tv = (TextView) root.findViewById(R.id.content_tv);
+        content_tv = (EditText) root.findViewById(R.id.content_tv);
         date_tv = (TextView) root.findViewById(R.id.date_tv);
         feel_btn1 = (ImageView) root.findViewById(R.id.imageView1);
         feel_btn2 = (ImageView) root.findViewById(R.id.imageView2);
@@ -99,6 +109,63 @@ public class CompletionFragment extends Fragment{
         comment_layout = (LinearLayout) root.findViewById(R.id.comment_layout);
         comment_et = (EditText) root.findViewById(R.id.comment_et);
         reg_button = (Button) root.findViewById(R.id.reg_button);
+        edit_btn = (Button) root.findViewById(R.id.edit_btn);
+
+        feel_btn1.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                feel_btn1.setImageResource(R.drawable.color_emoji1);
+                feel_btn2.setImageResource(R.drawable.emotion2);
+                feel_btn3.setImageResource(R.drawable.emotion3);
+                feel_btn4.setImageResource(R.drawable.emotion4);
+                feel_btn5.setImageResource(R.drawable.emotion5);
+                rating = 1;
+            }
+        });
+        feel_btn2.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                feel_btn1.setImageResource(R.drawable.emotion1);
+                feel_btn2.setImageResource(R.drawable.color_emoji2);
+                feel_btn3.setImageResource(R.drawable.emotion3);
+                feel_btn4.setImageResource(R.drawable.emotion4);
+                feel_btn5.setImageResource(R.drawable.emotion5);
+                rating = 2;
+            }
+        });
+        feel_btn3.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                feel_btn1.setImageResource(R.drawable.emotion1);
+                feel_btn2.setImageResource(R.drawable.emotion2);
+                feel_btn3.setImageResource(R.drawable.color_emoji3);
+                feel_btn4.setImageResource(R.drawable.emotion4);
+                feel_btn5.setImageResource(R.drawable.emotion5);
+                rating = 3;
+            }
+        });
+        feel_btn4.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                feel_btn1.setImageResource(R.drawable.emotion1);
+                feel_btn2.setImageResource(R.drawable.emotion2);
+                feel_btn3.setImageResource(R.drawable.emotion3);
+                feel_btn4.setImageResource(R.drawable.color_emoji4);
+                feel_btn5.setImageResource(R.drawable.emotion5);
+                rating = 4;
+            }
+        });
+        feel_btn5.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                feel_btn1.setImageResource(R.drawable.emotion1);
+                feel_btn2.setImageResource(R.drawable.emotion2);
+                feel_btn3.setImageResource(R.drawable.emotion3);
+                feel_btn4.setImageResource(R.drawable.emotion4);
+                feel_btn5.setImageResource(R.drawable.color_emoji5);
+                rating = 5;
+            }
+        });
         comment_text = (TextView)root.findViewById(R.id.comment_text);
         comment_add = (LinearLayout) root.findViewById(R.id.comment_add);
 
@@ -108,6 +175,19 @@ public class CompletionFragment extends Fragment{
                 RegCmt regCmt = new RegCmt();
                 regCmt.execute(userId, comment_et.getText().toString(), board_seq);
 
+            }
+        });
+
+        commentYN = (Switch) root.findViewById(R.id.switch1);
+        commentYN.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b) {
+                    comment = 1;
+
+                }else{
+                    comment = 0;
+                }
             }
         });
 
@@ -135,17 +215,20 @@ public class CompletionFragment extends Fragment{
                 inputFormat.applyPattern("yyyy-MM-dd HH:mm:ss");
                 String newDateForm = inputFormat.format(pDate);
                 int score = Integer.parseInt(jsonObject.optString("score"));
+                int isComment = Integer.parseInt(jsonObject.optString("comment"));
 
                 uid.add(uuid);
                 postid.add(idid);
                 text.add(content);
                 pubDate.add(newDateForm);
                 oscore.add(score);
+                isCommentt.add(isComment);
                 Log.i(TAG, String.format("All_uid: %s", uid.get(i)));
                 Log.i(TAG, String.format("All_id: %s", postid.get(i)));
                 Log.i(TAG, String.format("All_content: %s", text.get(i)));
                 Log.i(TAG, String.format("All_pubDate: %s", pubDate.get(i)));
                 Log.i(TAG, String.format("All_score: %d", oscore.get(i)));
+                Log.i(TAG, String.format("All_isComment: %d", isCommentt.get(i)));
             }
         } catch (ParseException e) {
             e.printStackTrace();
@@ -166,11 +249,18 @@ public class CompletionFragment extends Fragment{
                String publishDate = jsonObject.optString("publishDate");
                SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
                Date pDate = inputFormat.parse(publishDate);
+               publishDatetoPut = pDate;
                inputFormat.applyPattern("yyyy-MM-dd HH:mm:ss");
                String newDateForm = inputFormat.format(pDate);
                int score = Integer.parseInt(jsonObject.optString("score"));
+               String xx = jsonObject.optString("xcoord");
+               String yy = jsonObject.optString("ycoord");
+               x = Double.parseDouble(xx);
+               y = Double.parseDouble(yy);
 
+               Log.i(TAG, String.format("post_id_check:" + board_seq));
                content_tv.setText(content);
+               content_tv.setSelection(content_tv.length());
                date_tv.setText(newDateForm);
 
                switch (score) {
@@ -191,7 +281,8 @@ public class CompletionFragment extends Fragment{
                        feel_btn5.setBackgroundColor(Color.WHITE);
                        break;
                }
-               int cmt_view = 1;
+
+               int cmt_view = Integer.parseInt(jsonObject.optString("comment"));
                try{
                    cmt_view = Integer.parseInt(jsonObject.getString("comment"));
                } catch (Exception e){
@@ -261,6 +352,66 @@ public class CompletionFragment extends Fragment{
        }
 
         Log.i(TAG, "board값" + board_seq);
+
+
+       //글 수정할 때 실행
+       edit_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!getTodayHistory().equals("")){
+                    //REST API 주소
+                    String url = CommonMethod.ipConfig+ "/api/update";
+                    SimpleDateFormat sformat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+                    Date now = new Date();
+                    String getTime = sformat.format(now);
+                    Log.i(TAG, "getTime값" + getTime);
+                    try{
+                        String jsonString = new JSONObject()
+                                .put("id", board_seq)
+                                .put("userId", ProfileData.getUserId())
+                                .put("text", content_tv.getText().toString())
+                                .put("score", rating)
+                                .put("publishDate", getTime)
+                                //.put("updateDate", getTime)
+                                .put("xcoord", x)
+                                .put("ycoord", y)
+                                .put("anon_xcoord", 0.0)
+                                .put("anon_ycoord", 0.0)
+                                .put("comment", comment)
+                                .toString();
+
+                        //REST API
+                        RequestHttpURLConnection.NetworkAsyncTask networkTask = new RequestHttpURLConnection.NetworkAsyncTask(url, jsonString);
+                        networkTask.execute();
+
+                        Toast.makeText(getActivity().getApplicationContext(), "글이 수정되었습니다! ", Toast.LENGTH_LONG).show();
+
+                        Intent intent = new Intent(getActivity().getApplicationContext(), MainActivity.class);
+
+                        startActivity(intent);
+
+                    }catch(Exception e){
+                        e.printStackTrace();
+                    }
+
+                }
+
+
+
+            }
+        });
+
+
+
+
+
+
+
+
+
+
+
+
         return root;
 
     }
