@@ -219,7 +219,8 @@ public class FeelingService {
     }
     public int checkReportCmt(HashMap<String, String> data) {
         Query query = new Query().addCriteria(Criteria.where("feeling_id").is(data.get("feeling_id"))
-                .andOperator(Criteria.where("comment_id").is(data.get("comment_id"))));
+                .andOperator(Criteria.where("comment_id").is(data.get("comment_id")))
+                .andOperator(Criteria.where("userId").is(data.get("userId"))));
 
         return (int) mongoTemplate.count(query, "commentReport");
     }
