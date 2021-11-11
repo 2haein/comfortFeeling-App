@@ -215,7 +215,7 @@ public class CompletionFragment extends Fragment{
                 Date pDate = inputFormat.parse(publishDate);
                 inputFormat.applyPattern("yyyy-MM-dd HH:mm:ss");
                 String newDateForm = inputFormat.format(pDate);
-                score = Integer.parseInt(jsonObject.optString("score"));
+                int score = Integer.parseInt(jsonObject.optString("score"));
                 int isComment = Integer.parseInt(jsonObject.optString("comment"));
 
                 uid.add(uuid);
@@ -250,7 +250,7 @@ public class CompletionFragment extends Fragment{
             publishDatetoPut = pDate;
             inputFormat.applyPattern("yyyy-MM-dd HH:mm:ss");
             String newDateForm = inputFormat.format(pDate);
-            int score = Integer.parseInt(jsonObject.optString("score"));
+            score = Integer.parseInt(jsonObject.optString("score"));
             int isComment = Integer.parseInt(jsonObject.optString("comment"));
             String xx = jsonObject.optString("xcoord");
             String yy = jsonObject.optString("ycoord");
@@ -312,8 +312,6 @@ public class CompletionFragment extends Fragment{
             e.printStackTrace();
         }
 
-
-
        //글 수정할 때 실행
        edit_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -328,7 +326,6 @@ public class CompletionFragment extends Fragment{
                     Log.i(TAG, "board값" + board_seq);
                     if(rating == 0){
                         rating = score;
-                        score = rating;
                     }
                     try{
                         String jsonString = new JSONObject()
