@@ -2,8 +2,12 @@ package com.example.frontend;
 
 import static android.app.Activity.RESULT_OK;
 
+import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -11,6 +15,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,8 +28,10 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -38,7 +45,6 @@ import com.example.frontend.http.CommonMethod;
 
 import org.json.JSONObject;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -57,8 +63,6 @@ public class PostFragment extends Fragment {
     private int rating;
     private FragmentPostBinding binding;
     private Double lat, lon;
-    File file;
-
 
     @Override
     public void onResume() {
@@ -83,8 +87,6 @@ public class PostFragment extends Fragment {
         submit_btn = (Button)root.findViewById(R.id.button);
 
 
-//        File sdcard = Environment.getExternalStorageDirectory();
-//        file = new File(sdcard, "capture.jpg");
         camera_btn = (ImageView)root.findViewById(R.id.cameraView);
         camera_image = (ImageView)root.findViewById(R.id.cameraImage);
 
@@ -244,8 +246,6 @@ public class PostFragment extends Fragment {
         }
 
     }
-
-
 
 
 }
