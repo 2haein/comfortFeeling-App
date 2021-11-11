@@ -2,6 +2,7 @@ package com.codeboogie.comfortbackend.feeling.model;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -34,12 +35,13 @@ public class FeelingService {
 
         Query query = new Query();
 
-        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-        Date sDate = inputFormat.parse(feeling.getPublishDate().toString());
+
+        //SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        //Date sDate = inputFormat.parse(feeling.getPublishDate().toString());
 
         Update update = new Update();
         update.set("score", feeling.getScore());
-        update.set("publishDate", sDate);
+        update.set("publishDate", feeling.getPublishDate());
         update.set("text", feeling.getText());
         update.set("xcoord", feeling.getXcoord());
         update.set("ycoord", feeling.getYcoord());
@@ -146,7 +148,9 @@ public class FeelingService {
         Criteria criteria = new Criteria("userId");
         criteria.is(userId);
 
+
         Query query = new Query(criteria);
+        query.with(Sort.by(Sort.Direction.DESC, "publishDate"));
 
         return mongoTemplate.find(query, Feeling.class, "feeling" );
     }
