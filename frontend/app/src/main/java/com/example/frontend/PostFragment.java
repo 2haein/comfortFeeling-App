@@ -1,6 +1,7 @@
 package com.example.frontend;
 
 import static android.app.Activity.RESULT_OK;
+import static android.service.controls.ControlsProviderService.TAG;
 
 import android.Manifest;
 import android.app.Activity;
@@ -12,10 +13,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +48,7 @@ import com.example.frontend.http.CommonMethod;
 
 import org.json.JSONObject;
 
+import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -101,9 +105,19 @@ public class PostFragment extends Fragment {
         camera_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                capture();
+                // 6.0 마쉬멜로우 이상일 경우에는 권한 체크 후 권한 요청
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (getContext().checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED && getContext().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                        Log.d(TAG, "권한 설정 완료");
+                        capture();
+                    } else {
+                        Log.d(TAG, "권한 설정 요청");
+                        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                    }
+                }
             }
         });
+
 
         feel_btn1.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -246,6 +260,5 @@ public class PostFragment extends Fragment {
         }
 
     }
-
 
 }
