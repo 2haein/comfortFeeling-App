@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -58,7 +59,8 @@ import javax.net.ssl.HttpsURLConnection;
 public class OtherCompletionFragment extends Fragment{
 
     final private String TAG = getClass().getSimpleName();
-    private FragmentOcompletionBinding binding;
+    private @NonNull
+    FragmentOcompletionBinding binding;
 
     // 사용할 컴포넌트 선언
     TextView content_tv, date_tv, comment_text;
@@ -222,7 +224,7 @@ public class OtherCompletionFragment extends Fragment{
 
     @Override
     public void onDestroyView() {
-        super.onDestroyView();
+         super.onDestroyView();
         binding = null;
     }
 

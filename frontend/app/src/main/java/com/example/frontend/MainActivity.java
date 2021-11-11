@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private SessionCallback sessionCallback = new SessionCallback();
     public String strUserId;
     CompletionFragment completionFragment;
+    OtherCompletionFragment otherCompletionFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
                 .into(profileImageUrl);
 
         completionFragment = new CompletionFragment();
+        otherCompletionFragment = new OtherCompletionFragment();
 
     }
 
@@ -133,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         getSupportFragmentManager().popBackStack("completefrag", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        getSupportFragmentManager().popBackStack("ocompletefrag", FragmentManager.POP_BACK_STACK_INCLUSIVE);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
