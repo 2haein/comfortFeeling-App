@@ -64,4 +64,5 @@ dependencies {
         exclude module: "httpclient"
     }
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.2'
+
 }
