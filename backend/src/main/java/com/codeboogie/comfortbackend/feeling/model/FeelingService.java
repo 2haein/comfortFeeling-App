@@ -29,8 +29,8 @@ public class FeelingService {
         if(feeling == null) {
             throw new NullPointerException("Data Null");
         }
-        Criteria criteria = new Criteria("userId");
-        criteria.is(feeling.getUserId());
+        Criteria criteria = new Criteria("_id");
+        criteria.is(new ObjectId(feeling.getId()));
 
         Query query = new Query();
 
