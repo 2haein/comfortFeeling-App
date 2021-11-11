@@ -208,12 +208,14 @@ public class DetailFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
+        Log.i(TAG, "onPause");
         mapViewContainer.removeAllViews();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        Log.i(TAG, "onDestroyView");
         binding = null;
     }
 
@@ -659,5 +661,6 @@ public class DetailFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        Log.i(TAG, "onDestroy");
     }
 }

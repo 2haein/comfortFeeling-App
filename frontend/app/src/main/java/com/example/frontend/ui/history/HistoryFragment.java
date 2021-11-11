@@ -1,11 +1,13 @@
 package com.example.frontend.ui.history;
 
 
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,6 +52,14 @@ public class HistoryFragment extends Fragment {
 
     // 게시물 번호를 담기 위한 배열
     ArrayList<String> seqList = new ArrayList<>();
+
+    MainActivity activity;
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        activity = (MainActivity) getActivity();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -130,17 +140,8 @@ public class HistoryFragment extends Fragment {
                 System.out.println("idStr="+idStr);
 
 
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                DetailFragment detailFragment = new DetailFragment();
-
                 //프레그먼트끼리 seq넘기기 위한 bundle
-                Bundle bundle = new Bundle();
-                bundle.putString("seq", idStr);
-                detailFragment.setArguments(bundle); //seq 변수 값 전달.
-
-                transaction.replace(R.id.history_fragment, detailFragment); //프레임 레이아웃에서 detailFragment로 변경
-                transaction.addToBackStack(null);
-                transaction.commit(); //저장해라 commit
+                activity.onFragmentChange(3, idStr);
 
             }
         });

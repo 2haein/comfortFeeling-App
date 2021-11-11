@@ -12,6 +12,7 @@ import com.example.frontend.callback.SessionCallback;
 import com.example.frontend.common.ProfileData;
 import com.example.frontend.ui.completion.CompletionFragment;
 import com.example.frontend.ui.completion.OtherCompletionFragment;
+import com.example.frontend.ui.history.DetailFragment;
 import com.example.frontend.ui.main.HomeFragment;
 import com.google.android.material.navigation.NavigationView;
 
@@ -136,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         getSupportFragmentManager().popBackStack("completefrag", FragmentManager.POP_BACK_STACK_INCLUSIVE);
         getSupportFragmentManager().popBackStack("ocompletefrag", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        getSupportFragmentManager().popBackStack("detailfrag", FragmentManager.POP_BACK_STACK_INCLUSIVE);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
@@ -156,6 +158,23 @@ public class MainActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction().
                     replace(R.id.nav_host_fragment_content_main , ocompletionFragment).addToBackStack("ocompletefrag").commit();
         }
+
+        //여기서 다른 프래그먼트로 이동하는 기능 구현가능
+    }
+
+    //프래그먼트 이동용 String Data 용
+    public void onFragmentChange(int index, String tag){
+        DetailFragment detailFragment = new DetailFragment();
+        Bundle bundle = new Bundle(1);
+        bundle.putString("seq", tag);
+        detailFragment.setArguments(bundle);
+
+        if(index == 3){
+            getSupportFragmentManager().beginTransaction().
+                    replace(R.id.nav_host_fragment_content_main , detailFragment).addToBackStack("detailfrag").commit();
+        }
+
+
         //여기서 다른 프래그먼트로 이동하는 기능 구현가능
     }
 
