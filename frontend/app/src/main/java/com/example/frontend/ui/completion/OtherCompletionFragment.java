@@ -543,6 +543,7 @@ public class OtherCompletionFragment extends Fragment{
             String jsonString = new JSONObject()
                     .put("comment_id", _id)
                     .put("feeling_id", feeling_id)
+                    .put("userId", userId)
                     .toString();
 
             //REST API
