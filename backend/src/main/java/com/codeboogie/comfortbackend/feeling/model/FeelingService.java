@@ -218,9 +218,13 @@ public class FeelingService {
         return mongoTemplate.find(query, Comment.class, "comment" );
     }
     public int checkReportCmt(HashMap<String, String> data) {
-        Query query = new Query().addCriteria(Criteria.where("feeling_id").is(data.get("feeling_id"))
-                .andOperator(Criteria.where("comment_id").is(data.get("comment_id")))
-                .andOperator(Criteria.where("userId").is(data.get("userId"))));
+        Query query = new Query();
+        Criteria criteria = new Criteria();
+        Criteria criteria_arr[] = new Criteria[3];
+        criteria_arr[0] = Criteria.where("feeling_id").is(data.get("feeling_id"));
+        criteria_arr[1] = Criteria.where("comment_id").is(data.get("comment_id"));
+        criteria_arr[2] = Criteria.where("userId").is(data.get("userId"));
+        query.addCriteria(criteria.andOperator(criteria_arr));
 
         return (int) mongoTemplate.count(query, "commentReport");
     }
@@ -233,7 +237,8 @@ public class FeelingService {
 
         Query query = new Query().addCriteria(Criteria.where("comment_id").is(commentReport.getComment_id()));
         int reportCount = (int) mongoTemplate.count(query, "commentReport");
-        if(reportCount>5) deleteCmt(commentReport.getComment_id());
+        System.out.println("댓글 신고수 " + reportCount);
+        if(reportCount>=5) deleteCmt(commentReport.getComment_id());
 
     }
 
