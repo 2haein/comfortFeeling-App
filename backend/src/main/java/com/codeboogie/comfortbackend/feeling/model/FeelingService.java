@@ -32,8 +32,8 @@ public class FeelingService {
         }
         Criteria criteria = new Criteria("_id");
         criteria.is(new ObjectId(feeling.getId()));
-
-        Query query = new Query();
+        System.out.println("안드로이드 -> 서버로 Post 업데이트:"+ feeling.getPublishDate());
+        Query query = new Query(criteria);
 
 
         //SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
