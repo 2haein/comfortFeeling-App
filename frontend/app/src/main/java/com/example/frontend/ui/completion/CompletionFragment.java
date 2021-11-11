@@ -236,122 +236,81 @@ public class CompletionFragment extends Fragment{
             e.printStackTrace();
         }
 
+        try {
+            // 결과값이 JSONArray 형태로 넘어오기 때문에
+            // JSONArray, JSONObject 를 사용해서 파싱
+            JSONObject jsonObject = new JSONObject(getTodayHistory());
+            // Database 의 데이터들을 변수로 저장한 후 해당 TextView 에 데이터 입력
+            board_seq = jsonObject.optString("id");
+            String content = jsonObject.optString("text");
+            String publishDate = jsonObject.optString("publishDate");
+            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+            Date pDate = inputFormat.parse(publishDate);
+            publishDatetoPut = pDate;
+            inputFormat.applyPattern("yyyy-MM-dd HH:mm:ss");
+            String newDateForm = inputFormat.format(pDate);
+            int score = Integer.parseInt(jsonObject.optString("score"));
+            int isComment = Integer.parseInt(jsonObject.optString("comment"));
+            String xx = jsonObject.optString("xcoord");
+            String yy = jsonObject.optString("ycoord");
+            x = Double.parseDouble(xx);
+            y = Double.parseDouble(yy);
 
-        //글 주인이 자신의 글을 보려고 할 때 실행
-       if(tag==0){
-           try {
-               // 결과값이 JSONArray 형태로 넘어오기 때문에
-               // JSONArray, JSONObject 를 사용해서 파싱
-               JSONObject jsonObject = new JSONObject(getTodayHistory());
-               // Database 의 데이터들을 변수로 저장한 후 해당 TextView 에 데이터 입력
-               board_seq = jsonObject.optString("id");
-               String content = jsonObject.optString("text");
-               String publishDate = jsonObject.optString("publishDate");
-               SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
-               Date pDate = inputFormat.parse(publishDate);
-               publishDatetoPut = pDate;
-               inputFormat.applyPattern("yyyy-MM-dd HH:mm:ss");
-               String newDateForm = inputFormat.format(pDate);
-               int score = Integer.parseInt(jsonObject.optString("score"));
-               String xx = jsonObject.optString("xcoord");
-               String yy = jsonObject.optString("ycoord");
-               x = Double.parseDouble(xx);
-               y = Double.parseDouble(yy);
-
-               Log.i(TAG, String.format("post_id_check:" + board_seq));
-               content_tv.setText(content);
-               content_tv.setSelection(content_tv.length());
-               date_tv.setText(newDateForm);
-
-               switch (score) {
-                   case 1: feel_btn1.setImageResource(R.drawable.color_emoji1);
-                       break;
-                   case 2 : feel_btn2.setImageResource(R.drawable.color_emoji2);
-                       break;
-                   case 3 : feel_btn3.setImageResource(R.drawable.color_emoji3);
-                       break;
-                   case 4 : feel_btn4.setImageResource(R.drawable.color_emoji4);
-                       break;
-                   case 5 : feel_btn5.setImageResource(R.drawable.color_emoji5);
-                       break;
-                   default : feel_btn1.setBackgroundColor(Color.WHITE);
-                       feel_btn2.setBackgroundColor(Color.WHITE);
-                       feel_btn3.setBackgroundColor(Color.WHITE);
-                       feel_btn4.setBackgroundColor(Color.WHITE);
-                       feel_btn5.setBackgroundColor(Color.WHITE);
-                       break;
-               }
-
-               int cmt_view = Integer.parseInt(jsonObject.optString("comment"));
-               try{
-                   cmt_view = Integer.parseInt(jsonObject.getString("comment"));
-               } catch (Exception e){
-
-               }
-               // 해당 게시물에 대한 댓글 불러오는 함수 호출, 파라미터로 게시물 번호 넘김
-               LoadCmt loadCmt = new LoadCmt();
-               if(cmt_view == 1){
-                   loadCmt.execute(board_seq);
-               }else{
-                   comment_layout.setVisibility(View.GONE);
-                   comment_add.setVisibility(View.GONE);
-                   comment_text.setText("댓글창 OFF");
-               }
+            if(isComment == 1){
+                commentYN.setChecked(true);
+            }
+            else{
+                commentYN.setChecked(false);
+            }
 
 
-           } catch (ParseException e) {
-               e.printStackTrace();
-           } catch (JSONException e) {
-               e.printStackTrace();
-           }
+            Log.i(TAG, String.format("post_id_check:" + board_seq));
+            content_tv.setText(content);
+            content_tv.setSelection(content_tv.length());
+            date_tv.setText(newDateForm);
 
-       }
-       else {
-           String temp = Integer.toString(tag);
-           int cnt = uid.indexOf(temp);
-           if (cnt != -1) { //찾는 값이 존재하면
-               try {
-                   board_seq = postid.get(cnt);
-                   content_tv.setText(text.get(cnt));
-                   date_tv.setText(pubDate.get(cnt));
+            switch (score) {
+                case 1: feel_btn1.setImageResource(R.drawable.color_emoji1);
+                    break;
+                case 2 : feel_btn2.setImageResource(R.drawable.color_emoji2);
+                    break;
+                case 3 : feel_btn3.setImageResource(R.drawable.color_emoji3);
+                    break;
+                case 4 : feel_btn4.setImageResource(R.drawable.color_emoji4);
+                    break;
+                case 5 : feel_btn5.setImageResource(R.drawable.color_emoji5);
+                    break;
+                default : feel_btn1.setBackgroundColor(Color.WHITE);
+                    feel_btn2.setBackgroundColor(Color.WHITE);
+                    feel_btn3.setBackgroundColor(Color.WHITE);
+                    feel_btn4.setBackgroundColor(Color.WHITE);
+                    feel_btn5.setBackgroundColor(Color.WHITE);
+                    break;
+            }
 
-                   switch (oscore.get(cnt)) {
-                       case 1:
-                           feel_btn1.setImageResource(R.drawable.color_emoji1);
-                           break;
-                       case 2:
-                           feel_btn2.setImageResource(R.drawable.color_emoji2);
-                           break;
-                       case 3:
-                           feel_btn3.setImageResource(R.drawable.color_emoji3);
-                           break;
-                       case 4:
-                           feel_btn4.setImageResource(R.drawable.color_emoji4);
-                           break;
-                       case 5:
-                           feel_btn5.setImageResource(R.drawable.color_emoji5);
-                           break;
-                       default:
-                           feel_btn1.setBackgroundColor(Color.WHITE);
-                           feel_btn2.setBackgroundColor(Color.WHITE);
-                           feel_btn3.setBackgroundColor(Color.WHITE);
-                           feel_btn4.setBackgroundColor(Color.WHITE);
-                           feel_btn5.setBackgroundColor(Color.WHITE);
-                           break;
-                   }
+            int cmt_view = Integer.parseInt(jsonObject.optString("comment"));
+            try{
+                cmt_view = Integer.parseInt(jsonObject.getString("comment"));
+            } catch (Exception e){
 
-                   LoadCmt loadCmt = new LoadCmt();
-                   loadCmt.execute(board_seq);
-
-               } catch (Exception e) {
-                   e.printStackTrace();
-               }
+            }
+            // 해당 게시물에 대한 댓글 불러오는 함수 호출, 파라미터로 게시물 번호 넘김
+            LoadCmt loadCmt = new LoadCmt();
+            if(cmt_view == 1){
+                loadCmt.execute(board_seq);
+            }else{
+                comment_layout.setVisibility(View.GONE);
+                comment_add.setVisibility(View.GONE);
+                comment_text.setText("댓글창 OFF");
+            }
 
 
-           }
-       }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-        Log.i(TAG, "board값" + board_seq);
 
 
        //글 수정할 때 실행
@@ -365,6 +324,7 @@ public class CompletionFragment extends Fragment{
                     Date now = new Date();
                     String getTime = sformat.format(now);
                     Log.i(TAG, "getTime값" + getTime);
+                    Log.i(TAG, "board값" + board_seq);
                     try{
                         String jsonString = new JSONObject()
                                 .put("id", board_seq)
@@ -395,22 +355,14 @@ public class CompletionFragment extends Fragment{
                     }
 
                 }
+                else{
+                    Toast.makeText(getActivity().getApplicationContext(), "글을 먼저 등록해주세요! ", Toast.LENGTH_LONG).show();
+                }
 
 
 
             }
         });
-
-
-
-
-
-
-
-
-
-
-
 
         return root;
 
