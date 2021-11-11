@@ -61,8 +61,8 @@ public class CompletionFragment extends Fragment{
     FragmentCompletionBinding binding;
 
     // 사용할 컴포넌트 선언
-    TextView content_tv, date_tv;
-    LinearLayout comment_layout;
+    TextView content_tv, date_tv, comment_text;
+    LinearLayout comment_layout, comment_add;
     EditText comment_et;
     Button reg_button;
     ImageView feel_btn1, feel_btn2, feel_btn3, feel_btn4, feel_btn5;
@@ -99,6 +99,8 @@ public class CompletionFragment extends Fragment{
         comment_layout = (LinearLayout) root.findViewById(R.id.comment_layout);
         comment_et = (EditText) root.findViewById(R.id.comment_et);
         reg_button = (Button) root.findViewById(R.id.reg_button);
+        comment_text = (TextView)root.findViewById(R.id.comment_text);
+        comment_add = (LinearLayout) root.findViewById(R.id.comment_add);
 
         reg_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -189,8 +191,21 @@ public class CompletionFragment extends Fragment{
                        feel_btn5.setBackgroundColor(Color.WHITE);
                        break;
                }
+               int cmt_view = 1;
+               try{
+                   cmt_view = Integer.parseInt(jsonObject.getString("comment"));
+               } catch (Exception e){
+
+               }
+               // 해당 게시물에 대한 댓글 불러오는 함수 호출, 파라미터로 게시물 번호 넘김
                LoadCmt loadCmt = new LoadCmt();
-               loadCmt.execute(board_seq);
+               if(cmt_view == 1){
+                   loadCmt.execute(board_seq);
+               }else{
+                   comment_layout.setVisibility(View.GONE);
+                   comment_add.setVisibility(View.GONE);
+                   comment_text.setText("댓글창 OFF");
+               }
 
 
            } catch (ParseException e) {

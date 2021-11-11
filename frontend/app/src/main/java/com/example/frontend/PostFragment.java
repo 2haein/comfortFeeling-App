@@ -7,9 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +39,8 @@ public class PostFragment extends Fragment {
     public Button submit_btn;
     public RatingBar feel_rate;
     public ImageView feel_btn1, feel_btn2, feel_btn3, feel_btn4, feel_btn5;
+    private Switch commentYN;
+    private int comment = 1;
     private SessionCallback sessionCallback = new SessionCallback();
     private int rating;
     private FragmentPostBinding binding;
@@ -62,6 +66,7 @@ public class PostFragment extends Fragment {
         feel_btn3 = (ImageView)root.findViewById(R.id.imageView3);
         feel_btn4 = (ImageView)root.findViewById(R.id.imageView4);
         feel_btn5 = (ImageView)root.findViewById(R.id.imageView5);
+        commentYN = (Switch) root.findViewById(R.id.switch1);
         back_btn = (Button)root.findViewById(R.id.back_btn);
         submit_btn = (Button)root.findViewById(R.id.button);
 
@@ -129,6 +134,20 @@ public class PostFragment extends Fragment {
             }
         });
 
+        commentYN.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b) {
+                    comment = 1;
+
+                }else{
+                    comment = 0;
+                }
+            }
+        });
+
+
+
 //        LayerDrawable stars = (LayerDrawable) feel_rate.getProgressDrawable();
 //        stars.getDrawable(2).setColorFilter(Color.parseColor("#e7c31b"), PorterDuff.Mode.SRC_ATOP); // for filled stars
 //        stars.getDrawable(1).setColorFilter(Color.parseColor("#e7c31b"), PorterDuff.Mode.SRC_ATOP); // for half filled stars
@@ -160,6 +179,7 @@ public class PostFragment extends Fragment {
                     .put("publishDate", getTime)
                     .put("xcoord", lat)
                     .put("ycoord", lon)
+                    .put("comment", comment)
                     .toString();
 
                     //REST API

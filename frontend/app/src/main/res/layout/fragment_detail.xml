@@ -117,6 +117,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
+                android:id="@+id/comment_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="16dp"
@@ -132,6 +133,7 @@
     </ScrollView>
 
     <LinearLayout
+        android:id="@+id/comment_add"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
