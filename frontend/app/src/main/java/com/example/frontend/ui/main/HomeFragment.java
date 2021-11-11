@@ -441,7 +441,7 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
                         }
                     });
                 }
-                else{
+                else{ //내 글일 경우
                     builder.setItems(R.array.LAN2, new DialogInterface.OnClickListener(){
                         @Override
                         public void onClick(DialogInterface dialog, int pos)
@@ -468,8 +468,9 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
                 AlertDialog alertDialog = builder.create();
                 alertDialog.show();
             }
-            else{
-                activity.onFragmentChange(1, mapPOIItem.getTag());
+            else{ //남의 글의 경우
+                Log.i(LOG_TAG, String.format("태그값볼려고", mapPOIItem.getTag()));
+                activity.onFragmentChange(2, mapPOIItem.getTag());
             }
 
 

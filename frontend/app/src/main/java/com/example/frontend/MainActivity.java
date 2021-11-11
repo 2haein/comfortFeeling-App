@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide;
 import com.example.frontend.callback.SessionCallback;
 import com.example.frontend.common.ProfileData;
 import com.example.frontend.ui.completion.CompletionFragment;
+import com.example.frontend.ui.completion.OtherCompletionFragment;
 import com.example.frontend.ui.main.HomeFragment;
 import com.google.android.material.navigation.NavigationView;
 
@@ -139,12 +140,18 @@ public class MainActivity extends AppCompatActivity {
     //프래그먼트 이동용
     public void onFragmentChange(int index, int tag){
         CompletionFragment completionFragment = new CompletionFragment();
+        OtherCompletionFragment ocompletionFragment = new OtherCompletionFragment();
         Bundle bundle = new Bundle(1);
         bundle.putInt("key", tag);
         completionFragment.setArguments(bundle);
+        ocompletionFragment.setArguments(bundle);
         if(index == 1){
             getSupportFragmentManager().beginTransaction().
                     replace(R.id.nav_host_fragment_content_main , completionFragment).addToBackStack("completefrag").commit();
+        }
+        else if(index == 2){
+            getSupportFragmentManager().beginTransaction().
+                    replace(R.id.nav_host_fragment_content_main , ocompletionFragment).addToBackStack("ocompletefrag").commit();
         }
         //여기서 다른 프래그먼트로 이동하는 기능 구현가능
     }
