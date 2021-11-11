@@ -328,6 +328,7 @@ public class CompletionFragment extends Fragment{
                     Log.i(TAG, "board값" + board_seq);
                     if(rating == 0){
                         rating = score;
+                        score = rating;
                     }
                     try{
                         String jsonString = new JSONObject()
