@@ -31,9 +31,11 @@ public class Feeling {
     private Double ycoord; //글 작성 위치 y 좌표
     private Double anon_xcoord; //타 사용자가 보기 위한 임의의 x 좌표
     private Double anon_ycoord; //타 사용자가 보기 위한 임의의 y 좌표
+    private int comment; //댓글창 사용 여부 1: 사용 0: 미사용
 
     @Builder //빌더로 entity 만들어 한번에 저장
-    public Feeling(String id, Long userId, int score, Date publishDate, Date updateDate, String text, Double xcoord, Double ycoord, Double anon_xcoord, Double anon_ycoord) {
+    public Feeling(String id, Long userId, int score, Date publishDate, Date updateDate, String text, Double xcoord,
+                   Double ycoord, Double anon_xcoord, Double anon_ycoord, int comment) {
         this.id = id;
         this.userId = userId;
         this.score = score;
@@ -44,5 +46,6 @@ public class Feeling {
         this.ycoord = ycoord;
         this.anon_xcoord = anon_xcoord;
         this.anon_ycoord = anon_ycoord;
+        this.comment = comment;
     }
 }

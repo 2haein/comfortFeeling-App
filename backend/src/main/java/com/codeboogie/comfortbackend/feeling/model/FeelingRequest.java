@@ -26,4 +26,5 @@ public class FeelingRequest {
     private Double ycoord; //글 작성 위치 y 좌표
     private Double anon_xcoord; //타 사용자가 보기 위한 임의의 x 좌표
     private Double anon_ycoord; //타 사용자가 보기 위한 임의의 y 좌표
+    private int comment; //댓글창 사용 여부 1: 사용 0: 미사용
 }

@@ -43,6 +43,7 @@ public class FeelingService {
         update.set("text", feeling.getText());
         update.set("xcoord", feeling.getXcoord());
         update.set("ycoord", feeling.getYcoord());
+        update.set("comment", feeling.getComment());
 
         mongoTemplate.updateFirst(query, update, "feeling");
     }
