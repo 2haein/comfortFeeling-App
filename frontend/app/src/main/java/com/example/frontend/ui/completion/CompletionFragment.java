@@ -88,6 +88,7 @@ public class CompletionFragment extends Fragment{
     HomeFragment homeFragment;
     private int rating;
     private int comment;
+    private int score;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -214,7 +215,7 @@ public class CompletionFragment extends Fragment{
                 Date pDate = inputFormat.parse(publishDate);
                 inputFormat.applyPattern("yyyy-MM-dd HH:mm:ss");
                 String newDateForm = inputFormat.format(pDate);
-                int score = Integer.parseInt(jsonObject.optString("score"));
+                score = Integer.parseInt(jsonObject.optString("score"));
                 int isComment = Integer.parseInt(jsonObject.optString("comment"));
 
                 uid.add(uuid);
@@ -325,6 +326,9 @@ public class CompletionFragment extends Fragment{
                     String getTime = sformat.format(now);
                     Log.i(TAG, "getTime값" + getTime);
                     Log.i(TAG, "board값" + board_seq);
+                    if(rating == 0){
+                        rating = score;
+                    }
                     try{
                         String jsonString = new JSONObject()
                                 .put("id", board_seq)
