@@ -10,6 +10,7 @@
     <string name="menu_completion">오늘 쓴 글</string>
     <string name="menu_history">나의 히스토리 보기</string>
     <string name="menu_graph">감정 변화 그래프</string>
+    <string name="menu_test">우울증 자가테스트</string>
 
     <string name="menu_logout">로그아웃</string>
     <string name="title_activity_login">LoginActivity</string>
@@ -32,6 +33,17 @@
         <item>"글 삭제"</item>
         <item>"감정기록확인"</item>
     </string-array>
+
+    <string name="test_explain">"지난 2주간 다음 문제들을 겪었다면 표시해주세요."</string>
+    <string name="test_item1">"거의 매일 또는 하루 종일 우울하고 슬프다."</string>
+    <string name="test_item2">"흥미나 즐거움이 눈에 띄게 줄었다."</string>
+    <string name="test_item3">"의도하지 않았는데 체중이 눈에 띄게 줄거나 늘었다."</string>
+    <string name="test_item4">"거의 매일 잠을 못 자거나 반대로 너무 많이 잔다."</string>
+    <string name="test_item5">"불안해서 잠시도 가만히 있지 못하거나 몸의 움직임이 느려진다."</string>
+    <string name="test_item6">"늘 피곤하고 무기력하다."</string>
+    <string name="test_item7">"내 자신이 실패자로 느껴지거나 가족을 실망시켰다고 느낀다."</string>
+    <string name="test_item8">"집중을 못하며, 어떤 결정을 내리지 못하고 늘 망설인다."</string>
+    <string name="test_item9">"자살을 반복적으로 생각하고, 계획을 세운다"</string>
 
 
     <string name="hello_blank_fragment">Hello blank fragment</string>

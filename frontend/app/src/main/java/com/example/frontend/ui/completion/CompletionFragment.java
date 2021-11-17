@@ -10,7 +10,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
+
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,15 +31,8 @@ import com.example.frontend.R;
 import com.example.frontend.RequestHttpURLConnection;
 import com.example.frontend.common.ProfileData;
 import com.example.frontend.databinding.FragmentCompletionBinding;
-import com.example.frontend.databinding.FragmentDetailBinding;
-import com.example.frontend.databinding.FragmentHistoryBinding;
 import com.example.frontend.http.CommonMethod;
-import com.example.frontend.ui.history.DetailFragment;
 import com.example.frontend.ui.main.HomeFragment;
-
-import net.daum.mf.map.api.MapPoint;
-import net.daum.mf.map.api.MapView;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -49,7 +42,6 @@ import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.ParseException;

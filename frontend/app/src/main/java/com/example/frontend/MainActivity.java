@@ -14,10 +14,14 @@ import com.example.frontend.callback.SessionCallback;
 import com.example.frontend.common.ProfileData;
 import com.example.frontend.ui.completion.CompletionFragment;
 import com.example.frontend.ui.completion.OtherCompletionFragment;
+import com.example.frontend.ui.depressionTest.DepressionTestFragment;
+import com.example.frontend.ui.depressionTest.TestResultFragment;
 import com.example.frontend.ui.history.DetailFragment;
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -51,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     private static int flag = 0;
     CompletionFragment completionFragment;
     OtherCompletionFragment otherCompletionFragment;
+    DepressionTestFragment depressionTestFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_completion, R.id.nav_history, R.id.nav_graph)
+                R.id.nav_home, R.id.nav_completion, R.id.nav_history, R.id.nav_graph, R.id.nav_test)
                 .setOpenableLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
@@ -90,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
 
         completionFragment = new CompletionFragment();
         otherCompletionFragment = new OtherCompletionFragment();
-
+        depressionTestFragment = new DepressionTestFragment();
         if(flag == 0) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("오늘의 위로 한마디").setMessage("어깨를 토닥토닥");
@@ -156,6 +161,9 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().popBackStack("completefrag", FragmentManager.POP_BACK_STACK_INCLUSIVE);
         getSupportFragmentManager().popBackStack("ocompletefrag", FragmentManager.POP_BACK_STACK_INCLUSIVE);
         getSupportFragmentManager().popBackStack("detailfrag", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        getSupportFragmentManager().popBackStack("depressiontestfrag", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        getSupportFragmentManager().popBackStack("testresultfrag", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
@@ -164,10 +172,16 @@ public class MainActivity extends AppCompatActivity {
     public void onFragmentChange(int index, int tag){
         CompletionFragment completionFragment = new CompletionFragment();
         OtherCompletionFragment ocompletionFragment = new OtherCompletionFragment();
+        DepressionTestFragment depressionTestFragment = new DepressionTestFragment();
+        TestResultFragment testResultFragment = new TestResultFragment();
+
         Bundle bundle = new Bundle(1);
         bundle.putInt("key", tag);
         completionFragment.setArguments(bundle);
         ocompletionFragment.setArguments(bundle);
+        depressionTestFragment.setArguments(bundle);
+        testResultFragment.setArguments(bundle);
+
         if(index == 1){
             getSupportFragmentManager().beginTransaction().
                     replace(R.id.nav_host_fragment_content_main , completionFragment).addToBackStack("completefrag").commit();
@@ -176,6 +190,15 @@ public class MainActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction().
                     replace(R.id.nav_host_fragment_content_main , ocompletionFragment).addToBackStack("ocompletefrag").commit();
         }
+        else if(index == 3){
+            getSupportFragmentManager().beginTransaction().
+                    replace(R.id.nav_host_fragment_content_main , depressionTestFragment).addToBackStack("depressiontestfrag").commit();
+        }
+        else if(index == 4){
+            getSupportFragmentManager().beginTransaction().
+                    replace(R.id.test_fragment , testResultFragment).addToBackStack("testresultfrag").commit();
+        }
+
 
         //여기서 다른 프래그먼트로 이동하는 기능 구현가능
     }

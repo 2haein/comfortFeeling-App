@@ -7,6 +7,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -30,17 +31,16 @@ public class SplashActivity extends Activity {
         constraintLayout=findViewById(R.id.constraintLayout);
         lcklockImageView=findViewById(R.id.lock_lck);
         oImageView=findViewById(R.id.lock_o);
-
+        /*
         mp = MediaPlayer.create(
                 getApplicationContext(), // 현재 화면의 제어권자
                 R.raw.sound); // 음악파일
         mp.setLooping(false); // true:무한반복
         mp.start(); // 노래 재생 시작
 
-
-        anim_FadeIn=AnimationUtils.loadAnimation(this,R.anim.anim_splash_fade_in);
+        //anim_FadeIn=AnimationUtils.loadAnimation(this,R.anim.anim_splash_fadeIn);
         anim_ball=AnimationUtils.loadAnimation(this,R.anim.anim_splash_ball);
-
+        */
 
         anim_FadeIn.setAnimationListener(new Animation.AnimationListener() {
             @Override
