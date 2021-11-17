@@ -152,7 +152,7 @@
             android:id="@+id/reg_button"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:padding="8dp"
+            android:padding="2dp"
             android:text="등록하기"
             tools:ignore="TouchTargetSizeCheck" />
     </LinearLayout>

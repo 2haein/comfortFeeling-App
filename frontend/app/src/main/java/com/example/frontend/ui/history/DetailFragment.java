@@ -46,6 +46,11 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -53,7 +58,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -106,14 +113,25 @@ public class DetailFragment extends Fragment {
         comment_text = (TextView)root.findViewById(R.id.comment_text);
         comment_add = (LinearLayout) root.findViewById(R.id.comment_add);
 
+        List<String> curses = listCurse();
+
         // 등록하기 버튼을 눌렀을 때 댓글 등록 함수 호출
         reg_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String text = comment_et.getText().toString();
+                for(int i=0;i<curses.size();i++){
+                    if(text.contains(curses.get(i))){
+                        Toast.makeText(view.getContext(), "비속어가 탐지 되었습니다", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                }
                 RegCmt regCmt = new RegCmt();
                 regCmt.execute(userId, comment_et.getText().toString(), board_seq);
             }
         });
+        
 
         delete_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -218,6 +236,35 @@ public class DetailFragment extends Fragment {
         Log.i(TAG, "onDestroyView");
         binding = null;
     }
+
+    public List<String> listCurse(){
+        List<String> curse = new ArrayList<>();
+        try{
+            //파일 객체 생성
+            InputStream inputStream = getResources().openRawResource(R.raw.fword_list);
+            //File file = new File(R.raw.fword_list);
+            //입력 스트림 생성
+            InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+            //입력 버퍼 생성
+            BufferedReader bufReader = new BufferedReader(inputStreamReader);
+            String line = "";
+            while((line = bufReader.readLine()) != null){
+                System.out.println(line);
+                curse.add(line);
+            }
+            //.readLine()은 끝에 개행문자를 읽지 않는다.
+            bufReader.close();
+        }catch (FileNotFoundException e) {
+            // TODO: handle exception
+        }catch(IOException e){
+            System.out.println(e);
+        }
+
+        return curse;
+
+    }
+
+
 
     //당일 글 갯수
     public String getHistory(){
