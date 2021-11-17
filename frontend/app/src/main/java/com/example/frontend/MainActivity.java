@@ -1,6 +1,6 @@
 package com.example.frontend;
 
-import android.content.Context;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -13,11 +13,9 @@ import com.example.frontend.common.ProfileData;
 import com.example.frontend.ui.completion.CompletionFragment;
 import com.example.frontend.ui.completion.OtherCompletionFragment;
 import com.example.frontend.ui.history.DetailFragment;
-import com.example.frontend.ui.main.HomeFragment;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -32,11 +30,12 @@ import android.widget.Toast;
 
 
 import com.example.frontend.databinding.ActivityMainBinding;
-import com.google.android.material.snackbar.Snackbar;
 import com.kakao.auth.Session;
 import com.kakao.network.ErrorResult;
 import com.kakao.usermgmt.UserManagement;
 import com.kakao.usermgmt.callback.LogoutResponseCallback;
+
+import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -57,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         setSupportActionBar(binding.appBarMain.toolbar);
-
 
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
