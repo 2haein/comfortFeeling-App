@@ -1,7 +1,9 @@
 package com.codeboogie.comfortbackend.cheerup.controller;
 
+import com.codeboogie.comfortbackend.cheerup.model.CheerUp;
 import com.codeboogie.comfortbackend.cheerup.model.CheerUpService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;

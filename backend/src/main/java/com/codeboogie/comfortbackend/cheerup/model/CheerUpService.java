@@ -22,14 +22,13 @@ public class CheerUpService {
         //Criteria criteria = new Criteria("score");
         //criteria.equals(data.get("score"));
         //Query query = new Query(criteria);
-        SampleOperation sampleOperation = Aggregation.sample(1L);
+        SampleOperation sampleOperation = Aggregation.sample(1);
         //MatchOperation matchOperation = Aggregation.match(criteria);
         Aggregation aggregation = Aggregation.newAggregation(
                 sampleOperation
                 //matchOperation
         );
-        msg = mongoTemplate.aggregate(aggregation, "cheerup", CheerUp.class).toString();
-
+        msg = mongoTemplate.aggregate(aggregation, "cheerup", CheerUp.class).getUniqueMappedResult().getContext();
         return msg;
     }
 }
