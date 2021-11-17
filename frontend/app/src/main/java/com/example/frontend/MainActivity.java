@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
     // menu item initialization
     private SessionCallback sessionCallback = new SessionCallback();
-    public String strUserId;
+    private static int flag = 0;
     CompletionFragment completionFragment;
     OtherCompletionFragment otherCompletionFragment;
 
@@ -91,18 +91,19 @@ public class MainActivity extends AppCompatActivity {
         completionFragment = new CompletionFragment();
         otherCompletionFragment = new OtherCompletionFragment();
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("오늘의 위로 한마디").setMessage("어깨를 토닥토닥");
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener(){
-            @Override
-            public void onClick(DialogInterface dialog, int id)
-            {
-                Toast.makeText(getApplicationContext(), "어깨를 토닥토닥", Toast.LENGTH_SHORT).show();
-            }
-        });
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
-
+        if(flag == 0) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("오늘의 위로 한마디").setMessage("어깨를 토닥토닥");
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int id) {
+                    Toast.makeText(getApplicationContext(), "어깨를 토닥토닥", Toast.LENGTH_SHORT).show();
+                }
+            });
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+            flag++;
+        }
     }
 
 
