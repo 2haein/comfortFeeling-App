@@ -28,6 +28,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.example.frontend.databinding.ActivityMainBinding;
@@ -126,6 +127,10 @@ public class MainActivity extends AppCompatActivity {
                         });
                 Intent i = new Intent(this,LoginActivity.class);
                 this.startActivity(i);
+                return true;
+            case R.id.empathy:
+                this.startActivity(new Intent(this,SplashActivity.class));
+                Toast.makeText(getApplicationContext(), "당신의 어깨를 토닥토닥", Toast.LENGTH_SHORT).show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

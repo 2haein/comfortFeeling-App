@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/search"
+        android:id="@+id/empathy"
         android:icon="@mipmap/ic_empathy_round"
         android:title="토닥"
         app:showAsAction="always" />

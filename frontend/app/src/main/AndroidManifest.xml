@@ -8,10 +8,12 @@
     <uses-permission
         android:name="android.permission.ACCESS_FINE_LOCATION"
         tools:ignore="CoarseFineLocation" />
-    <uses-permission android:name="android.permission.CAMERA" /><!--카메라 권한-->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /><!--파일 읽기 권한-->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /><!--파일 쓰기 권한-->
-    <uses-feature android:name="android.hardware.camera" android:required="true"/><!--카메라 기능 사용-->
+    <uses-permission android:name="android.permission.CAMERA" /> <!-- 카메라 권한 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- 파일 읽기 권한 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- 파일 쓰기 권한 -->
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
 
     <application
         android:name=".GlobalApplication"
@@ -23,11 +25,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FrontEnd"
         android:usesCleartextTraffic="true">
-
+        <activity
+            android:name=".SplashActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
             android:name=".MainActivity"
-            android:theme="@style/Theme.FrontEnd.NoActionBar"
-            android:label="@string/app_name" />
+            android:label="@string/app_name"
+            android:theme="@style/Theme.FrontEnd.NoActionBar" />
 
         <meta-data
             android:name="com.kakao.sdk.AppKey"
@@ -36,17 +40,14 @@
         <activity
             android:name=".LoginActivity"
             android:exported="true"
-            android:theme="@style/Theme.FrontEnd.NoActionBar"
-            android:label="@string/app_name">
-
+            android:label="@string/app_name"
+            android:theme="@style/Theme.FrontEnd.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
     </application>
 
 </manifest>
