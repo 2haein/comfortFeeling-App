@@ -1,5 +1,7 @@
 package com.example.frontend;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
@@ -88,6 +90,18 @@ public class MainActivity extends AppCompatActivity {
 
         completionFragment = new CompletionFragment();
         otherCompletionFragment = new OtherCompletionFragment();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("오늘의 위로 한마디").setMessage("어깨를 토닥토닥");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialog, int id)
+            {
+                Toast.makeText(getApplicationContext(), "어깨를 토닥토닥", Toast.LENGTH_SHORT).show();
+            }
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
 
     }
 
@@ -180,6 +194,8 @@ public class MainActivity extends AppCompatActivity {
 
         //여기서 다른 프래그먼트로 이동하는 기능 구현가능
     }
+
+
 
      @Override
     protected void onStart() {

@@ -51,7 +51,9 @@ public class SplashActivity extends Activity {
             @Override
             public void onAnimationEnd(Animation animation) {
                 startActivity(new Intent(SplashActivity.this, MainActivity.class));
-
+                if (mp!=null) {
+                    mp.release(); // 자원해제
+                }
             }
 
             @Override
