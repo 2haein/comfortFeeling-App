@@ -31,6 +31,7 @@ public class CheerUpController {
         } catch(final Exception e) {
             e.printStackTrace();
         }
+        System.out.println("서버 -> 안드로이드로 Message Push :"+ msg);
 
         return msg;
     }
