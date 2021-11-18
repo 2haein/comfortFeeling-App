@@ -5,29 +5,45 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/testresult_fragment"
+    android:background="#CBDBEA"
     tools:context=".ui.depressionTest.TestResultFragment" >
 
     <TextView
         android:id="@+id/title"
         android:layout_width="223dp"
         android:layout_height="49dp"
-        android:layout_marginStart="92dp"
+        android:layout_marginStart="76dp"
         android:layout_marginTop="172dp"
+        android:fontFamily="@font/seongsil"
         android:text="우울증 테스트 결과"
         android:textColor="#070000"
-        android:textSize="28sp"
+        android:textSize="35sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/myResult"
         android:layout_width="247dp"
-        android:layout_height="282dp"
-        android:layout_marginStart="80dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="60dp"
         android:layout_marginTop="12dp"
+        android:fontFamily="@font/seongsil"
         android:gravity="center_horizontal"
         android:text="TextView"
         android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title" />
+
+    <TextView
+        android:id="@+id/myResult2"
+        android:layout_width="257dp"
+        android:layout_height="103dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="128dp"
+        android:fontFamily="@font/seongsil"
+        android:gravity="center_horizontal"
+        android:text=""
+        android:textSize="25sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title" />
 

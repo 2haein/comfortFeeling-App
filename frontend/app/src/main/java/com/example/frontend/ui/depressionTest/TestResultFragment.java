@@ -20,7 +20,7 @@ public class TestResultFragment extends Fragment {
     FragmentTestresultBinding binding;
     final private String TAG = getClass().getSimpleName();
     int count;
-    TextView title, explanation;
+    TextView title, explanation, explanation2;
 
     MainActivity activity;
     @Override
@@ -42,6 +42,7 @@ public class TestResultFragment extends Fragment {
 
         title = (TextView) root.findViewById(R.id.title);
         explanation = (TextView) root.findViewById((R.id.myResult));
+        explanation2 = (TextView) root.findViewById((R.id.myResult2));
 
         Bundle bundle = getArguments();
         if(bundle != null){
@@ -50,11 +51,19 @@ public class TestResultFragment extends Fragment {
         }
 
 
-        if(count >= 5){
-            explanation.setText("2주 이상 이 현상이 지속되면 초기 우울증으로 간주합니다.");
+        if(count >= 6){
+            explanation.setText("2주 이상 이 현상이 지속되셨나요? 우울감이 높은 상태입니다.");
+            explanation2.setText("전문가와 반드시 상담을 받아보세요");
+        }
+        else if(count>=4){
+            explanation.setText("가벼운 우울감이 있는 상태입니다.");
+            explanation2.setText("우울증 예방을 위해 운동, 여가활동, 대인관계를 맺어보세요");
+
         }
         else{
-            explanation.setText("회원님은 자연스러운 우울감을 느끼고 있는 상태입니다");
+            explanation.setText("회원님은 자연스러운 상태입니다.");
+            explanation2.setText("너무 걱정마세요!");
+
         }
 
 
