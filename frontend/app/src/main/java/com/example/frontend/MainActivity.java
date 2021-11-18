@@ -12,6 +12,7 @@ import android.view.Menu;
 import com.bumptech.glide.Glide;
 import com.example.frontend.callback.SessionCallback;
 import com.example.frontend.common.ProfileData;
+import com.example.frontend.http.CommonMethod;
 import com.example.frontend.ui.completion.CompletionFragment;
 import com.example.frontend.ui.completion.OtherCompletionFragment;
 import com.example.frontend.ui.depressionTest.DepressionTestFragment;
@@ -41,7 +42,10 @@ import com.kakao.network.ErrorResult;
 import com.kakao.usermgmt.UserManagement;
 import com.kakao.usermgmt.callback.LogoutResponseCallback;
 
+import org.json.JSONObject;
+
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -49,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
 
     private static final String LOG_TAG = "MainActivity";
+    private String comfortMsg = "";
 
     // menu item initialization
     private SessionCallback sessionCallback = new SessionCallback();
@@ -97,12 +102,13 @@ public class MainActivity extends AppCompatActivity {
         otherCompletionFragment = new OtherCompletionFragment();
         depressionTestFragment = new DepressionTestFragment();
         if(flag == 0) {
+            comfortMsg = getComfortMsg();
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("오늘의 위로 한마디").setMessage("어깨를 토닥토닥");
+            builder.setTitle("오늘의 위로 한마디").setMessage(comfortMsg);
             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int id) {
-                    Toast.makeText(getApplicationContext(), "어깨를 토닥토닥", Toast.LENGTH_SHORT).show();
+                    finish();
                 }
             });
             AlertDialog alertDialog = builder.create();
@@ -217,6 +223,25 @@ public class MainActivity extends AppCompatActivity {
 
 
         //여기서 다른 프래그먼트로 이동하는 기능 구현가능
+    }
+
+    //랜덤 글 표출
+    public String getComfortMsg(){
+        String rtnStr="";
+        String url = CommonMethod.ipConfig +"/api/message";
+
+
+            RequestHttpURLConnection.NetworkAsyncTask networkTask = new RequestHttpURLConnection.NetworkAsyncTask(url, "");
+        try {
+            rtnStr = networkTask.execute().get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+        return rtnStr;
     }
 
 
