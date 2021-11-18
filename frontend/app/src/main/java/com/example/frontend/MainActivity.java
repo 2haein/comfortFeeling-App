@@ -87,8 +87,8 @@ public class MainActivity extends AppCompatActivity {
          * Drawer 및 Navigation Setting 후 호출
          */
         View headerView = navigationView.getHeaderView(0);
-        TextView userId = headerView.findViewById(R.id.userId);
-        userId.setText(ProfileData.getUserId());
+//        TextView userId = headerView.findViewById(R.id.userId);
+//        userId.setText(ProfileData.getUserId());
         TextView nickName = headerView.findViewById(R.id.nickName);
         nickName.setText(ProfileData.getNickName());
         ImageView profileImageUrl = headerView.findViewById(R.id.profileImageUrl);

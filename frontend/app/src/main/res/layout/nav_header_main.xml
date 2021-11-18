@@ -15,19 +15,20 @@
         android:id="@+id/profileImageUrl"
         android:layout_width="110dp"
         android:layout_height="110dp"
-        android:layout_marginTop="0dp"
+        android:layout_marginTop="@dimen/fab_margin"
         android:contentDescription="@string/nav_header_desc" />
 
     <TextView
         android:id="@+id/nickName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/nav_header_vertical_spacing"
+        android:paddingTop="@dimen/fab_margin"
+        android:paddingBottom="@dimen/fab_margin"
         android:text="@string/nav_header_title"/>
 
-    <TextView
+<!--    <TextView
         android:id="@+id/userId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/nav_header_subtitle" />
+        android:text="@string/nav_header_subtitle" />-->
 </LinearLayout>
