@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
             LayoutInflater inflater = this.getLayoutInflater();
             View titleView = inflater.inflate(R.layout.custom_title, null);
             AlertDialog.Builder builder = new AlertDialog.Builder(this).setCustomTitle(titleView);
-            builder.setTitle("오늘의 위로 한마디").setMessage(comfortMsg);
+            builder.setMessage(comfortMsg);
             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int id) {
@@ -281,6 +281,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        flag = 0;
         super.onDestroy();
         Log.i(LOG_TAG, "onDestroy");
     }
