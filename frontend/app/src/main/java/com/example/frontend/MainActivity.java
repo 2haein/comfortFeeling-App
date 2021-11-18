@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
@@ -103,12 +104,14 @@ public class MainActivity extends AppCompatActivity {
         depressionTestFragment = new DepressionTestFragment();
         if(flag == 0) {
             comfortMsg = getComfortMsg();
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            LayoutInflater inflater = this.getLayoutInflater();
+            View titleView = inflater.inflate(R.layout.custom_title, null);
+            AlertDialog.Builder builder = new AlertDialog.Builder(this).setCustomTitle(titleView);
             builder.setTitle("오늘의 위로 한마디").setMessage(comfortMsg);
             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int id) {
-                    finish();
+                    dialog.dismiss();
                 }
             });
             AlertDialog alertDialog = builder.create();
