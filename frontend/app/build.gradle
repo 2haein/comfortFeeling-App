@@ -6,7 +6,7 @@ android {
     compileSdk 31
 
     defaultConfig {
-        applicationId "com.example.frontend"
+        applicationId "com.comfortfeeling.frontend"
         minSdk 21
         targetSdk 30
         versionCode 1

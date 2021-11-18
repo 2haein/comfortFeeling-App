@@ -7,32 +7,32 @@
 
     <fragment
         android:id="@+id/nav_home"
-        android:name="com.example.frontend.ui.main.HomeFragment"
+        android:name="com.comfortfeeling.frontend.ui.main.HomeFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home"/>
 
     <fragment
         android:id="@+id/nav_completion"
-        android:name="com.example.frontend.ui.completion.CompletionFragment"
+        android:name="com.comfortfeeling.frontend.ui.completion.CompletionFragment"
         android:label="@string/menu_completion"
         tools:layout="@layout/fragment_completion">
     </fragment>
 
     <fragment
         android:id="@+id/nav_history"
-        android:name="com.example.frontend.ui.history.HistoryFragment"
+        android:name="com.comfortfeeling.frontend.ui.history.HistoryFragment"
         android:label="@string/menu_history"
         tools:layout="@layout/fragment_history" />
 
     <fragment
         android:id="@+id/nav_graph"
-        android:name="com.example.frontend.ui.graph.GraphFragment"
+        android:name="com.comfortfeeling.frontend.ui.graph.GraphFragment"
         android:label="@string/menu_graph"
         tools:layout="@layout/fragment_graph" />
 
     <fragment
         android:id="@+id/nav_test"
-        android:name="com.example.frontend.ui.depressionTest.DepressionTestFragment"
+        android:name="com.comfortfeeling.frontend.ui.depressionTest.DepressionTestFragment"
         android:label="@string/menu_test"
         tools:layout="@layout/fragment_test" >
     </fragment>

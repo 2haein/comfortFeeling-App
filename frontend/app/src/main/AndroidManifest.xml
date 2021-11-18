@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.frontend">
+    package="com.comfortfeeling.frontend">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -16,7 +16,7 @@
         android:required="true" />
 
     <application
-        android:name=".GlobalApplication"
+        android:name="com.comfortfeeling.frontend.GlobalApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_main"
         android:label="@string/app_name"
@@ -26,10 +26,10 @@
         android:theme="@style/Theme.FrontEnd"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".SplashActivity"
+            android:name="com.comfortfeeling.frontend.SplashActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
-            android:name=".MainActivity"
+            android:name="com.comfortfeeling.frontend.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.FrontEnd.NoActionBar" />
 
@@ -38,7 +38,7 @@
             android:value="cb2c018d5bea8a40846fb57534209711" />
 
         <activity
-            android:name=".LoginActivity"
+            android:name="com.comfortfeeling.frontend.LoginActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.FrontEnd.NoActionBar">
