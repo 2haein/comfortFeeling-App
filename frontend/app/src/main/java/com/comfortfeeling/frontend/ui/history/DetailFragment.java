@@ -56,7 +56,7 @@ import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public class DetailFragment extends Fragment {
+public class DetailFragment extends Fragment implements MainActivity.onKeyBackPressedListener {
 
     // 로그에 사용할 TAG
     final private String TAG = getClass().getSimpleName();
@@ -136,7 +136,6 @@ public class DetailFragment extends Fragment {
 
         if(bundle != null){
             board_seq = bundle.getString("seq");
-            System.out.println("seq=" + board_seq); //확인
         }
         Log.i(TAG, "board값" + board_seq);
         try {
@@ -215,20 +214,6 @@ public class DetailFragment extends Fragment {
         return root;
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.i(TAG, "onPause");
-        mapViewContainer.removeAllViews();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        Log.i(TAG, "onDestroyView");
-        binding = null;
-    }
-
     public List<String> listCurse(){
         List<String> curse = new ArrayList<>();
         try{
@@ -241,7 +226,6 @@ public class DetailFragment extends Fragment {
             BufferedReader bufReader = new BufferedReader(inputStreamReader);
             String line = "";
             while((line = bufReader.readLine()) != null){
-                System.out.println(line);
                 curse.add(line);
             }
             //.readLine()은 끝에 개행문자를 읽지 않는다.
@@ -696,6 +680,43 @@ public class DetailFragment extends Fragment {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void onBackKey() {
+        MainActivity activity = (MainActivity) getActivity();
+        activity.setOnKeyBackPressedListener(null);
+        onPause();
+        onDestroy();
+        activity.onBackPressed();
+    }
+    @Override public void onAttach(Context context) {
+        super.onAttach(context);
+        ((MainActivity) context).setOnKeyBackPressedListener(this);
+    }
+
+
+    @Override
+    public void onPause() {
+        mapViewContainer.removeAllViews();
+        super.onPause();
+        Log.i(TAG, "onPause");
+    }
+
+    @Override
+    public void onStop() {
+        mapViewContainer.removeAllViews();
+        super.onStop();
+        Log.i(TAG, "onStop");
+    }
+
+    @Override
+    public void onDestroyView() {
+
+        super.onDestroyView();
+        Log.i(TAG, "onDestroyView");
+        binding = null;
+    }
+
 
     @Override
     public void onDestroy() {

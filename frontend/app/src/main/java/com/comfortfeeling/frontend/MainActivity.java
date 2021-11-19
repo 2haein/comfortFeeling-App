@@ -18,6 +18,7 @@ import com.comfortfeeling.frontend.ui.completion.OtherCompletionFragment;
 import com.comfortfeeling.frontend.ui.depressionTest.DepressionTestFragment;
 import com.comfortfeeling.frontend.ui.depressionTest.TestResultFragment;
 import com.comfortfeeling.frontend.ui.history.DetailFragment;
+import com.comfortfeeling.frontend.ui.main.HomeFragment;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.fragment.app.FragmentManager;
@@ -241,9 +242,44 @@ public class MainActivity extends AppCompatActivity {
         return rtnStr;
     }
 
+    private long lastTimeBackPressed;
+
+    public interface onKeyBackPressedListener {
+        void onBackKey();
+    }
+    private onKeyBackPressedListener mOnKeyBackPressedListener;
+
+    public void setOnKeyBackPressedListener(onKeyBackPressedListener listener) {
+        mOnKeyBackPressedListener = listener;
+    } //메인에서 토스트를 띄우며 종료확인을 하기 위해 필드선언
 
 
-     @Override
+    @Override public void onBackPressed() {
+        if (mOnKeyBackPressedListener != null) {
+            mOnKeyBackPressedListener.onBackKey();
+        } else {
+            //쌓인 BackStack 여부에 따라 Toast를 띄울지, 뒤로갈지
+            if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+                //* 종료 EndToast Bean 사용
+                //두 번 클릭시 어플 종료
+                if(System.currentTimeMillis() - lastTimeBackPressed < 1500){
+                    finish();
+                    return;
+                }
+                lastTimeBackPressed = System.currentTimeMillis();
+                Toast.makeText(this,"'뒤로' 버튼을 한 번 더 누르면 종료됩니다.",Toast.LENGTH_SHORT).show();
+
+                } else {
+                    super.onBackPressed();
+               }
+        }
+
+    }
+
+
+
+
+    @Override
     protected void onStart() {
         super.onStart();
         Log.i(LOG_TAG, "onStart");
