@@ -51,4 +51,4 @@
 
 <img src="https://github.com/codeBoogie/comfort_feeling/blob/develop/extra_folder/profile.jpg" width="300"/>&nbsp;&nbsp;<img src="https://github.com/codeBoogie/comfort_feeling/blob/develop/extra_folder/firstScreen.jpg" width="300"/>
 <img src="https://github.com/codeBoogie/comfort_feeling/blob/develop/extra_folder/list.jpg" width="300"/>&nbsp;&nbsp;<img src="https://github.com/codeBoogie/comfort_feeling/blob/develop/extra_folder/graph.jpg" width="300"/>
-<img src="https://github.com/codeBoogie/comfort_feeling/blob/develop/extra_folder/read.jpg" width="300"/>
+<img src="https://github.com/codeBoogie/comfort_feeling/blob/develop/extra_folder/read.jpg" width="300"/>&nbsp;&nbsp;<img src="https://github.com/codeBoogie/comfort_feeling/blob/develop/extra_folder/test.jpg" width="300"/>
