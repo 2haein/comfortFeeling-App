@@ -49,4 +49,6 @@
 
 #### 5.3 예시 화면
 
-<img src="https://github.com/codeBoogie/comfort_feeling/blob/04e3a79271156aa8db888a4928b132dcdf96ddd2/extra_folder/screenshot1.png" width="300"/>&nbsp;&nbsp;<img src="https://github.com/codeBoogie/comfort_feeling/blob/04e3a79271156aa8db888a4928b132dcdf96ddd2/extra_folder/screenshot2.png" width="300"/>
+<img src="https://github.com/codeBoogie/comfort_feeling/blob/04e3a79271156aa8db888a4928b132dcdf96ddd2/extra_folder/profile.jpg" width="300"/>&nbsp;&nbsp;<img src="https://github.com/codeBoogie/comfort_feeling/blob/04e3a79271156aa8db888a4928b132dcdf96ddd2/extra_folder/firstScreen.jpg" width="300"/>
+<img src="https://github.com/codeBoogie/comfort_feeling/blob/04e3a79271156aa8db888a4928b132dcdf96ddd2/extra_folder/list.jpg" width="300"/>&nbsp;&nbsp;<img src="https://github.com/codeBoogie/comfort_feeling/blob/04e3a79271156aa8db888a4928b132dcdf96ddd2/extra_folder/graph.jpg" width="300"/>
+<img src="https://github.com/codeBoogie/comfort_feeling/blob/04e3a79271156aa8db888a4928b132dcdf96ddd2/extra_folder/read.jpg" width="300"/>
