@@ -18,7 +18,7 @@
 
     <TextView
         android:id="@+id/title"
-        android:layout_width="286dp"
+        android:layout_width="match_parent"
         android:layout_height="51dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="72dp"
@@ -34,7 +34,7 @@
         android:layout_width="286dp"
         android:layout_height="50dp"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="116dp"
+        android:layout_marginTop="124dp"
         android:text="@string/test_explain"
         android:textColor="#070000"
         android:textSize="16sp"
@@ -136,6 +136,7 @@
         android:layout_height="46dp"
         android:layout_marginStart="130dp"
         android:layout_marginTop="24dp"
+        android:gravity="center"
         android:text="결과 확인"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/scrollView" />
