@@ -167,7 +167,7 @@ public class LoginActivity extends AppCompatActivity {
                                 intent.putExtra("thumbnail", profile.getThumbnailImageUrl());
 
                                 // login 함수안에 연결할 서버 IP주소 설정 후 주석 풀기, (설정 안할 시 서버 접속 오류 남)
-                                // login(id, profile.getNickname());
+                                 login(id, profile.getNickname());
 
 
                                 // LOGGING
