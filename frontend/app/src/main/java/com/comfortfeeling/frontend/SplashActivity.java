@@ -32,6 +32,7 @@ public class SplashActivity extends Activity {
         mp = MediaPlayer.create(
                 getApplicationContext(), // 현재 화면의 제어권자
                 R.raw.sound); // 음악파일
+        mp.setVolume(1.0f,1.0f);
         mp.setLooping(false); // true:무한반복
         mp.start(); // 노래 재생 시작
 
