@@ -91,9 +91,9 @@
             android:layout_marginTop="20dp"
             android:layout_marginBottom="16dp"
             android:ems="10"
+            android:fontFamily="@font/seongsil"
             android:gravity="start|top"
             android:hint="내용을 써주세요!"
-            android:fontFamily="@font/seongsil"
             android:inputType="textMultiLine"
             android:textColorHint="#808080"
             app:layout_constraintEnd_toEndOf="parent"
@@ -131,36 +131,37 @@
 
     <Switch
         android:id="@+id/switch1"
-        android:layout_width="102dp"
-        android:layout_height="48dp"
+        android:layout_width="158dp"
+        android:layout_height="51dp"
+        android:layout_marginStart="200dp"
         android:checked="true"
         android:text="댓글창"
         app:layout_constraintBottom_toTopOf="@+id/emotion_relative"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.936"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.92" />
+        app:layout_constraintVertical_bias="0.941" />
 
-    <ImageView
-        android:id="@+id/cameraView"
-        android:layout_width="64dp"
-        android:layout_height="50dp"
-        android:src="@drawable/ic_menu_camera"
+    <TextView
+        android:id="@+id/CommentX"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="비허용"
+        app:layout_constraintBottom_toBottomOf="@+id/CommentO"
+        app:layout_constraintEnd_toEndOf="@+id/switch1"
+        app:layout_constraintHorizontal_bias="0.58"
+        app:layout_constraintStart_toStartOf="@+id/switch1"
+        app:layout_constraintTop_toTopOf="@+id/CommentO" />
+
+    <TextView
+        android:id="@+id/CommentO"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="허용"
+        app:layout_constraintBottom_toTopOf="@+id/emotion_relative"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/cameraImage"
-        android:layout_width="85dp"
-        android:layout_height="69dp"
-        android:src="@drawable/ch_img_background"
-        app:layout_constraintEnd_toStartOf="@+id/cameraView"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintHorizontal_bias="0.88"
+        app:layout_constraintStart_toStartOf="@+id/switch1"
+        app:layout_constraintTop_toBottomOf="@+id/imageView5" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -76,8 +76,8 @@ public class PostFragment extends Fragment {
         submit_btn = (Button)root.findViewById(R.id.button);
 
 
-        camera_btn = (ImageView)root.findViewById(R.id.cameraView);
-        camera_image = (ImageView)root.findViewById(R.id.cameraImage);
+        /*camera_btn = (ImageView)root.findViewById(R.id.cameraView);
+        camera_image = (ImageView)root.findViewById(R.id.cameraImage);*/
 
         Bundle bundle = getArguments();  //번들 받기. getArguments() 메소드로 받음.
 
@@ -87,7 +87,7 @@ public class PostFragment extends Fragment {
 
         }
 
-        camera_btn.setOnClickListener(new View.OnClickListener() {
+        /*camera_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // 6.0 마쉬멜로우 이상일 경우에는 권한 체크 후 권한 요청
@@ -101,7 +101,7 @@ public class PostFragment extends Fragment {
                     }
                 }
             }
-        });
+        });*/
 
 
         feel_btn1.setOnClickListener(new View.OnClickListener(){
@@ -240,7 +240,7 @@ public class PostFragment extends Fragment {
         if (requestCode == 200 && resultCode == RESULT_OK && data != null && data.getData() != null) {
 
             Uri selectedImageUri = data.getData();
-            camera_image.setImageURI(selectedImageUri);
+            //camera_image.setImageURI(selectedImageUri);
 
         }
 

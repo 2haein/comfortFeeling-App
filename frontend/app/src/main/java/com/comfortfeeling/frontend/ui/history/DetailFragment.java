@@ -201,7 +201,7 @@ public class DetailFragment extends Fragment implements MainActivity.onKeyBackPr
             }else{
                 comment_layout.setVisibility(View.GONE);
                 comment_add.setVisibility(View.GONE);
-                comment_text.setText("댓글창 OFF");
+                comment_text.setText("댓글창 OFF | 댓글을 등록 할 수 없는 글입니다.");
             }
 
         } catch (JSONException e) {
