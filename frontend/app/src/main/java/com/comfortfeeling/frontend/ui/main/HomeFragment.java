@@ -232,7 +232,7 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
 
     public void onPause() {
         super.onPause();
-        mapViewContainer.removeAllViews();
+        //mapViewContainer.removeAllViews();
     }
 
     @Override
