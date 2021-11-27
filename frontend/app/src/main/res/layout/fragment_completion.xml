@@ -35,6 +35,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:padding="16dp"
                     android:text="작성일" />
 
@@ -44,6 +45,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:fontFamily="@font/seongsil"
+                    android:textColor="@color/black"
                     android:background="#eeeeee"
                     android:padding="16dp" />
 
@@ -114,7 +116,6 @@
                     android:id="@+id/switch1"
                     android:layout_width="102dp"
                     android:layout_height="48dp"
-
                     android:text="댓글창"
                     app:layout_constraintBottom_toTopOf="@+id/emotion_relative"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -143,6 +144,7 @@
                 android:id="@+id/comment_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/black"
                 android:padding="16dp"
                 android:text="댓글" />
 
@@ -168,6 +170,8 @@
             android:layout_weight="1"
             android:background="#eeeeee"
             android:hint="댓글 내용을 입력하세요"
+
+            android:textColor="@color/black"
             android:padding="10dp"
             tools:ignore="TouchTargetSizeCheck" />
 
