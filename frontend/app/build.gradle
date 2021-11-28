@@ -9,8 +9,8 @@ android {
         applicationId "com.comfortfeeling.frontend"
         minSdk 21
         targetSdk 30
-        versionCode 4
-        versionName "0.1.4"
+        versionCode 5
+        versionName "0.1.5"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
