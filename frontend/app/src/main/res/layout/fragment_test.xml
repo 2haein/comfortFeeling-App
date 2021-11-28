@@ -51,8 +51,8 @@
         android:id="@+id/linearlayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/explanation">
 
         <ScrollView
@@ -143,8 +143,9 @@
         android:layout_height="0dp"
         android:layout_marginTop="36dp"
         android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@+id/linearlayout"
-        tools:layout_editor_absoluteX="42dp">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearlayout">
 
         <Button
             android:id="@+id/resultBtn"
