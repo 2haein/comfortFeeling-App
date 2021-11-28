@@ -226,13 +226,15 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
 
     public void onResume() {
         super.onResume();
-
+        ProfileData.setMapFlag(false);
     }
 
 
     public void onPause() {
         super.onPause();
-        //mapViewContainer.removeAllViews();
+        if(ProfileData.getMapFlag()) {
+            mapViewContainer.removeAllViews();
+        }
     }
 
     @Override

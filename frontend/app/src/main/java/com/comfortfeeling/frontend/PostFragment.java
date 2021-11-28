@@ -211,7 +211,7 @@ public class PostFragment extends Fragment {
                     //REST API
                     RequestHttpURLConnection.NetworkAsyncTask networkTask = new RequestHttpURLConnection.NetworkAsyncTask(url, jsonString);
                     networkTask.execute();
-
+                    ProfileData.setMapFlag(true);
                     Toast.makeText(getActivity().getApplicationContext(), "글이 등록되었습니다", Toast.LENGTH_LONG).show();
 
                     Intent intent = new Intent(getActivity().getApplicationContext(), MainActivity.class);

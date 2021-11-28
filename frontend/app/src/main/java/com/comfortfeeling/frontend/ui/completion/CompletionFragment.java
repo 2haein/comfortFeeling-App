@@ -362,7 +362,7 @@ public class CompletionFragment extends Fragment{
                         networkTask.execute();
 
                         Toast.makeText(getActivity().getApplicationContext(), "글이 수정되었습니다! ", Toast.LENGTH_LONG).show();
-
+                        ProfileData.setMapFlag(true);
                         Intent intent = new Intent(getActivity().getApplicationContext(), MainActivity.class);
 
                         startActivity(intent);

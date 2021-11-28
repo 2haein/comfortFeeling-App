@@ -5,6 +5,7 @@ public class ProfileData {
     private static String nickName;
     private static String profile;
     private static String thumbnail;
+    private static Boolean mapFlag= false;
 
     public ProfileData(String userId, String nickName, String profile, String thumbnail) {
         this.userId = userId;
@@ -29,4 +30,11 @@ public class ProfileData {
         return thumbnail;
     }
 
+    public static Boolean getMapFlag() {
+        return mapFlag;
+    }
+
+    public static void setMapFlag(Boolean flag) {
+        mapFlag = flag;
+    }
 }
