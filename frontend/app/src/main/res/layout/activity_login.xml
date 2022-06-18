@@ -4,48 +4,49 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#7723F1"
     tools:context=".LoginActivity">
+
+    <!--    <TextView-->
+<!--        android:id="@+id/textView3"-->
+<!--        android:layout_width="359dp"-->
+<!--        android:layout_height="211dp"-->
+<!--        android:layout_marginBottom="260dp"-->
+<!--        android:gravity="center"-->
+<!--        android:text="너의 감정을 위로해"-->
+<!--        android:textColor="@color/black"-->
+<!--        android:textSize="40sp"-->
+<!--        android:textStyle="bold"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/loginV1"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        tools:fontFamily="sans-serif-black" />-->
 
     <ImageButton
         android:id="@+id/loginV1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="568dp"
         android:minHeight="48dp"
         android:padding="0dp"
         android:src="@drawable/kakao_login_medium_wide"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="359dp"
-        android:layout_height="211dp"
-        android:layout_marginBottom="260dp"
-        android:gravity="center"
-        android:text="너의 감정을 위로해"
-        android:textColor="#FFFFFFCC"
-        android:textSize="50sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/loginV1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:fontFamily="sans-serif-black" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.765" />
 
     <ImageView
         android:id="@+id/imageView3"
         android:layout_width="match_parent"
-        android:layout_height="202dp"
-        android:layout_marginTop="25dp"
-        android:layout_marginBottom="25dp"
+        android:layout_height="180dp"
+        android:layout_marginBottom="192dp"
+        android:gravity="center"
         app:layout_constraintBottom_toTopOf="@+id/loginV1"
-        app:layout_constraintTop_toBottomOf="@+id/textView3"
-        app:layout_constraintVertical_bias="0.5"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.694"
         app:srcCompat="@drawable/logo"
-        tools:layout_editor_absoluteX="117dp" />
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="40dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
