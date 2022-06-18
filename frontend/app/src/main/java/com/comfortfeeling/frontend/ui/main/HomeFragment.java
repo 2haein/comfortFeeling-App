@@ -546,7 +546,7 @@ public class HomeFragment extends Fragment implements MapView.CurrentLocationEve
             marker.setTag(tagNum);
         }
         marker.setMapPoint(mapPoint);
-        //Log.i(LOG_TAG, String.format("마커태그값" + marker.getTag()));
+        Log.i(LOG_TAG, String.format("마커 등록" + score));
         marker.setMarkerType(MapPOIItem.MarkerType.CustomImage);
         if(score == 1){
             marker.setCustomImageResourceId(R.drawable.emoji_marker1);

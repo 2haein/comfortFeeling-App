@@ -228,6 +228,8 @@ public class LoginActivity extends AppCompatActivity {
                 conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
                 conn.setRequestMethod("POST");                              //데이터를 POST 방식으로 전송합니다.
                 conn.setDoOutput(true);
+                conn.setConnectTimeout(7000);
+                conn.setReadTimeout(7000);
 
                 // 서버에 보낼 값 포함해 요청함.
                 OutputStreamWriter osw = new OutputStreamWriter(conn.getOutputStream());

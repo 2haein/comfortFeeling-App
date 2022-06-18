@@ -15,9 +15,10 @@ public class RequestHttpURLConnection {
     public static String sendREST(String sendUrl, String jsonValue) throws IllegalStateException {
         String inputLine = null;
         StringBuffer outResult = new StringBuffer();
+        HttpURLConnection conn=null;
         try{
             URL url = new URL(sendUrl);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn = (HttpURLConnection) url.openConnection();
             conn.setDoOutput(true); conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/json");
             conn.setRequestProperty("Accept-Charset", "UTF-8");
@@ -30,9 +31,14 @@ public class RequestHttpURLConnection {
             while ((inputLine = in.readLine()) != null) {
                 outResult.append(inputLine);
             }
-            conn.disconnect();
+//            conn.disconnect();
         }catch(Exception e){
             e.printStackTrace();
+        }
+        finally{
+            if(conn!=null){
+                conn.disconnect();
+            }
         }
         return outResult.toString();
     }

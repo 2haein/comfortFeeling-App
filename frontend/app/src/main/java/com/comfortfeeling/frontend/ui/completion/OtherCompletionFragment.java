@@ -605,7 +605,7 @@ public class OtherCompletionFragment extends Fragment{
             BufferedReader bufReader = new BufferedReader(inputStreamReader);
             String line = "";
             while((line = bufReader.readLine()) != null){
-                System.out.println(line);
+//                System.out.println(line);
                 curse.add(line);
             }
             //.readLine()은 끝에 개행문자를 읽지 않는다.

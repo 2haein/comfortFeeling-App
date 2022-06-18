@@ -791,7 +791,7 @@ public class CompletionFragment extends Fragment{
             BufferedReader bufReader = new BufferedReader(inputStreamReader);
             String line = "";
             while((line = bufReader.readLine()) != null){
-                System.out.println(line);
+//                System.out.println(line);
                 curse.add(line);
             }
             //.readLine()은 끝에 개행문자를 읽지 않는다.
@@ -799,7 +799,7 @@ public class CompletionFragment extends Fragment{
         }catch (FileNotFoundException e) {
             // TODO: handle exception
         }catch(IOException e){
-            System.out.println(e);
+//            System.out.println(e);
         }
 
         return curse;
