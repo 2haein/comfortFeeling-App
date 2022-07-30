@@ -18,22 +18,13 @@
 - 기존 감정일기에는 아직 얼굴표정을 기반으로 해서 내 감정을 분석해주는 기능은 존재하지 않음. 스스로 자신의 감정을 잘 모르겠을 때, 표정을 통해 감정을 분석하고 그에 따라서 자동으로 감정의 수치를 정해줄 필요가 있음.
 
 
-
-
 #### 필요성
 - 여러 요인들로 인해 자존감이 떨어지고, 우울한 감정을 느끼는 사람들이 주변에 사는 타인의 공감을 통해서 자존감 회복에 도움이 될 수 있다.
 - 멀리 사는 사람보다 내 주변의 누군가가 나의 감정에 공감해줄 때 효과가 더 크다고 생각해서 위치기반을 통한 것이 필요하다고 생각했다.
 - 기존 SNS에는 자신의 좋은 점만을 올리고 익명성이 보장이 되지 않아서 감정적으로 힘든 사람들이 상대적 박탈감을 얻을 수 있는데, 이 서비스는 익명성이 보장되어 좀 더 편하게 자신의 감정을 표출할 수 있다. 이에 자신의 감정에 솔직해질 수 있고, 감정변화를 통해 내 삶을 점검하면서 자존감 회복에 도움이 될 수 있다.
 
-### 4.팀원 및 역할
-|이름|역할|
-|---|---|
-|이해인|회원관리 시스템, 화면(Front) 개발, 감정 변화 그래프 개발, 앱 시작시 감정을 위로하는 한줄 글 개발, 토닥토닥 애니메이션 개발|
-|한승남|감정기록API 개발, 유저 별 History내역 및 글 내용 개발, 댓글 관련 기능 및 악플제한 기능 개발|
-|전현욱|메인지도 화면 관리, 위치기반 감정기록 글쓰기 기능 및 완성된 글 내용 표출 기능 개발, 우울증 자가테스트 기능 개발|
 
-### 5.프로젝트 수행 방안
-#### 5.1 주요 기술 스택
+### 주요 기술 스택
 <img src="https://source.android.com/setup/images/Android_symbol_green_RGB.png" width="200"/> <img src="https://spring.io/images/spring-logo-9146a4d3298760c2e7e49595184e1975.svg" width="200"/> <img src="https://webimages.mongodb.com/_com_assets/cms/MongoDB_Logo_FullColorBlack_RGB-4td3yuxzjs.png?auto=format%2Ccompress" width="200"/> <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="200"/> 
 
 - Front 프레임워크 (Android)
@@ -42,13 +33,9 @@
 - 백엔드 서버 (개발 초기 Spring Boot 내장 톰캣)
 - 분산 버전 관리 툴 (Github)
 
-#### 5.2 주요 기능
-- 위치기반 공유 감정 기록장
-- 감정 변화 그래프
-- 위로의 한마디
 
-#### 5.3 예시 화면
 
-<img src="https://github.com/codeBoogie/comfort_feeling/blob/develop/extra_folder/profile.jpg" width="300"/>&nbsp;&nbsp;<img src="https://github.com/codeBoogie/comfort_feeling/blob/develop/extra_folder/firstScreen.jpg" width="300"/>
-<img src="https://github.com/codeBoogie/comfort_feeling/blob/develop/extra_folder/list.jpg" width="300"/>&nbsp;&nbsp;<img src="https://github.com/codeBoogie/comfort_feeling/blob/develop/extra_folder/graph.jpg" width="300"/>
-<img src="https://github.com/codeBoogie/comfort_feeling/blob/develop/extra_folder/read.jpg" width="300"/>&nbsp;&nbsp;<img src="https://github.com/codeBoogie/comfort_feeling/blob/develop/extra_folder/test.jpg" width="300"/>
+#### 화면
+
+<img src="https://github.com/codeBoogie/comfort_feeling/blob/develop/extra_folder/firstScreen.jpg" width="300"/>&nbsp;&nbsp;
+<img src="https://github.com/codeBoogie/comfort_feeling/blob/develop/extra_folder/list.jpg" width="300"/>&nbsp;&nbsp;<img src="https://github.com/codeBoogie/comfort_feeling/blob/develop/extra_folder/graph.jpg" width="300"/>&nbsp;&nbsp;<img src="https://github.com/codeBoogie/comfort_feeling/blob/develop/extra_folder/test.jpg" width="300"/>
